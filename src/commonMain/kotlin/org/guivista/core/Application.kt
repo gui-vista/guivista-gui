@@ -1,3 +1,3 @@
 package org.guivista.core
 
-expect class Application(id: String)
+expect class Application(id: String) : ApplicationBase
