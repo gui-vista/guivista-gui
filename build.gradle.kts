@@ -19,4 +19,5 @@ kotlin {
             }
         }
     }
+    linuxX64("linuxX64")
 }
