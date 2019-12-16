@@ -12,13 +12,6 @@ repositories {
 }
 
 kotlin {
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation(kotlin("stdlib-common"))
-            }
-        }
-    }
     linuxX64("linuxX64") {
         compilations.getByName("main") {
             cinterops.create("gtk3") {

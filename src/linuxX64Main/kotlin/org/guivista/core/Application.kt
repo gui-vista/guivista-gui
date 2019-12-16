@@ -5,7 +5,7 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlin.system.exitProcess
 
-actual class Application actual constructor(val id: String) : ApplicationBase {
+class Application(val id: String) : ApplicationBase {
     val gtkAppPtr: CPointer<GtkApplication> = createGtkAppPtr()
     override val gAppPtr: CPointer<GApplication>
         get() = gtkAppPtr.reinterpret()
