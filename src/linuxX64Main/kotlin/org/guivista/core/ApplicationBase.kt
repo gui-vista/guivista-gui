@@ -6,7 +6,6 @@ import gtk3.gpointer
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 
-@Suppress("EXPERIMENTAL_API_USAGE")
 interface ApplicationBase {
     val gAppPtr: CPointer<GApplication>
 

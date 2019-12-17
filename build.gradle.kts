@@ -28,4 +28,9 @@ kotlin {
             }
         }
     }
+    sourceSets {
+        @Suppress("UNUSED_VARIABLE") val linuxX64Main by getting {
+            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
+        }
+    }
 }
