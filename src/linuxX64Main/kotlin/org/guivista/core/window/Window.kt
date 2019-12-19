@@ -2,7 +2,6 @@ package org.guivista.core.window
 
 import gtk3.*
 import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.cstr
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
 import org.guivista.core.layout.Container
@@ -20,28 +19,28 @@ import org.guivista.core.widget.Widget
  * from `gtk_window_list_toplevels()`. To delete a GtkWindow call `gtk_widget_destroy()`.
  */
 abstract class Window(val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPLEVEL) : Container {
-    private var _widgetPtr: CPointer<GtkWidget>? = null
-    override val widgetPtr: CPointer<GtkWidget>?
-        get() = _widgetPtr
-    val winPtr: CPointer<GtkWindow>? by lazy {
+    private var _gtkWidgetPtr: CPointer<GtkWidget>? = null
+    override val gtkWidgetPtr: CPointer<GtkWidget>?
+        get() = _gtkWidgetPtr
+    val gtkWinPtr: CPointer<GtkWindow>? by lazy {
         // Have to manually specify the type for the reinterpret function for some strange reason.
-        widgetPtr?.reinterpret<GtkWindow>()
+        gtkWidgetPtr?.reinterpret<GtkWindow>()
     }
     /** If set to *true* then the window should receive the input focus. */
     var acceptFocus: Boolean
-        set(value) = gtk_window_set_accept_focus(winPtr, if (value) TRUE else FALSE)
-        get() = gtk_window_get_accept_focus(winPtr) == TRUE
+        set(value) = gtk_window_set_accept_focus(gtkWinPtr, if (value) TRUE else FALSE)
+        get() = gtk_window_get_accept_focus(gtkWinPtr) == TRUE
     /** Name of the window. */
     var title: String
-        set(value) = gtk_window_set_title(winPtr, value)
-        get() = gtk_window_get_title(winPtr)?.toKString() ?: ""
+        set(value) = gtk_window_set_title(gtkWinPtr, value)
+        get() = gtk_window_get_title(gtkWinPtr)?.toKString() ?: ""
     /** If set to *true* then a user can resize the window. Default value is *true*. */
     var resizable: Boolean
-        set(value) = gtk_window_set_resizable(winPtr, if (value) TRUE else FALSE)
-        get() = gtk_window_get_resizable(winPtr) == TRUE
+        set(value) = gtk_window_set_resizable(gtkWinPtr, if (value) TRUE else FALSE)
+        get() = gtk_window_get_resizable(gtkWinPtr) == TRUE
     /** If set to *true* then the window is maximized. */
     val isMaximized: Boolean
-        get() = gtk_window_is_maximized(winPtr) == TRUE
+        get() = gtk_window_is_maximized(gtkWinPtr) == TRUE
 
     /**
      * Changes the default size of a window. If the window’s “natural” size (its size request) is larger than the
@@ -68,12 +67,12 @@ abstract class Window(val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPL
      * @param height Height in pixels, or -1 to unset the default height.
      */
     fun changeDefaultSize(width: Int, height: Int) {
-        gtk_window_set_default_size(winPtr, width, height)
+        gtk_window_set_default_size(gtkWinPtr, width, height)
     }
 
     /** Closes the window. */
     fun close() {
-        gtk_window_close(winPtr)
+        gtk_window_close(gtkWinPtr)
     }
 
     /**
@@ -87,7 +86,7 @@ abstract class Window(val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPL
      * listening to notifications on the “is-maximized” property.
      */
     fun maximize() {
-        gtk_window_maximize(winPtr)
+        gtk_window_maximize(gtkWinPtr)
     }
 
     /**
@@ -97,17 +96,17 @@ abstract class Window(val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPL
      * crashes if not. You can track maximization via the “window-state-event” signal on GtkWidget.
      */
     fun unmaximize() {
-        gtk_window_unmaximize(winPtr)
+        gtk_window_unmaximize(gtkWinPtr)
     }
 
     /** Adds a new widget (window child) to the window. */
     fun addWidget(widget: Widget) {
-        gtk_container_add(containerPtr, widget.widgetPtr)
+        gtk_container_add(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
     /** Removes a widget (window child) from the window. */
     fun removeWidget(widget: Widget) {
-        gtk_container_remove(containerPtr, widget.widgetPtr)
+        gtk_container_remove(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
     open fun resetFocus() {}
@@ -115,7 +114,7 @@ abstract class Window(val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPL
     open fun createMainLayout(): Container? = null
 
     open fun createUi(init: Window.() -> Unit) {
-        _widgetPtr = gtk_window_new(winType)
+        _gtkWidgetPtr = gtk_window_new(winType)
         this.init()
     }
 }

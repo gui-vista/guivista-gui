@@ -9,10 +9,10 @@ import org.guivista.core.widget.Widget
 
 /** Base class for widgets which contain other widgets. Deals with basic layout. */
 interface Container : Widget {
-    val containerPtr: CPointer<GtkContainer>?
-        get() = widgetPtr?.reinterpret()
+    val gtkContainerPtr: CPointer<GtkContainer>?
+        get() = gtkWidgetPtr?.reinterpret()
     /** The width of the empty border outside the container's children. */
     var borderWidth: UInt
-        set(value) = gtk_container_set_border_width(containerPtr, value)
-        get() = gtk_container_get_border_width(containerPtr)
+        set(value) = gtk_container_set_border_width(gtkContainerPtr, value)
+        get() = gtk_container_get_border_width(gtkContainerPtr)
 }
