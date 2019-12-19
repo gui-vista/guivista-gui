@@ -8,7 +8,7 @@ import org.guivista.core.connectGtkSignal
 
 /** Base interface for all widget's (controls). */
 interface Widget {
-    val widgetPtr: CPointer<GtkWidget>
+    val widgetPtr: CPointer<GtkWidget>?
     /** If set to *true* then the widget can accept the input focus. */
     var canFocus: Boolean
         set(value) = gtk_widget_set_can_focus(widgetPtr, if (value) TRUE else FALSE)

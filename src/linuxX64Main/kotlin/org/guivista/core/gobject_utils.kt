@@ -20,7 +20,7 @@ import kotlinx.cinterop.reinterpret
  * @return The handler ID for the [slot].
  */
 internal fun <F : CFunction<*>> connectGtkSignal(
-    obj: CPointer<*>,
+    obj: CPointer<*>?,
     signal: String,
     slot: CPointer<F>,
     data: gpointer? = null,
