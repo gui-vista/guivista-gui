@@ -99,13 +99,13 @@ abstract class Window(val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPL
         gtk_window_unmaximize(gtkWinPtr)
     }
 
-    /** Adds a new widget (window child) to the window. */
-    fun addWidget(widget: Widget) {
+    /** Adds a new child to the window. */
+    fun addChild(widget: Widget) {
         gtk_container_add(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
-    /** Removes a widget (window child) from the window. */
-    fun removeWidget(widget: Widget) {
+    /** Removes a child from the window. */
+    fun removeChild(widget: Widget) {
         gtk_container_remove(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
@@ -116,5 +116,8 @@ abstract class Window(val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPL
     open fun createUi(init: Window.() -> Unit) {
         _gtkWidgetPtr = gtk_window_new(winType)
         this.init()
+        val mainLayout = createMainLayout()
+        if (mainLayout != null) addChild(mainLayout)
+        if (visible) showAll()
     }
 }

@@ -17,5 +17,8 @@ open class AppWindow(private val app: Application) : Window() {
     override fun createUi(init: Window.() -> Unit) {
         _gtkWidgetPtr = gtk_application_window_new(app.gtkAppPtr)
         this.init()
+        val mainLayout = createMainLayout()
+        if (mainLayout != null) addChild(mainLayout)
+        if (visible) showAll()
     }
 }

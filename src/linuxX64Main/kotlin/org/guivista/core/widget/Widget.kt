@@ -119,4 +119,9 @@ interface Widget {
     fun connectHideSignal(slot: CPointer<CFunction<(app: CPointer<GtkWidget>, userData: gpointer) -> Unit>>,
                           userData: gpointer): ULong =
         connectGtkSignal(obj = gtkWidgetPtr, signal = "hide", slot = slot, data = userData)
+
+    /** Recursively shows a widget, and any child widgets (if the widget is a container). */
+    fun showAll() {
+        gtk_widget_show_all(gtkWidgetPtr)
+    }
 }
