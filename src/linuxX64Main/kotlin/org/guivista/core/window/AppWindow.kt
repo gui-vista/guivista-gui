@@ -19,6 +19,9 @@ open class AppWindow(private val app: Application) : Window() {
         this.init()
         val mainLayout = createMainLayout()
         if (mainLayout != null) addChild(mainLayout)
-        if (visible) showAll()
+        if (visible) {
+            showAll()
+            resetFocus()
+        }
     }
 }

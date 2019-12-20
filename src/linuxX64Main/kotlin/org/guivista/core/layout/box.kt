@@ -84,3 +84,9 @@ class Box(orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTA
         padding = padding
     )
 }
+
+fun boxLayout(orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTAL, init: Box.() -> Unit): Box {
+    val box = Box(orientation)
+    box.init()
+    return box
+}

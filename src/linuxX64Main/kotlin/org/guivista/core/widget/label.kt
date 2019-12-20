@@ -38,3 +38,9 @@ open class Label(text: String) : Widget {
         set(value) = gtk_label_set_width_chars(gtkLabelPtr, value)
         get() = gtk_label_get_width_chars(gtkLabelPtr)
 }
+
+fun labelWidget(text: String, init: Label.() -> Unit): Label {
+    val lbl = Label(text)
+    lbl.init()
+    return lbl
+}

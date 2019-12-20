@@ -118,6 +118,9 @@ abstract class Window(val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPL
         this.init()
         val mainLayout = createMainLayout()
         if (mainLayout != null) addChild(mainLayout)
-        if (visible) showAll()
+        if (visible) {
+            showAll()
+            resetFocus()
+        }
     }
 }

@@ -136,3 +136,9 @@ class Grid : Container {
      */
     fun fetchRowBaselinePosition(row: Int): GtkBaselinePosition = gtk_grid_get_row_baseline_position(gtkGridPtr, row)
 }
+
+fun gridLayout(init: Grid.() -> Unit): Grid {
+    val grid = Grid()
+    grid.init()
+    return grid
+}

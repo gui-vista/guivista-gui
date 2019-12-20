@@ -29,3 +29,9 @@ open class Button : Container {
                              userData: gpointer): ULong =
         connectGtkSignal(obj = gtkButtonPtr, signal = "clicked", slot = slot, data = userData)
 }
+
+fun buttonWidget(init: Button.() -> Unit): Button {
+    val btn = Button()
+    btn.init()
+    return btn
+}

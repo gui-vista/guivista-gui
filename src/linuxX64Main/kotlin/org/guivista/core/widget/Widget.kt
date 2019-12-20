@@ -66,9 +66,7 @@ interface Widget {
         set(value) = gtk_widget_set_margin_top(gtkWidgetPtr, value)
         get() = gtk_widget_get_margin_top(gtkWidgetPtr)
 
-    /**
-     * Changes all margins for the widget.
-     */
+    /** Changes all margins for the widget. */
     fun changeMargins(bottom: Int, end: Int, start: Int, top: Int) {
         marginBottom = bottom
         marginEnd = end
@@ -76,14 +74,32 @@ interface Widget {
         marginTop = top
     }
 
-    /**
-     * Clears all the widget's margins (bottom, end, start, and top).
-     */
+    /** Changes all margins for the widget using a single value. */
+    fun changeAllMargins(value: Int) {
+        marginBottom = value
+        marginEnd = value
+        marginStart = value
+        marginTop = value
+    }
+
+    /** Clears all the widget's margins (bottom, end, start, and top). */
     fun clearMargins() {
         marginBottom = 0
         marginEnd = 0
         marginStart = 0
         marginTop = 0
+    }
+
+    /**
+     * Causes widget to have the keyboard focus for the GtkWindow it's inside. Widget must be a focusable widget such
+     * as a GtkEntry; something like GtkFrame won’t work. More precisely it must have the `GTK_CAN_FOCUS` flag set. Use
+     * `gtk_widget_set_can_focus()` to modify that flag.
+     *
+     * The widget also needs to be realized and mapped. This is indicated by the related signals. Grabbing the focus
+     * immediately after creating the widget will likely fail and cause critical warnings.
+     */
+    fun grabFocus() {
+        gtk_widget_grab_focus(gtkWidgetPtr)
     }
 
     /**
