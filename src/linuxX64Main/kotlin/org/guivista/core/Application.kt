@@ -10,9 +10,11 @@ class Application(val id: String) : ApplicationBase {
     override val gAppPtr: CPointer<GApplication>
         get() = gtkAppPtr.reinterpret()
 
+    @Suppress("unused")
     fun use(init: Application.() -> Unit) {
         this.init()
         g_object_unref(gtkAppPtr)
+        disposeEmptyDataRef()
     }
 
     private fun createGtkAppPtr(): CPointer<GtkApplication> {

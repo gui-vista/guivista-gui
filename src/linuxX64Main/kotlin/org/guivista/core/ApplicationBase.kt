@@ -19,7 +19,7 @@ interface ApplicationBase {
      */
     fun connectActivateSignal(slot: CPointer<CFunction<(app: CPointer<GApplication>, userData: gpointer) -> Unit>>,
                               userData: gpointer): ULong =
-        connectGtkSignal(obj = gAppPtr, signal = "activate", slot = slot, data = userData)
+        connectGObjectSignal(obj = gAppPtr, signal = "activate", slot = slot, data = userData)
 
     /**
      * Connects the *startup* signal to a [slot] on a application. The *startup* signal is emitted on the primary
@@ -31,7 +31,7 @@ interface ApplicationBase {
      */
     fun connectStartupSignal(slot: CPointer<CFunction<(app: CPointer<GApplication>, userData: gpointer) -> Unit>>,
                              userData: gpointer): ULong =
-        connectGtkSignal(obj = gAppPtr, signal = "startup", slot = slot, data = userData)
+            connectGObjectSignal(obj = gAppPtr, signal = "startup", slot = slot, data = userData)
 
     /**
      * Connects the *shutdown* signal to a [slot] on a application. The *shutdown* signal is emitted only on the
@@ -43,7 +43,7 @@ interface ApplicationBase {
      */
     fun connectShutdownSignal(slot: CPointer<CFunction<(app: CPointer<GApplication>, userData: gpointer) -> Unit>>,
                               userData: gpointer): ULong =
-        connectGtkSignal(obj = gAppPtr, signal = "shutdown", slot = slot, data = userData)
+            connectGObjectSignal(obj = gAppPtr, signal = "shutdown", slot = slot, data = userData)
 
     /**
      * Runs the application.

@@ -5,9 +5,18 @@ package org.guivista.core
 import gtk3.GConnectFlags
 import gtk3.g_signal_connect_data
 import gtk3.gpointer
-import kotlinx.cinterop.CFunction
-import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.reinterpret
+import kotlinx.cinterop.*
+
+private val emptyData by lazy { EmptyData() }
+private val emptyDataRef = StableRef.create(emptyData)
+
+/** Gets the C Pointer for EmptyData, which is used for supplying "empty" data when connecting a signal to a slot. **/
+@Suppress("unused")
+fun fetchEmptyDataPointer(): COpaquePointer = emptyDataRef.asCPointer()
+
+internal fun disposeEmptyDataRef() {
+    emptyDataRef.dispose()
+}
 
 /**
  * Connects a signal (event) to a slot (event handler). Note that all callback parameters must be primitive types or
@@ -19,17 +28,19 @@ import kotlinx.cinterop.reinterpret
  * @param connectFlags The flags to use.
  * @return The handler ID for the [slot].
  */
-internal fun <F : CFunction<*>> connectGtkSignal(
-    obj: CPointer<*>?,
-    signal: String,
-    slot: CPointer<F>,
-    data: gpointer? = null,
-    connectFlags: GConnectFlags = 0u
+fun <F : CFunction<*>> connectGObjectSignal(
+        obj: CPointer<*>?,
+        signal: String,
+        slot: CPointer<F>,
+        data: gpointer? = null,
+        connectFlags: GConnectFlags = 0u
 ): ULong = g_signal_connect_data(
-    instance = obj,
-    detailed_signal = signal,
-    c_handler = slot.reinterpret(),
-    data = data,
-    destroy_data = null,
-    connect_flags = connectFlags
+        instance = obj,
+        detailed_signal = signal,
+        c_handler = slot.reinterpret(),
+        data = data,
+        destroy_data = null,
+        connect_flags = connectFlags
 )
+
+private class EmptyData

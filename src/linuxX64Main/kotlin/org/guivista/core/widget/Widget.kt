@@ -4,7 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
-import org.guivista.core.connectGtkSignal
+import org.guivista.core.connectGObjectSignal
 
 /** Base interface for all widget's (controls). */
 interface Widget {
@@ -112,7 +112,7 @@ interface Widget {
      */
     fun connectGrabFocusSignal(slot: CPointer<CFunction<(app: CPointer<GtkWidget>, userData: gpointer) -> Unit>>,
                                userData: gpointer): ULong =
-        connectGtkSignal(obj = gtkWidgetPtr, signal = "activate", slot = slot, data = userData)
+            connectGObjectSignal(obj = gtkWidgetPtr, signal = "activate", slot = slot, data = userData)
 
     /**
      * Connects the *show* signal to a [slot] on a widget. The *show* signal is used when a widget is shown.
@@ -123,7 +123,7 @@ interface Widget {
      */
     fun connectShowSignal(slot: CPointer<CFunction<(app: CPointer<GtkWidget>, userData: gpointer) -> Unit>>,
                           userData: gpointer): ULong =
-        connectGtkSignal(obj = gtkWidgetPtr, signal = "show", slot = slot, data = userData)
+            connectGObjectSignal(obj = gtkWidgetPtr, signal = "show", slot = slot, data = userData)
 
     /**
      * Connects the *hide* signal to a [slot] on a widget. The *hide* signal is used when a widget is hidden.
@@ -134,7 +134,7 @@ interface Widget {
      */
     fun connectHideSignal(slot: CPointer<CFunction<(app: CPointer<GtkWidget>, userData: gpointer) -> Unit>>,
                           userData: gpointer): ULong =
-        connectGtkSignal(obj = gtkWidgetPtr, signal = "hide", slot = slot, data = userData)
+            connectGObjectSignal(obj = gtkWidgetPtr, signal = "hide", slot = slot, data = userData)
 
     /** Recursively shows a widget, and any child widgets (if the widget is a container). */
     fun showAll() {

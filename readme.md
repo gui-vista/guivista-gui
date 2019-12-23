@@ -49,23 +49,15 @@ kotlin {
 A basic GTK program using this library requires using an Application object that has the Application ID, connecting the **activate** signal, and creating the AppWindow UI in the slot (event handler) for the **activate** signal.
 
 1. Create the **main.kt** file with a **main** function
-2. Define the top level **DummyData** class:
-```kotlin
-private class DummyData {
-    val stableRef = StableRef.create(this)
-}
-```
-3. Define the top level **appWin** variable:
+2. Define the top level **appWin** variable:
 ```kotlin
 private lateinit var appWin: AppWindow
 ```
-4. Define the top level **activateApplication** function (handles creating the AppWindow UI):
+3. Define the top level **activateApplication** function (handles creating the AppWindow UI):
 ```kotlin
-private fun activateApplication(app: CPointer<GApplication>, userData: gpointer) {
-    
-}
+private fun activateApplication(app: CPointer<GApplication>, userData: gpointer) {}
 ```
-5. Create the AppWindow UI in the **activateApplication** function:
+4. Create the AppWindow UI in the **activateApplication** function:
 ```kotlin
 private fun activateApplication(app: CPointer<GApplication>, userData: gpointer) {
     appWin.createUi {
@@ -74,28 +66,19 @@ private fun activateApplication(app: CPointer<GApplication>, userData: gpointer)
     }
 }
 ```
-6. In the **main** function define a read only property called **data**:
-```kotlin
-val data = DummyData()
-```
-7. Once **data** is defined create a instance of Application, and pass through the **org.example.basicgui** Application ID:
-```kotlin
-Application("org.example.basicgui")
-```
-8. With the same line append the **use** function with a lambda:
+5. Create a instance of Application, pass through the **org.example.basicgui** Application ID, and call the *use* function with a lambda:
 ```kotlin
 Application("org.example.basicgui").use {}
 ```
-9. In the lambda initialise **appWin**, connect the **activate** signal, run the application, and dispose of the stable reference to **data** after the application exits:
+6. In the lambda initialise **appWin**, connect the **activate** signal, run the application, and dispose of the stable reference to **data** after the application exits:
 ```kotlin
 Application("org.example.basicgui").use {
     appWin = AppWin(this)
-    connectActivateSignal(staticCFunction(::activateApplication), data.stableRef.asCPointer())
+    connectActivateSignal(staticCFunction(::activateApplication), fetchEmptyDataPointer())
     println("Application Status: ${run()}")
-    data.stableRef.dispose()
 }
 ```
-10. Insert the following imports:
+7. Insert the following imports:
 - import gtk3.GApplication
 - import gtk3.gpointer
 - import kotlinx.cinterop.CPointer
@@ -103,6 +86,7 @@ Application("org.example.basicgui").use {
 - import kotlinx.cinterop.staticCFunction
 - import org.guivista.core.Application
 - import org.guivista.core.window.AppWindow
+- import org.guivista.core.fetchEmptyDataPointer
 
 
 After completing the steps above the **main.kt** file should look like the following:
@@ -114,16 +98,15 @@ import kotlinx.cinterop.StableRef
 import kotlinx.cinterop.staticCFunction
 import org.guivista.core.Application
 import org.guivista.core.window.AppWindow
+import org.guivista.core.fetchEmptyDataPointer
 
 private lateinit var appWin: AppWindow
 
 fun main() {
-    val data = DummyData()
     Application("org.example.basicgui").use {
         appWin = AppWindow(this)
-        connectActivateSignal(staticCFunction(::activateApplication), data.stableRef.asCPointer())
+        connectActivateSignal(staticCFunction(::activateApplication), fetchEmptyDataPointer())
         println("Application Status: ${run()}")
-        data.stableRef.dispose()
     }
 }
 
@@ -133,9 +116,5 @@ private fun activateApplication(app: CPointer<GApplication>, userData: gpointer)
         title = "Basic GUI"
         visible = true
     }
-}
-
-private class DummyData {
-    val stableRef = StableRef.create(this)
 }
 ```

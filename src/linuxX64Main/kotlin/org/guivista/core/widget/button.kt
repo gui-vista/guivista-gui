@@ -5,7 +5,7 @@ import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guivista.core.connectGtkSignal
+import org.guivista.core.connectGObjectSignal
 import org.guivista.core.layout.Container
 
 open class Button : Container {
@@ -27,7 +27,7 @@ open class Button : Container {
      */
     fun connectClickedSignal(slot: CPointer<CFunction<(app: CPointer<GtkButton>, userData: gpointer) -> Unit>>,
                              userData: gpointer): ULong =
-        connectGtkSignal(obj = gtkButtonPtr, signal = "clicked", slot = slot, data = userData)
+            connectGObjectSignal(obj = gtkButtonPtr, signal = "clicked", slot = slot, data = userData)
 }
 
 fun buttonWidget(init: Button.() -> Unit): Button {
