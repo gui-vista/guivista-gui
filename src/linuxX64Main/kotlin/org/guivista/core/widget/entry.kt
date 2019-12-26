@@ -1,10 +1,9 @@
-package org.guivista.core.layout
+package org.guivista.core.widget
 
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guivista.core.widget.Widget
 
 /** A single line text entry field. */
 class Entry : Widget {
