@@ -1,9 +1,10 @@
-package org.guivista.core.widget
+package org.guivista.core.widget.display
 
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
+import org.guivista.core.widget.Widget
 
 /** A widget that displays a small to medium amount of text. */
 open class Label(text: String) : Widget {
