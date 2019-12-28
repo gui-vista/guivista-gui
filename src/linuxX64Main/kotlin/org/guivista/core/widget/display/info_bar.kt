@@ -92,7 +92,7 @@ fun infoBarWidget(init: InfoBar.() -> Unit): InfoBar {
  * 1. infoBar: CPointer<GtkInfoBar>
  * 2. userData: gpointer
  */
-typealias CloseSlot = CFunction<(app: CPointer<GtkButton>, userData: gpointer) -> Unit>
+typealias CloseSlot = CFunction<(infoBar: CPointer<GtkInfoBar>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *response* signal. Arguments:
@@ -100,4 +100,4 @@ typealias CloseSlot = CFunction<(app: CPointer<GtkButton>, userData: gpointer) -
  * 2. responseId: Int
  * 3. userData: gpointer
  */
-typealias ResponseSlot = CFunction<(app: CPointer<GtkButton>, responseId: Int, userData: gpointer) -> Unit>
+typealias ResponseSlot = CFunction<(infoBar: CPointer<GtkInfoBar>, responseId: Int, userData: gpointer) -> Unit>
