@@ -11,6 +11,8 @@ import kotlinx.cinterop.toKString
 import org.guivista.core.connectGSignal
 import org.guivista.core.layout.Container
 
+private const val CLICKED_SIGNAL = "clicked"
+
 /** Base interface for button objects. */
 interface ButtonBase : Container {
     val gtkButtonPtr: CPointer<GtkButton>?
@@ -26,7 +28,7 @@ interface ButtonBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkButtonPtr, signal = "clicked", slot = slot, data = userData)
+        connectGSignal(obj = gtkButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData)
 }
 
 /**
