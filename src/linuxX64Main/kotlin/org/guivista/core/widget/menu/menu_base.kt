@@ -5,7 +5,7 @@ import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
 import org.guivista.core.layout.Container
 import org.guivista.core.widget.Widget
 
@@ -93,7 +93,7 @@ interface MenuBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectPoppedUpSignal(slot: CPointer<PoppedUpSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkMenuPtr, signal = "popped-up", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuPtr, signal = "popped-up", slot = slot, data = userData)
 }
 
 /**

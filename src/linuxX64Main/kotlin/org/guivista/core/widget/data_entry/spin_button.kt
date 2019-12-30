@@ -4,12 +4,16 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
+import org.guivista.core.disconnectGSignal
+
+private const val VALUE_CHANGED_SIGNAL = "value-changed"
+private const val CHANGE_VALUE_SIGNAL = "change-value"
 
 /** Retrieve an integer or floating-point number from the user. */
-class SpinButton(climbRate: Double = 1.0, digits: UInt = 1u) : Entry() {
+class SpinButton(climbRate: Double = 1.0, digits: UInt = 1u) : EntryBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? =
-            gtk_spin_button_new(climb_rate = climbRate, digits = digits, adjustment = null)
+        gtk_spin_button_new(climb_rate = climbRate, digits = digits, adjustment = null)
     val gtkSpinButtonPtr: CPointer<GtkSpinButton>?
         get() = gtkWidgetPtr?.reinterpret()
     /** The adjustment that holds the value of the [SpinButton]. */
@@ -78,7 +82,7 @@ class SpinButton(climbRate: Double = 1.0, digits: UInt = 1u) : Entry() {
      * @param userData User data to pass through to the [slot].
      */
     fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkSpinButtonPtr, signal = "value-changed", slot = slot, data = userData)
+        connectGSignal(obj = gtkSpinButtonPtr, signal = VALUE_CHANGED_SIGNAL, slot = slot, data = userData)
 
     /**
      * Connects the *change-value* signal to a [slot] on a [SpinButton]. This signal is used when the user initiates a
@@ -89,7 +93,12 @@ class SpinButton(climbRate: Double = 1.0, digits: UInt = 1u) : Entry() {
      * @param userData User data to pass through to the [slot].
      */
     fun connectChangeValueSignal(slot: CPointer<ChangeValueSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkSpinButtonPtr, signal = "change-value", slot = slot, data = userData)
+        connectGSignal(obj = gtkSpinButtonPtr, signal = CHANGE_VALUE_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkSpinButtonPtr, handlerId)
+    }
 }
 
 fun spinButtonWidget(climbRate: Double = 1.0, digits: UInt = 1u, init: SpinButton.() -> Unit): SpinButton {

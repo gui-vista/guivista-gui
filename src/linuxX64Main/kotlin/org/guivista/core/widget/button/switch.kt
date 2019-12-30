@@ -4,8 +4,11 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
+import org.guivista.core.disconnectGSignal
 import org.guivista.core.widget.Widget
+
+private const val STATE_SET_SIGNAL = "state-set"
 
 /** A “light switch” style toggle. */
 class Switch : Widget {
@@ -36,8 +39,13 @@ class Switch : Widget {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateLinkSignal(slot: CPointer<ActivateLinkSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkSwitchPtr, signal = "state-set", slot = slot, data = userData)
+    fun connectStateSetSignal(slot: CPointer<StateSetSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSwitchPtr, signal = STATE_SET_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkSwitchPtr, handlerId)
+    }
 }
 
 fun switchWidget(init: Switch.() -> Unit): Switch {

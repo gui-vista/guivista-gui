@@ -4,7 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
 
 /** A choice from multiple check menu items. */
 class RadioMenuItem(label: String = "", mnemonic: Boolean = false) : CheckMenuItemBase {
@@ -22,7 +22,7 @@ class RadioMenuItem(label: String = "", mnemonic: Boolean = false) : CheckMenuIt
      * @param userData User data to pass through to the [slot].
      */
     fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkRadioMenuItemPtr, signal = "group-changed", slot = slot, data = userData)
+        connectGSignal(obj = gtkRadioMenuItemPtr, signal = "group-changed", slot = slot, data = userData)
 
     /**
      * Joins a GtkRadioMenuItem object to the group of another GtkRadioMenuItem object.

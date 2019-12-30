@@ -4,8 +4,12 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
+import org.guivista.core.disconnectGSignal
 import org.guivista.core.layout.Container
+
+private const val CLOSE_SIGNAL = "close"
+private const val RESPONSE_SIGNAL = "response"
 
 /** Report important messages to the user. */
 class InfoBar : Container {
@@ -32,23 +36,28 @@ class InfoBar : Container {
         get() = gtk_info_bar_get_content_area(gtkInfoBarPtr)
 
     /**
-     * Connects the *close* signal to a [slot] on a info bar. The *close* signal is used when a user uses a key binding
+     * Connects the *close* signal to a [slot] on a [InfoBar]. This signal is used when a user uses a key binding
      * to dismiss the info bar.
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
     fun connectCloseSignal(slot: CPointer<CloseSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkInfoBarPtr, signal = "close", slot = slot, data = userData)
+        connectGSignal(obj = gtkInfoBarPtr, signal = CLOSE_SIGNAL, slot = slot, data = userData)
 
     /**
-     * Connects the *response* signal to a [slot] on a info bar. The *response* signal is used when an action widget
+     * Connects the *response* signal to a [slot] on a [InfoBar]. This signal is used when an action widget
      * is clicked, or the application programmer calls `gtk_dialog_response()`. The responseId depends on which action
      * widget was clicked.
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
     fun connectResponseSignal(slot: CPointer<ResponseSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkInfoBarPtr, signal = "response", slot = slot, data = userData)
+        connectGSignal(obj = gtkInfoBarPtr, signal = RESPONSE_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkInfoBarPtr, handlerId)
+    }
 
     /**
      * Adds a button with the given text, and sets things up so that clicking the button will emit the “response”
@@ -58,7 +67,7 @@ class InfoBar : Container {
      * @return A button widget. Usually you don't need it.
      */
     fun addButton(buttonText: String, responseId: Int): CPointer<GtkButton>? =
-            gtk_info_bar_add_button(
+        gtk_info_bar_add_button(
                     info_bar = gtkInfoBarPtr,
                     button_text = buttonText,
                     response_id = responseId

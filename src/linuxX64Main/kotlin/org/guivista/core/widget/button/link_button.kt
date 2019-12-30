@@ -5,7 +5,10 @@ import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
+import org.guivista.core.disconnectGSignal
+
+private const val ACTIVATE_LINK_SIGNAL = "activate-link"
 
 class LinkButton(uri: String, label: String = "") : ButtonBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? =
@@ -31,7 +34,12 @@ class LinkButton(uri: String, label: String = "") : ButtonBase {
      * @param userData User data to pass through to the [slot].
      */
     fun connectActivateLinkSignal(slot: CPointer<ActivateLinkSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkLinkButtonPtr, signal = "activate-link", slot = slot, data = userData)
+        connectGSignal(obj = gtkLinkButtonPtr, signal = ACTIVATE_LINK_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkLinkButtonPtr, handlerId)
+    }
 }
 
 fun linkButtonWidget(label: String = "", uri: String, init: LinkButton.() -> Unit): LinkButton {

@@ -4,7 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
 import org.guivista.core.layout.Container
 import org.guivista.core.widget.Widget
 
@@ -101,7 +101,7 @@ interface MenuShell : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectCancelSignal(slot: CPointer<CancelSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkMenuShellPtr, signal = "cancel", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuShellPtr, signal = "cancel", slot = slot, data = userData)
 
     /**
      * Connects the *selection-done* signal to a [slot] on a [MenuShell]. This signal is used when selection is
@@ -110,7 +110,7 @@ interface MenuShell : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectSelectionDoneSignal(slot: CPointer<SelectionDoneSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkMenuShellPtr, signal = "selection-done", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuShellPtr, signal = "selection-done", slot = slot, data = userData)
 
     /**
      * Connects the *activate-current* signal to a [slot] on a [MenuShell]. This signal is used when the current item
@@ -119,7 +119,7 @@ interface MenuShell : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectActivateCurrentSignal(slot: CPointer<ActivateCurrentSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkMenuShellPtr, signal = "activate-current", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuShellPtr, signal = "activate-current", slot = slot, data = userData)
 
     /**
      * Connects the *deactivate* signal to a [slot] on a [MenuShell]. This signal is used when the [MenuShell] is
@@ -128,7 +128,7 @@ interface MenuShell : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectDeactivateSignal(slot: CPointer<DeactivateSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkMenuShellPtr, signal = "deactivate", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuShellPtr, signal = "deactivate", slot = slot, data = userData)
 }
 
 /**

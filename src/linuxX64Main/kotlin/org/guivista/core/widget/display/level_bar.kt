@@ -4,8 +4,11 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
+import org.guivista.core.disconnectGSignal
 import org.guivista.core.widget.Widget
+
+private const val OFFSET_CHANGED_SIGNAL = "offset-changed"
 
 /** A bar that can used as a level indicator. */
 class LevelBar : Widget {
@@ -42,14 +45,19 @@ class LevelBar : Widget {
         set(value) = gtk_level_bar_set_value(gtkLevelBarPtr, value)
 
     /**
-     * Connects the *offset-changed* signal to a [slot] on a level bar. The *offset-changed* signal is used when the
+     * Connects the *offset-changed* signal to a [slot] on a [LevelBar]. This signal is used when the
      * bar changes value as an effect to ?? being called. The signal supports detailed connections. You can connect to
      * the detailed signal "changed::x" in order to only receive callbacks when the value of offset *x* changes.
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
     fun connectOffsetChangedSignal(slot: CPointer<OffsetChangedSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkLevelBarPtr, signal = "offset-changed", slot = slot, data = userData)
+        connectGSignal(obj = gtkLevelBarPtr, signal = OFFSET_CHANGED_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkLevelBarPtr, handlerId)
+    }
 }
 
 fun levelBarWidget(init: LevelBar.() -> Unit): LevelBar {

@@ -4,10 +4,16 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
+import org.guivista.core.disconnectGSignal
+
+private const val NEXT_MATCH_SIGNAL = "next-match"
+private const val PREVIOUS_MATCH_SIGNAL = "previous-match"
+private const val STOP_SEARCH_SIGNAL = "stop-search"
+private const val SEARCH_CHANGED_SIGNAL = "search-changed"
 
 /** An entry which shows a search icon. */
-class SearchEntry : Entry() {
+class SearchEntry : EntryBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_search_entry_new()
     val gtkSearchEntryPtr: CPointer<GtkSearchEntry>?
         get() = gtkWidgetPtr?.reinterpret()
@@ -34,7 +40,7 @@ class SearchEntry : Entry() {
      * @param userData User data to pass through to the [slot].
      */
     fun connectNextMatchSignal(slot: CPointer<NextMatchSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkSearchEntryPtr, signal = "next-match", slot = slot, data = userData)
+        connectGSignal(obj = gtkSearchEntryPtr, signal = NEXT_MATCH_SIGNAL, slot = slot, data = userData)
 
     /**
      * Connects the *previous-match* signal to a [slot] on a [SearchEntry]. This signal is a key binding signal that is
@@ -44,7 +50,7 @@ class SearchEntry : Entry() {
      * @param userData User data to pass through to the [slot].
      */
     fun connectPreviousMatchSignal(slot: CPointer<PreviousMatchSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkSearchEntryPtr, signal = "previous-match", slot = slot, data = userData)
+        connectGSignal(obj = gtkSearchEntryPtr, signal = PREVIOUS_MATCH_SIGNAL, slot = slot, data = userData)
 
     /**
      * Connects the *search-changed* signal to a [slot] on a [SearchEntry]. This signal is emitted with a short delay of
@@ -53,7 +59,7 @@ class SearchEntry : Entry() {
      * @param userData User data to pass through to the [slot].
      */
     fun connectSearchChangedSignal(slot: CPointer<SearchChangedSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkSearchEntryPtr, signal = "search-changed", slot = slot, data = userData)
+        connectGSignal(obj = gtkSearchEntryPtr, signal = SEARCH_CHANGED_SIGNAL, slot = slot, data = userData)
 
     /**
      * Connects the *stop-search* signal to a [slot] on a [SearchEntry]. This signal is a key binding signal that is
@@ -63,7 +69,12 @@ class SearchEntry : Entry() {
      * @param userData User data to pass through to the [slot].
      */
     fun connectStopSearchSignal(slot: CPointer<StopSearchSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkSearchEntryPtr, signal = "stop-search", slot = slot, data = userData)
+        connectGSignal(obj = gtkSearchEntryPtr, signal = STOP_SEARCH_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkSearchEntryPtr, handlerId)
+    }
 }
 
 fun searchEntryWidget(init: SearchEntry.() -> Unit): SearchEntry {

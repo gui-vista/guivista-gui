@@ -5,7 +5,7 @@ import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
 import org.guivista.core.layout.Container
 import org.guivista.core.widget.Widget
 
@@ -50,7 +50,7 @@ interface MenuItemBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkMenuItemPtr, signal = "activate", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuItemPtr, signal = "activate", slot = slot, data = userData)
 
     /**
      * Connects the *activate-item* signal to a [slot] on a menu item. This signal is used when the item is activated,
@@ -59,7 +59,7 @@ interface MenuItemBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectActivateItemSignal(slot: CPointer<ActivateItemSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkMenuItemPtr, signal = "activate-item", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuItemPtr, signal = "activate-item", slot = slot, data = userData)
 
     /**
      * Connects the *deselect* signal to a [slot] on a menu item. This signal is used when a item is deselected.
@@ -67,7 +67,7 @@ interface MenuItemBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectDeselectSignal(slot: CPointer<DeselectSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkMenuItemPtr, signal = "deselect", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuItemPtr, signal = "deselect", slot = slot, data = userData)
 
     /**
      * Connects the *select* signal to a [slot] on a menu item. This signal is used when a item is selected.
@@ -75,7 +75,7 @@ interface MenuItemBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     fun connectSelectSignal(slot: CPointer<SelectSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkMenuItemPtr, signal = "select", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuItemPtr, signal = "select", slot = slot, data = userData)
 }
 
 /**

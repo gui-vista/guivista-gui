@@ -4,7 +4,10 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
+import org.guivista.core.disconnectGSignal
+
+private const val GROUP_CHANGED_SIGNAL = "group-changed"
 
 /** A choice from multiple check buttons. */
 class RadioButton(label: String = "", mnemonic: Boolean = false) : CheckButtonBase {
@@ -25,7 +28,7 @@ class RadioButton(label: String = "", mnemonic: Boolean = false) : CheckButtonBa
     }
 
     /**
-     * Connects the *group-changed* signal to a [slot] on a info bar. This signal is used when the group of radio
+     * Connects the *group-changed* signal to a [slot] on a [RadioButton]. This signal is used when the group of radio
      * buttons that a [radio button][RadioButton] belongs to changes. Signal is emitted when a
      * [radio button][RadioButton] switches from being alone to being part of a group of two or more buttons, or
      * vice-versa, and when a button is moved from one group of two or more buttons to a different one, but not when
@@ -33,8 +36,13 @@ class RadioButton(label: String = "", mnemonic: Boolean = false) : CheckButtonBa
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectCloseSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkRadioButtonPtr, signal = "group-changed", slot = slot, data = userData)
+    fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkRadioButtonPtr, signal = GROUP_CHANGED_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkRadioButtonPtr, handlerId)
+    }
 }
 
 fun radioButtonWidget(label: String = "", mnemonic: Boolean = false, init: RadioButton.() -> Unit): RadioButton {

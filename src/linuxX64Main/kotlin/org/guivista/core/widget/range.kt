@@ -4,7 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
 
 /** A base for widgets which visualize an adjustment. */
 interface Range : Widget {
@@ -60,7 +60,7 @@ interface Range : Widget {
      * @param userData User data to pass through to the [slot].
      */
     fun connectAdjustBoundsSignal(slot: CPointer<AdjustBoundsSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkRangePtr, signal = "adjust-bounds", slot = slot, data = userData)
+        connectGSignal(obj = gtkRangePtr, signal = "adjust-bounds", slot = slot, data = userData)
 
     /**
      * Connects the *change-value* signal to a [slot] on a [Range]. The *change-value* signal is used when a scroll
@@ -76,7 +76,7 @@ interface Range : Widget {
      * @param userData User data to pass through to the [slot].
      */
     fun connectChangeValueSignal(slot: CPointer<ChangeValueSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkRangePtr, signal = "change-value", slot = slot, data = userData)
+        connectGSignal(obj = gtkRangePtr, signal = "change-value", slot = slot, data = userData)
 
     /**
      * Connects the *move-slider* signal to a [slot] on a [Range]. The *move-slider* signal is used for key bindings
@@ -85,7 +85,7 @@ interface Range : Widget {
      * @param userData User data to pass through to the [slot].
      */
     fun connectMoveSliderSignal(slot: CPointer<MoveSliderSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkRangePtr, signal = "move-slider", slot = slot, data = userData)
+        connectGSignal(obj = gtkRangePtr, signal = "move-slider", slot = slot, data = userData)
 
     /**
      * Connects the *value-changed* signal to a [slot] on a [Range]. The *value-changed* signal is used when the
@@ -94,7 +94,7 @@ interface Range : Widget {
      * @param userData User data to pass through to the [slot].
      */
     fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkRangePtr, signal = "value-changed", slot = slot, data = userData)
+        connectGSignal(obj = gtkRangePtr, signal = "value-changed", slot = slot, data = userData)
 }
 
 /**

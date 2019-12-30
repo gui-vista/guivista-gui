@@ -4,8 +4,12 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
+import org.guivista.core.disconnectGSignal
 
+private const val TOGGLED_SIGNAL = "toggled"
+
+/** Base interface for toggle button objects. */
 interface ToggleButtonBase : ButtonBase {
     val gtkToggleButtonPtr: CPointer<GtkToggleButton>?
         get() = gtkWidgetPtr?.reinterpret()
@@ -34,9 +38,15 @@ interface ToggleButtonBase : ButtonBase {
      * [toggle button's][ToggleButton] state has changed.
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
+     * @return The handler ID for the [slot].
      */
     fun connectToggledSignal(slot: CPointer<ToggledSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkToggleButtonPtr, signal = "toggled", slot = slot, data = userData)
+        connectGSignal(obj = gtkToggleButtonPtr, signal = TOGGLED_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkToggleButtonPtr, handlerId)
+    }
 }
 
 /**

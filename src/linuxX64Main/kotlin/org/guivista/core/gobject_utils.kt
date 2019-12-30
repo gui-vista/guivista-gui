@@ -1,10 +1,6 @@
-@file:Suppress("EXPERIMENTAL_API_USAGE", "EXPERIMENTAL_UNSIGNED_LITERALS")
-
 package org.guivista.core
 
-import gtk3.GConnectFlags
-import gtk3.g_signal_connect_data
-import gtk3.gpointer
+import gtk3.*
 import kotlinx.cinterop.*
 
 private val emptyData by lazy { EmptyData() }
@@ -14,7 +10,7 @@ private val emptyDataRef = StableRef.create(emptyData)
 @Suppress("unused")
 fun fetchEmptyDataPointer(): COpaquePointer = emptyDataRef.asCPointer()
 
-internal fun disposeEmptyDataRef() {
+fun disposeEmptyDataRef() {
     emptyDataRef.dispose()
 }
 
@@ -26,21 +22,30 @@ internal fun disposeEmptyDataRef() {
  * @param slot The slot to use for handling the signal.
  * @param data User data to pass through to the [slot]. By default no user data is passed through.
  * @param connectFlags The flags to use.
- * @return The handler ID for the [slot].
+ * @return A handler ID > 0 for the [slot] **if** the connection is successful.
  */
-fun <F : CFunction<*>> connectGObjectSignal(
-        obj: CPointer<*>?,
-        signal: String,
-        slot: CPointer<F>,
-        data: gpointer? = null,
-        connectFlags: GConnectFlags = 0u
+fun <F : CFunction<*>> connectGSignal(
+    obj: CPointer<*>?,
+    signal: String,
+    slot: CPointer<F>,
+    data: gpointer? = null,
+    connectFlags: GConnectFlags = 0u
 ): ULong = g_signal_connect_data(
-        instance = obj,
-        detailed_signal = signal,
-        c_handler = slot.reinterpret(),
-        data = data,
-        destroy_data = null,
-        connect_flags = connectFlags
+    instance = obj,
+    detailed_signal = signal,
+    c_handler = slot.reinterpret(),
+    data = data,
+    destroy_data = null,
+    connect_flags = connectFlags
 )
+
+/**
+ * Disconnects a signal (event) from a slot (event handler) on a [object][obj].
+ * @param obj The GObject to use.
+ * @param handlerId The handler ID to use.
+ */
+fun disconnectGSignal(obj: CPointer<*>?, handlerId: ULong) {
+    g_signal_handler_disconnect(obj, handlerId)
+}
 
 private class EmptyData

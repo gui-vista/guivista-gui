@@ -4,7 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
 
 /** Base interface for check menu item objects. */
 interface CheckMenuItemBase : MenuItemBase {
@@ -30,7 +30,7 @@ interface CheckMenuItemBase : MenuItemBase {
      * @param userData User data to pass through to the [slot].
      */
     fun connectToggledSignal(slot: CPointer<ToggledSlot>, userData: gpointer): ULong =
-        connectGObjectSignal(obj = gtkCheckMenuItemPtr, signal = "toggled", slot = slot, data = userData)
+        connectGSignal(obj = gtkCheckMenuItemPtr, signal = "toggled", slot = slot, data = userData)
 }
 
 /**

@@ -4,8 +4,11 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.connectGObjectSignal
+import org.guivista.core.connectGSignal
+import org.guivista.core.disconnectGSignal
 import org.guivista.core.widget.Range
+
+private const val FORMAT_VALUE_SIGNAL = "format-value"
 
 /** A slider widget for selecting a value from a range. */
 class Scale(orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTAL) : Range {
@@ -40,8 +43,12 @@ class Scale(orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZON
      * @param userData User data to pass through to the [slot].
      */
     fun connectFormatValueSignal(slot: CPointer<FormatValueSlot>, userData: gpointer): ULong =
-            connectGObjectSignal(obj = gtkScalePtr, signal = "format-value", slot = slot, data = userData)
+        connectGSignal(obj = gtkScalePtr, signal = FORMAT_VALUE_SIGNAL, slot = slot, data = userData)
 
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkScalePtr, handlerId)
+    }
 }
 
 fun scaleWidget(init: Scale.() -> Unit): Scale {
