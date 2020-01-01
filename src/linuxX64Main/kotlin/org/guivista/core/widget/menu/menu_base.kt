@@ -7,7 +7,7 @@ import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
 import org.guivista.core.connectGSignal
 import org.guivista.core.layout.Container
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** Base interface for menu objects. */
 interface MenuBase : Container {
@@ -39,7 +39,7 @@ interface MenuBase : Container {
      * @param menuAnchor The point on menu to align with the widget's anchor point.
      * @param triggerEvent The GdkEvent that initiated this request, or *null* if it's the current event.
      */
-    fun popupAtWidget(widget: Widget, widgetAnchor: GdkGravity, menuAnchor: GdkGravity,
+    fun popupAtWidget(widget: WidgetBase, widgetAnchor: GdkGravity, menuAnchor: GdkGravity,
                       triggerEvent: CPointer<GdkEvent>?) {
         gtk_menu_popup_at_widget(
             menu = gtkMenuPtr,

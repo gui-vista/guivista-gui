@@ -3,11 +3,11 @@ package org.guivista.core.layout
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** Packs widgets in rows and columns. */
-class Grid : Container {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_grid_new()
+class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = gridPtr?.reinterpret() ?: gtk_grid_new()
     val gtkGridPtr: CPointer<GtkGrid>?
         get() = gtkWidgetPtr?.reinterpret()
     /** The row to align the to the baseline when valign is GTK_ALIGN_BASELINE. Default value is *0*. */
@@ -80,7 +80,7 @@ class Grid : Container {
      * @param left The column number to attach the left side of the [child] to.
      * @param top The row number to attach the top side of the [child] to.
      */
-    fun attachChild(child: Widget, left: Int, top: Int, width: Int, height: Int) {
+    fun attachChild(child: WidgetBase, left: Int, top: Int, width: Int, height: Int) {
         gtk_grid_attach(grid = gtkGridPtr, child = child.gtkWidgetPtr, left = left, top = top, width = width,
             height = height)
     }
@@ -96,7 +96,7 @@ class Grid : Container {
      * @param width The number of columns that [child] will span.
      * @param height The number of rows that [child] will span.
      */
-    fun attachChildNextTo(child: Widget, sibling: Widget, side: GtkPositionType, width: Int, height: Int) {
+    fun attachChildNextTo(child: WidgetBase, sibling: WidgetBase, side: GtkPositionType, width: Int, height: Int) {
         gtk_grid_attach_next_to(
             grid = gtkGridPtr,
             child = child.gtkWidgetPtr,
@@ -114,7 +114,7 @@ class Grid : Container {
      * @param sibling The child of the grid that the new row, or column will be placed next to.
      * @param side The side of [sibling] that the child is positioned next to.
      */
-    fun insertNextTo(sibling: Widget, side: GtkPositionType) {
+    fun insertNextTo(sibling: WidgetBase, side: GtkPositionType) {
         gtk_grid_insert_next_to(grid = gtkGridPtr, sibling = sibling.gtkWidgetPtr, side = side)
     }
 
@@ -137,8 +137,8 @@ class Grid : Container {
     fun fetchRowBaselinePosition(row: Int): GtkBaselinePosition = gtk_grid_get_row_baseline_position(gtkGridPtr, row)
 }
 
-fun gridLayout(init: Grid.() -> Unit): Grid {
-    val grid = Grid()
+fun gridLayout(gridPtr: CPointer<GtkGrid>? = null, init: Grid.() -> Unit): Grid {
+    val grid = Grid(gridPtr)
     grid.init()
     return grid
 }

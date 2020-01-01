@@ -7,8 +7,12 @@ import kotlinx.cinterop.toKString
 import org.guivista.core.ObjectBase
 import org.guivista.core.connectGSignal
 
+private const val GRAB_FOCUS_SIGNAL = "grab-focus"
+private const val SHOW_SIGNAL = "show"
+private const val HIDE_SIGNAL = "hide"
+
 /** Base interface for all widget's (controls). */
-interface Widget : ObjectBase {
+interface WidgetBase : ObjectBase {
     val gtkWidgetPtr: CPointer<GtkWidget>?
     /** If set to *true* then the widget can accept the input focus. */
     var canFocus: Boolean
@@ -104,41 +108,56 @@ interface Widget : ObjectBase {
     }
 
     /**
-     * Connects the *grab-focus* signal to a [slot] on a widget. The *grab-focus* signal is used when a widget is
+     * Connects the *grab-focus* signal to a [slot] on a [WidgetBase]. This signal is used when a widget is
      * "grabbing" focus.
-     * @param slot The event handler for the signal. Arguments:
-     * 1. app: CPointer<GtkWidget>
-     * 2. userData: gpointer
+     * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectGrabFocusSignal(slot: CPointer<CFunction<(app: CPointer<GtkWidget>, userData: gpointer) -> Unit>>,
-                               userData: gpointer): ULong =
-        connectGSignal(obj = gtkWidgetPtr, signal = "activate", slot = slot, data = userData)
+    fun connectGrabFocusSignal(slot: CPointer<GrabFocusSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = GRAB_FOCUS_SIGNAL, slot = slot, data = userData)
 
     /**
-     * Connects the *show* signal to a [slot] on a widget. The *show* signal is used when a widget is shown.
-     * @param slot The event handler for the signal. Arguments:
-     * 1. app: CPointer<GtkWidget>
-     * 2. userData: gpointer
+     * Connects the *show* signal to a [slot] on a [WidgetBase]. This signal is used when a widget is shown.
+     * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectShowSignal(slot: CPointer<CFunction<(app: CPointer<GtkWidget>, userData: gpointer) -> Unit>>,
-                          userData: gpointer): ULong =
-        connectGSignal(obj = gtkWidgetPtr, signal = "show", slot = slot, data = userData)
+    fun connectShowSignal(slot: CPointer<ShowSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = SHOW_SIGNAL, slot = slot, data = userData)
 
     /**
-     * Connects the *hide* signal to a [slot] on a widget. The *hide* signal is used when a widget is hidden.
-     * @param slot The event handler for the signal. Arguments:
-     * 1. app: CPointer<GtkWidget>
-     * 2. userData: gpointer
+     * Connects the *hide* signal to a [slot] on a [WidgetBase]. This signal is used when a widget is hidden.
+     * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectHideSignal(slot: CPointer<CFunction<(app: CPointer<GtkWidget>, userData: gpointer) -> Unit>>,
-                          userData: gpointer): ULong =
-        connectGSignal(obj = gtkWidgetPtr, signal = "hide", slot = slot, data = userData)
+    fun connectHideSignal(slot: CPointer<HideSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = HIDE_SIGNAL, slot = slot, data = userData)
 
-    /** Recursively shows a widget, and any child widgets (if the widget is a container). */
+    /**
+     * Recursively shows a widget, and any child widgets (if the [widget][WidgetBase] is a
+     * [container][org.guivista.core.layout.Container]).
+     */
     fun showAll() {
         gtk_widget_show_all(gtkWidgetPtr)
     }
 }
+
+/**
+ * The event handler for the *grab-focus* signal. Arguments:
+ * 1. widget: CPointer<GtkWidget>
+ * 2. userData: gpointer
+ */
+typealias GrabFocusSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *show* signal. Arguments:
+ * 1. widget: CPointer<GtkWidget>
+ * 2. userData: gpointer
+ */
+typealias ShowSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *hide* signal. Arguments:
+ * 1. widget: CPointer<GtkWidget>
+ * 2. userData: gpointer
+ */
+typealias HideSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>

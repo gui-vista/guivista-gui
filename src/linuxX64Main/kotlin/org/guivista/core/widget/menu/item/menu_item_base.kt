@@ -7,7 +7,7 @@ import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
 import org.guivista.core.connectGSignal
 import org.guivista.core.layout.Container
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** Base interface for menu item objects. */
 interface MenuItemBase : Container {
@@ -33,7 +33,7 @@ interface MenuItemBase : Container {
      * Sets or replaces the menu item’s submenu, or removes it when a *null* submenu is passed.
      * @param submenu The submenu to use or *null*.
      */
-    fun changeSubmenu(submenu: Widget?) {
+    fun changeSubmenu(submenu: WidgetBase?) {
         gtk_menu_item_set_submenu(gtkMenuItemPtr, submenu?.gtkWidgetPtr)
     }
 

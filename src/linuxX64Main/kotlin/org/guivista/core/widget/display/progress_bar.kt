@@ -4,11 +4,11 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** A widget which indicates progress visually. */
-class ProgressBar : Widget {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_progress_bar_new()
+class ProgressBar(progressBarPtr: CPointer<GtkProgressBar>? = null) : WidgetBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = progressBarPtr?.reinterpret() ?: gtk_progress_bar_new()
     val gtkProgressBarPtr: CPointer<GtkProgressBar>?
         get() = gtkWidgetPtr?.reinterpret()
     /** The fraction of total work that has been completed. */
@@ -47,8 +47,8 @@ class ProgressBar : Widget {
     }
 }
 
-fun progressBarWidget(init: ProgressBar.() -> Unit): ProgressBar {
-    val progressBar = ProgressBar()
+fun progressBarWidget(progressBarPtr: CPointer<GtkProgressBar>? = null, init: ProgressBar.() -> Unit): ProgressBar {
+    val progressBar = ProgressBar(progressBarPtr)
     progressBar.init()
     return progressBar
 }

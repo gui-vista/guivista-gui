@@ -4,10 +4,10 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** Base interface for entry objects. */
-interface EntryBase : Widget {
+interface EntryBase : WidgetBase {
     val gtkEntryPtr: CPointer<GtkEntry>?
         get() = gtkWidgetPtr?.reinterpret()
     /** String contents in the entry. */

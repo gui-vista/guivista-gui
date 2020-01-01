@@ -5,8 +5,8 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
 /** A subclass of GtkMenuShell which holds GtkMenuItem widgets */
-class MenuBar : MenuShell {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_menu_bar_new()
+class MenuBar(menuBarPtr: CPointer<GtkMenuBar>? = null) : MenuShell {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = menuBarPtr?.reinterpret() ?: gtk_menu_bar_new()
     val gtkMenuBarPtr: CPointer<GtkMenuBar>?
         get() = gtkWidgetPtr?.reinterpret()
     /**
@@ -20,4 +20,10 @@ class MenuBar : MenuShell {
     var packDirection: GtkPackDirection
         get() = gtk_menu_bar_get_pack_direction(gtkMenuBarPtr)
         set(value) = gtk_menu_bar_set_pack_direction(gtkMenuBarPtr, value)
+}
+
+fun menuBarWidget(menuBarPtr: CPointer<GtkMenuBar>? = null, init: MenuBar.() -> Unit): MenuBar {
+    val menuBar = MenuBar(menuBarPtr)
+    menuBar.init()
+    return menuBar
 }

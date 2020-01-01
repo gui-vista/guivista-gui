@@ -3,7 +3,7 @@ package org.guivista.core.layout
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** Base interface for box objects. */
 interface BoxBase : Container {
@@ -37,7 +37,7 @@ interface BoxBase : Container {
      * @param pos The new position for the child in the box starting from 0. If negative this indicates the end of the
      * list.
      */
-    fun reorderChild(child: Widget, pos: Int) {
+    fun reorderChild(child: WidgetBase, pos: Int) {
         gtk_box_reorder_child(box = gtkBoxPtr, child = child.gtkWidgetPtr, position = pos)
     }
 
@@ -50,7 +50,7 @@ interface BoxBase : Container {
      * @param padding The amount of padding to use for the [child] which is in pixels. By default no padding is used.
      */
     fun prependChild(
-        child: Widget,
+        child: WidgetBase,
         fill: Boolean = true,
         expand: Boolean = false,
         padding: UInt = 0u
@@ -71,7 +71,7 @@ interface BoxBase : Container {
      * @param padding The amount of padding to use for the [child] which is in pixels. By default no padding is used.
      */
     fun appendChild(
-        child: Widget,
+        child: WidgetBase,
         fill: Boolean = true,
         expand: Boolean = false,
         padding: UInt = 0u

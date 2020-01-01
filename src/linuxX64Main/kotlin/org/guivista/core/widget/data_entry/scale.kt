@@ -11,8 +11,10 @@ import org.guivista.core.widget.Range
 private const val FORMAT_VALUE_SIGNAL = "format-value"
 
 /** A slider widget for selecting a value from a range. */
-class Scale(orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTAL) : Range {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_scale_new(orientation, null)
+class Scale(scalePtr: CPointer<GtkScale>? = null,
+            orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTAL) : Range {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? =
+        scalePtr?.reinterpret() ?: gtk_scale_new(orientation, null)
     val gtkScalePtr: CPointer<GtkScale>?
         get() = gtkWidgetPtr?.reinterpret()
     /** The number of decimal places that are displayed in the value. */
@@ -51,8 +53,8 @@ class Scale(orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZON
     }
 }
 
-fun scaleWidget(init: Scale.() -> Unit): Scale {
-    val scale = Scale()
+fun scaleWidget(scalePtr: CPointer<GtkScale>? = null, init: Scale.() -> Unit): Scale {
+    val scale = Scale(scalePtr)
     scale.init()
     return scale
 }

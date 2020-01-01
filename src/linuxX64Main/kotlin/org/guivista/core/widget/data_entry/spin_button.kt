@@ -4,6 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
+import org.guivista.core.Adjustment
 import org.guivista.core.connectGSignal
 import org.guivista.core.disconnectGSignal
 
@@ -11,15 +12,20 @@ private const val VALUE_CHANGED_SIGNAL = "value-changed"
 private const val CHANGE_VALUE_SIGNAL = "change-value"
 
 /** Retrieve an integer or floating-point number from the user. */
-class SpinButton(climbRate: Double = 1.0, digits: UInt = 1u) : EntryBase {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? =
-        gtk_spin_button_new(climb_rate = climbRate, digits = digits, adjustment = null)
+class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, climbRate: Double = 1.0,
+                 digits: UInt = 1u) : EntryBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = spinButtonPtr?.reinterpret()
+        ?: gtk_spin_button_new(climb_rate = climbRate, digits = digits, adjustment = null)
     val gtkSpinButtonPtr: CPointer<GtkSpinButton>?
         get() = gtkWidgetPtr?.reinterpret()
     /** The adjustment that holds the value of the [SpinButton]. */
-    var adjustment: CPointer<GtkAdjustment>?
-        get() = gtk_spin_button_get_adjustment(gtkSpinButtonPtr)
-        set(value) = gtk_spin_button_set_adjustment(gtkSpinButtonPtr, value)
+    var adjustment: Adjustment?
+        get() {
+            val tmp = gtk_spin_button_get_adjustment(gtkSpinButtonPtr)
+            return if (tmp != null) Adjustment(tmp)
+            else null
+        }
+        set(value) = gtk_spin_button_set_adjustment(gtkSpinButtonPtr, value?.gtkAdjustmentPtr)
     /** The number of decimal places to display. */
     var digits: UInt
         get() = gtk_spin_button_get_digits(gtkSpinButtonPtr)
@@ -66,14 +72,18 @@ class SpinButton(climbRate: Double = 1.0, digits: UInt = 1u) : EntryBase {
     /**
      * Changes the properties of an existing [SpinButton]. The adjustment, climb rate, and number of decimal places are
      * updated accordingly.
-     * @param adjustment A GtkAdjustment to replace the [spin button's][SpinButton] existing [adjustment], or **null**
+     * @param adjustment The adjustment to replace the [spin button's][SpinButton] existing adjustment, or **null**
      * to leave its current adjustment unchanged.
      * @param digits The number of decimal places to display in the [SpinButton].
      * @param climbRate The number of decimal places to display in the [SpinButton].
      */
-    fun configure(adjustment: CPointer<GtkAdjustment>? = null, digits: UInt = 1u, climbRate: Double = 1.0) {
-        gtk_spin_button_configure(spin_button = gtkSpinButtonPtr, adjustment = adjustment, climb_rate = climbRate,
-                digits = digits)
+    fun configure(adjustment: Adjustment? = null, digits: UInt = 1u, climbRate: Double = 1.0) {
+        gtk_spin_button_configure(
+            spin_button = gtkSpinButtonPtr,
+            adjustment = adjustment?.gtkAdjustmentPtr,
+            climb_rate = climbRate,
+            digits = digits
+        )
     }
 
     /**
@@ -101,8 +111,13 @@ class SpinButton(climbRate: Double = 1.0, digits: UInt = 1u) : EntryBase {
     }
 }
 
-fun spinButtonWidget(climbRate: Double = 1.0, digits: UInt = 1u, init: SpinButton.() -> Unit): SpinButton {
-    val spinButton = SpinButton(climbRate, digits)
+fun spinButtonWidget(
+    spinButtonPtr: CPointer<GtkSpinButton>? = null,
+    climbRate: Double = 1.0,
+    digits: UInt = 1u,
+    init: SpinButton.() -> Unit
+): SpinButton {
+    val spinButton = SpinButton(spinButtonPtr = spinButtonPtr, climbRate = climbRate, digits = digits)
     spinButton.init()
     return spinButton
 }

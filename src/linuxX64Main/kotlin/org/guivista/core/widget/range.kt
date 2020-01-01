@@ -4,16 +4,20 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
+import org.guivista.core.Adjustment
 import org.guivista.core.connectGSignal
 
 /** A base for widgets which visualize an adjustment. */
-interface Range : Widget {
+interface Range : WidgetBase {
     val gtkRangePtr: CPointer<GtkRange>?
         get() = gtkWidgetPtr?.reinterpret()
     /** Contains the current value of this range object. */
-    var adjustment: CPointer<GtkAdjustment>?
-        get() = gtk_range_get_adjustment(gtkRangePtr)
-        set(value) = gtk_range_set_adjustment(gtkRangePtr, value)
+    var adjustment: Adjustment?
+        get() {
+            val tmp = gtk_range_get_adjustment(gtkRangePtr)
+            return if (tmp != null) Adjustment(tmp) else null
+        }
+        set(value) = gtk_range_set_adjustment(gtkRangePtr, value?.gtkAdjustmentPtr)
     /**
      * The fill level (e.g. prebuffering of a network stream), which is best described by its most prominent use case.
      * It is an indicator for the amount of pre-buffering in a streaming media player. In that use case the value of

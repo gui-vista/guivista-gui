@@ -1,18 +1,18 @@
 package org.guivista.core.widget.data_entry
 
-import gtk3.*
+import gtk3.GtkEntry
+import gtk3.GtkWidget
+import gtk3.gtk_entry_new
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import kotlinx.cinterop.toKString
-import org.guivista.core.widget.Widget
 
 /** A single line text entry field. */
-class Entry : EntryBase {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_entry_new()
+class Entry(entryPtr: CPointer<GtkEntry>? = null) : EntryBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = entryPtr?.reinterpret() ?: gtk_entry_new()
 }
 
-fun entryWidget(init: Entry.() -> Unit): Entry {
-    val entry = Entry()
+fun entryWidget(entryPtr: CPointer<GtkEntry>? = null, init: Entry.() -> Unit): Entry {
+    val entry = Entry(entryPtr)
     entry.init()
     return entry
 }

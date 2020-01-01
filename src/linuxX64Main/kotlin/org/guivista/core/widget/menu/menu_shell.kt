@@ -7,30 +7,34 @@ import kotlinx.cinterop.reinterpret
 import org.guivista.core.connectGSignal
 import org.guivista.core.layout.Container
 import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** Base interface for menu objects. */
 interface MenuShell : Container {
     val gtkMenuShellPtr: CPointer<GtkMenuShell>?
         get() = gtkWidgetPtr?.reinterpret()
-    /**
-     * Determines whether the menu, and its submenus grab the keyboard focus. See `gtk_menu_shell_set_take_focus()`,
-     * and `gtk_menu_shell_get_take_focus().`
-     */
+    /** Determines whether the menu, and its submenus grab the keyboard focus. */
     var takeFocus: Boolean
         get() = gtk_menu_shell_get_take_focus(gtkMenuShellPtr) == TRUE
         set(value) = gtk_menu_shell_set_take_focus(gtkMenuShellPtr, if (value) TRUE else FALSE)
     /** The currently selected item in the [MenuShell] */
-    val selectedItem: CPointer<GtkWidget>?
-        get() = gtk_menu_shell_get_selected_item(gtkMenuShellPtr)
+    val selectedItem: Widget?
+        get() {
+            val tmp = gtk_menu_shell_get_selected_item(gtkMenuShellPtr)
+            return if (tmp != null) Widget(tmp) else null
+        }
     /** The parent [MenuShell]. A submenu parent is the GtkMenu or GtkMenuBar from which it was opened up. */
-    val parentShell: CPointer<GtkWidget>?
-        get() = gtk_menu_shell_get_parent_shell(gtkMenuShellPtr)
+    val parentShell: Widget?
+        get() {
+            val tmp = gtk_menu_shell_get_parent_shell(gtkMenuShellPtr)
+            return if (tmp != null) Widget(tmp) else null
+        }
 
     /**
      * Adds a new GtkMenuItem to the end of the menu shell's item list.
      * @param child The menu item to append.
      */
-    fun append(child: Widget) {
+    fun append(child: WidgetBase) {
         gtk_menu_shell_append(gtkMenuShellPtr, child.gtkWidgetPtr)
     }
 
@@ -38,7 +42,7 @@ interface MenuShell : Container {
      * Adds a new menu item to the beginning of the menu shell's item list.
      * @param child The menu item to prepend.
      */
-    fun prepend(child: Widget) {
+    fun prepend(child: WidgetBase) {
         gtk_menu_shell_prepend(gtkMenuShellPtr, child.gtkWidgetPtr)
     }
 
@@ -47,7 +51,7 @@ interface MenuShell : Container {
      * @param child The menu item to insert.
      * @param position The position in the item list where [child] is added. Positions are numbered from 0 to n-1.
      */
-    fun insert(child: Widget, position: Int) {
+    fun insert(child: WidgetBase, position: Int) {
         gtk_menu_shell_insert(menu_shell = gtkMenuShellPtr, child = child.gtkWidgetPtr, position = position)
     }
 
@@ -60,7 +64,7 @@ interface MenuShell : Container {
      * Selects the menu item from the menu shell.
      * @param menuItem The menu item to select.
      */
-    fun selectItem(menuItem: Widget) {
+    fun selectItem(menuItem: WidgetBase) {
         gtk_menu_shell_select_item(gtkMenuShellPtr, menuItem.gtkWidgetPtr)
     }
 
@@ -84,7 +88,7 @@ interface MenuShell : Container {
      * @param menuItem The menu item to activate.
      * @param forceDeactivate If *true* force the deactivation of the menu shell after the menu item is activated.
      */
-    fun activateItem(menuItem: Widget, forceDeactivate: Boolean) {
+    fun activateItem(menuItem: WidgetBase, forceDeactivate: Boolean) {
         gtk_menu_shell_activate_item(menu_shell = gtkMenuShellPtr, menu_item = menuItem.gtkWidgetPtr,
             force_deactivate = if (forceDeactivate) TRUE else FALSE)
     }

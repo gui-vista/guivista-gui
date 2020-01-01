@@ -6,13 +6,13 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guivista.core.connectGSignal
 import org.guivista.core.disconnectGSignal
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 private const val STATE_SET_SIGNAL = "state-set"
 
 /** A “light switch” style toggle. */
-class Switch : Widget {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_switch_new()
+class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = switchPtr?.reinterpret() ?: gtk_switch_new()
     val gtkSwitchPtr: CPointer<GtkSwitch>?
         get() = gtkWidgetPtr?.reinterpret()
     /** Whether the GtkSwitch widget is in its on or off state. */
@@ -48,8 +48,8 @@ class Switch : Widget {
     }
 }
 
-fun switchWidget(init: Switch.() -> Unit): Switch {
-    val switch = Switch()
+fun switchWidget(switchPtr: CPointer<GtkSwitch>? = null, init: Switch.() -> Unit): Switch {
+    val switch = Switch(switchPtr)
     switch.init()
     return switch
 }

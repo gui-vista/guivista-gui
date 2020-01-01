@@ -4,19 +4,47 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
+import org.guivista.core.SinglyLinkedList
 import org.guivista.core.connectGSignal
 import org.guivista.core.disconnectGSignal
 
 private const val GROUP_CHANGED_SIGNAL = "group-changed"
 
 /** A choice from multiple check buttons. */
-class RadioButton(label: String = "", mnemonic: Boolean = false) : CheckButtonBase {
+class RadioButton(
+    radioButtonPtr: CPointer<GtkRadioButton>? = null,
+    label: String = "",
+    mnemonic: Boolean = false
+) : CheckButtonBase {
+    @Suppress("IfThenToElvis")
     override val gtkWidgetPtr: CPointer<GtkWidget>? =
-        if (label.isNotEmpty() && mnemonic) gtk_check_button_new_with_mnemonic(label)
+        if (radioButtonPtr != null) radioButtonPtr.reinterpret()
+        else if (label.isNotEmpty() && mnemonic) gtk_check_button_new_with_mnemonic(label)
         else if (label.isNotEmpty() && !mnemonic) gtk_check_button_new_with_label(label)
         else gtk_check_button_new()
     val gtkRadioButtonPtr: CPointer<GtkRadioButton>?
         get() = gtkWidgetPtr?.reinterpret()
+
+    /**
+     * Changes the [radio button’s][RadioButton] group. It should be noted that this does not change the layout of your
+     * interface in any way. If you are changing the group it is likely you will need to re-arrange the user interface
+     * to reflect these changes.
+     * @param newGroup An existing radio button group such as one returned from [fetchGroup], or *null*.
+     */
+    fun changeGroup(newGroup: SinglyLinkedList?) {
+        gtk_radio_button_set_group(gtkRadioButtonPtr, newGroup?.gSListPtr)
+    }
+
+    /**
+     * Retrieves the group assigned to a radio button.
+     * @return A [list][SinglyLinkedList] containing all the radio buttons in the same group as this radio button. The
+     * returned list is owned by the radio button, and **MUST** not be modified or freed!
+     */
+    fun fetchGroup(): SinglyLinkedList? {
+        val groupPtr = gtk_radio_button_get_group(gtkRadioButtonPtr)
+        return if (groupPtr != null) SinglyLinkedList(groupPtr)
+        else null
+    }
 
     /**
      * Joins this [RadioButton] object to the group of another [RadioButton].
@@ -45,11 +73,13 @@ class RadioButton(label: String = "", mnemonic: Boolean = false) : CheckButtonBa
     }
 }
 
-fun radioButtonWidget(label: String = "", mnemonic: Boolean = false, init: RadioButton.() -> Unit): RadioButton {
-    val radioButton =
-        if (label.isNotEmpty() && mnemonic) RadioButton(label = label, mnemonic = mnemonic)
-        else if (label.isNotEmpty() && !mnemonic) RadioButton(label = label, mnemonic = mnemonic)
-        else RadioButton()
+fun radioButtonWidget(
+    radioButtonPtr: CPointer<GtkRadioButton>? = null,
+    label: String = "",
+    mnemonic: Boolean = false,
+    init: RadioButton.() -> Unit
+): RadioButton {
+    val radioButton = RadioButton(radioButtonPtr = radioButtonPtr, label = label, mnemonic = mnemonic)
     radioButton.init()
     return radioButton
 }

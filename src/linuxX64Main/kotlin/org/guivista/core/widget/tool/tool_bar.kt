@@ -7,8 +7,8 @@ import org.guivista.core.layout.Container
 import org.guivista.core.widget.tool.item.ToolItemBase
 
 /** Create bars of buttons and other widgets. */
-class ToolBar : Container, ToolShell {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_toolbar_new()
+class ToolBar(toolBarPtr: CPointer<GtkToolbar>? = null) : Container, ToolShell {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = toolBarPtr?.reinterpret() ?: gtk_toolbar_new()
     override val gtkToolShellPtr: CPointer<GtkToolShell>?
         get() = gtkWidgetPtr?.reinterpret()
     val gtkToolBarPtr: CPointer<GtkToolbar>?
@@ -91,4 +91,10 @@ class ToolBar : Container, ToolShell {
     fun unsetIconSize() {
         gtk_toolbar_unset_icon_size(gtkToolBarPtr)
     }
+}
+
+fun toolBarWidget(toolBarPtr: CPointer<GtkToolbar>? = null, init: ToolBar.() -> Unit): ToolBar {
+    val toolBar = ToolBar(toolBarPtr)
+    toolBar.init()
+    return toolBar
 }

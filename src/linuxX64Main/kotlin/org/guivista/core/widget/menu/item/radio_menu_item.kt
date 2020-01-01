@@ -7,11 +7,15 @@ import kotlinx.cinterop.reinterpret
 import org.guivista.core.connectGSignal
 
 /** A choice from multiple check menu items. */
-class RadioMenuItem(label: String = "", mnemonic: Boolean = false) : CheckMenuItemBase {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? =
-        if (label.isNotEmpty() && mnemonic) gtk_radio_menu_item_new_with_mnemonic(null, label)
-        else if (label.isNotEmpty() && !mnemonic) gtk_radio_menu_item_new_with_label(null, label)
-        else gtk_radio_menu_item_new(null)
+class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label: String = "",
+                    mnemonic: Boolean = false) : CheckMenuItemBase {
+    @Suppress("IfThenToElvis")
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = when {
+        radioMenuItemPtr != null -> radioMenuItemPtr.reinterpret()
+        label.isNotEmpty() && mnemonic -> gtk_radio_menu_item_new_with_mnemonic(null, label)
+        label.isNotEmpty() && !mnemonic -> gtk_radio_menu_item_new_with_label(null, label)
+        else -> gtk_radio_menu_item_new(null)
+    }
     val gtkRadioMenuItemPtr: CPointer<GtkRadioMenuItem>?
         get() = gtkWidgetPtr?.reinterpret()
 
@@ -32,6 +36,13 @@ class RadioMenuItem(label: String = "", mnemonic: Boolean = false) : CheckMenuIt
     fun joinGroup(groupSource: RadioMenuItem?) {
         gtk_radio_menu_item_join_group(gtkRadioMenuItemPtr, groupSource?.gtkRadioMenuItemPtr)
     }
+}
+
+fun radioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label: String = "", mnemonic: Boolean = false,
+                  init: RadioMenuItem.() -> Unit): RadioMenuItem {
+    val menuItem = RadioMenuItem(radioMenuItemPtr = radioMenuItemPtr, label = label, mnemonic = mnemonic)
+    menuItem.init()
+    return menuItem
 }
 
 /**

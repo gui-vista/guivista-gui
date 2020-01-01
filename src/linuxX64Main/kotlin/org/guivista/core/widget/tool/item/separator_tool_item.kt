@@ -5,8 +5,9 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
 /** A toolbar item that separates groups of other toolbar items. */
-class SeparatorToolItem : ToolItemBase {
-    override val gtkToolItemPtr: CPointer<GtkToolItem>? = gtk_separator_tool_item_new()
+class SeparatorToolItem(separatorToolItemPtr: CPointer<GtkSeparatorToolItem>? = null) : ToolItemBase {
+    override val gtkToolItemPtr: CPointer<GtkToolItem>? =
+        separatorToolItemPtr?.reinterpret() ?: gtk_separator_tool_item_new()
     val gtkSeparatorToolItemPtr: CPointer<GtkSeparatorToolItem>?
         get() = gtkToolItemPtr?.reinterpret()
     override val gtkWidgetPtr: CPointer<GtkWidget>? = null
@@ -16,8 +17,9 @@ class SeparatorToolItem : ToolItemBase {
         set(value) = gtk_separator_tool_item_set_draw(gtkSeparatorToolItemPtr, if (value) TRUE else FALSE)
 }
 
-fun separatorToolItemWidget(init: SeparatorToolItem.() -> Unit): SeparatorToolItem {
-    val toolItem = SeparatorToolItem()
+fun separatorToolItemWidget(separatorToolItemPtr: CPointer<GtkSeparatorToolItem>? = null,
+                            init: SeparatorToolItem.() -> Unit): SeparatorToolItem {
+    val toolItem = SeparatorToolItem(separatorToolItemPtr)
     toolItem.init()
     return toolItem
 }

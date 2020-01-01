@@ -10,10 +10,14 @@ import org.guivista.core.disconnectGSignal
 
 private const val ACTIVATE_LINK_SIGNAL = "activate-link"
 
-class LinkButton(uri: String, label: String = "") : ButtonBase {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? =
-        if (label.isNotEmpty()) gtk_link_button_new_with_label(uri, label)
-        else gtk_link_button_new(uri)
+/** Create buttons bound to a URL. */
+class LinkButton(linkButtonPtr: CPointer<GtkLinkButton>? = null, uri: String = "", label: String = "") : ButtonBase {
+    @Suppress("IfThenToElvis")
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = when {
+        linkButtonPtr != null -> linkButtonPtr.reinterpret()
+        uri.isNotEmpty() && label.isNotEmpty() -> gtk_link_button_new_with_label(uri, label)
+        else -> createLinkButton(uri)
+    }
     val gtkLinkButtonPtr: CPointer<GtkLinkButton>?
         get() = gtkWidgetPtr?.reinterpret()
     /** The URI bound to this button. */
@@ -24,6 +28,10 @@ class LinkButton(uri: String, label: String = "") : ButtonBase {
     var visited: Boolean
         get() = gtk_link_button_get_visited(gtkLinkButtonPtr) == TRUE
         set(value) = gtk_link_button_set_visited(gtkLinkButtonPtr, if (value) TRUE else FALSE)
+
+    private fun createLinkButton(uri: String) =
+        if (uri.isEmpty()) throw IllegalArgumentException("Cannot have empty uri.")
+        else gtk_link_button_new(uri)
 
     /**
      * Connects the *activate-link* signal to a [slot] on a [LinkButton]. This signal is used when the [LinkButton] has
@@ -42,10 +50,13 @@ class LinkButton(uri: String, label: String = "") : ButtonBase {
     }
 }
 
-fun linkButtonWidget(label: String = "", uri: String, init: LinkButton.() -> Unit): LinkButton {
-    val linkButton =
-        if (label.isNotEmpty()) LinkButton(label = label, uri = uri)
-        else LinkButton(uri)
+fun linkButtonWidget(
+    linkButtonPtr: CPointer<GtkLinkButton>? = null,
+    label: String = "",
+    uri: String = "",
+    init: LinkButton.() -> Unit
+): LinkButton {
+    val linkButton = LinkButton(linkButtonPtr = linkButtonPtr, label = label, uri = uri)
     linkButton.init()
     return linkButton
 }

@@ -6,13 +6,13 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guivista.core.connectGSignal
 import org.guivista.core.disconnectGSignal
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 private const val OFFSET_CHANGED_SIGNAL = "offset-changed"
 
 /** A bar that can used as a level indicator. */
-class LevelBar : Widget {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_level_bar_new()
+class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : WidgetBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = levelBarPtr?.reinterpret() ?: gtk_level_bar_new()
     val gtkLevelBarPtr: CPointer<GtkLevelBar>?
         get() = gtkWidgetPtr?.reinterpret()
     /**
@@ -60,8 +60,8 @@ class LevelBar : Widget {
     }
 }
 
-fun levelBarWidget(init: LevelBar.() -> Unit): LevelBar {
-    val levelBar = LevelBar()
+fun levelBarWidget(levelBarPtr: CPointer<GtkLevelBar>? = null, init: LevelBar.() -> Unit): LevelBar {
+    val levelBar = LevelBar(levelBarPtr)
     levelBar.init()
     return levelBar
 }

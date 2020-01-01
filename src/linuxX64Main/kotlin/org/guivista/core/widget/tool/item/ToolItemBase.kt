@@ -2,11 +2,25 @@ package org.guivista.core.widget.tool.item
 
 import gtk3.*
 import kotlinx.cinterop.CPointer
+import org.guivista.core.SizeGroup
 import org.guivista.core.layout.Container
 
 /** The base interface of widgets that can be added to a tool shell. */
 interface ToolItemBase : Container {
     val gtkToolItemPtr: CPointer<GtkToolItem>?
+    /**
+     * The size group used for labels in the tool item. Custom implementations of [ToolItemBase] should call this
+     * function, and use the size group for labels.
+     */
+    val textSizeGroup: SizeGroup
+        get() = SizeGroup(gtk_tool_item_get_text_size_group(gtkToolItemPtr))
+    /**
+     * The relief style of the tool item . Custom implementations of [ToolItemBase] should call this function in the
+     * handler of the “toolbar_reconfigured” signal to find out the relief style of buttons.
+     * @see [org.guivista.core.widget.button.Button.relief]
+     */
+    val reliefStyle: GtkReliefStyle
+        get() = gtk_tool_item_get_relief_style(gtkToolItemPtr)
     /**
      * Whether the toolbar item is considered important. When *true* the toolbar buttons show text in
      * `GTK_TOOLBAR_BOTH_HORIZ` mode.
@@ -86,6 +100,14 @@ interface ToolItemBase : Container {
     val textOrientation: GtkOrientation
         get() = gtk_tool_item_get_text_orientation(gtkToolItemPtr)
 
+    /**
+     * Calling this function signals to the toolbar that the overflow menu item for the tool item has changed. If the
+     * overflow menu is visible when this function it called, then the menu will be rebuilt. The function must be
+     * called when the tool item changes what it will do in response to the “create-menu-proxy” signal.
+     */
+    fun rebuildMenu() {
+        gtk_tool_item_rebuild_menu(gtkToolItemPtr)
+    }
 
     /**
      * Changes the text to be displayed as tooltip on the item. See `gtk_widget_set_tooltip_text()`.

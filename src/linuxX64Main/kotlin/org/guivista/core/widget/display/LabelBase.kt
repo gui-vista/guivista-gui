@@ -4,10 +4,10 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** Base interface for label objects. */
-interface LabelBase : Widget {
+interface LabelBase : WidgetBase {
     val gtkLabelPtr: CPointer<GtkLabel>?
         get() = gtkWidgetPtr?.reinterpret()
     /** The label's string contents. */

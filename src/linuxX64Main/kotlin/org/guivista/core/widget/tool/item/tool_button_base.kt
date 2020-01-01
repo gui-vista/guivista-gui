@@ -5,6 +5,7 @@ import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
 import org.guivista.core.connectGSignal
+import org.guivista.core.widget.Widget
 
 private const val CLICKED_SIGNAL = "clicked"
 
@@ -19,17 +20,23 @@ interface ToolButtonBase : ToolItemBase {
         get() = gtk_tool_button_get_icon_name(gtkToolButtonPtr)?.toKString() ?: ""
         set(value) = gtk_tool_button_set_icon_name(gtkToolButtonPtr, value)
     /** Icon widget to display in the item. */
-    var iconWidget: CPointer<GtkWidget>?
-        get() = gtk_tool_button_get_icon_widget(gtkToolButtonPtr)
-        set(value) = gtk_tool_button_set_icon_widget(gtkToolButtonPtr, value)
+    var iconWidget: Widget?
+        get() {
+            val tmp = gtk_tool_button_get_icon_widget(gtkToolButtonPtr)
+            return if (tmp != null) Widget(tmp) else null
+        }
+        set(value) = gtk_tool_button_set_icon_widget(gtkToolButtonPtr, value?.gtkWidgetPtr)
     /** Text to show in the item. */
     var label: String
         get() = gtk_tool_button_get_label(gtkToolButtonPtr)?.toKString() ?: ""
         set(value) = gtk_tool_button_set_label(gtkToolButtonPtr, value)
     /** Widget to use as the item label. */
-    var labelWidget: CPointer<GtkWidget>?
-        get() = gtk_tool_button_get_label_widget(gtkToolButtonPtr)
-        set(value) = gtk_tool_button_set_label_widget(gtkToolButtonPtr, value)
+    var labelWidget: Widget?
+        get() {
+            val tmp = gtk_tool_button_get_label_widget(gtkToolButtonPtr)
+            return if (tmp != null) Widget(tmp) else null
+        }
+        set(value) = gtk_tool_button_set_label_widget(gtkToolButtonPtr, value?.gtkWidgetPtr)
     /**
      * If set an underline in the [label] property indicates that the next character should be used for the mnemonic
      * accelerator key in the overflow menu.

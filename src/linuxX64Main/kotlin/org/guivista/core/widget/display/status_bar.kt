@@ -6,8 +6,8 @@ import kotlinx.cinterop.reinterpret
 import org.guivista.core.layout.Container
 
 /** Report messages of minor importance to the user. */
-class StatusBar : Container {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_statusbar_new()
+class StatusBar(statusBarPtr: CPointer<GtkStatusbar>? = null) : Container {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = statusBarPtr?.reinterpret() ?: gtk_statusbar_new()
     val gtkStatusBarPtr: CPointer<GtkStatusbar>?
         get() = gtkWidgetPtr?.reinterpret()
     /** Retrieves the box containing the label widget. */
@@ -60,8 +60,8 @@ class StatusBar : Container {
     }
 }
 
-fun statusBarWidget(init: StatusBar.() -> Unit): StatusBar {
-    val statusBar = StatusBar()
+fun statusBarWidget(statusBarPtr: CPointer<GtkStatusbar>? = null, init: StatusBar.() -> Unit): StatusBar {
+    val statusBar = StatusBar(statusBarPtr)
     statusBar.init()
     return statusBar
 }

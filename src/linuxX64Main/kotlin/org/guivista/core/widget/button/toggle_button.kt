@@ -1,24 +1,30 @@
 package org.guivista.core.widget.button
 
-import gtk3.GtkWidget
-import gtk3.gtk_toggle_button_new
-import gtk3.gtk_toggle_button_new_with_label
-import gtk3.gtk_toggle_button_new_with_mnemonic
+import gtk3.*
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.reinterpret
 
 /** Create buttons which retain their state. */
-class ToggleButton(label: String = "", mnemonic: Boolean = false) : ToggleButtonBase {
+class ToggleButton(
+    toggleButtonPtr: CPointer<GtkToggleButton>? = null,
+    label: String = "",
+    mnemonic: Boolean = false
+) : ToggleButtonBase {
+    @Suppress("IfThenToElvis")
     override val gtkWidgetPtr: CPointer<GtkWidget>? =
-        if (label.isNotEmpty() && !mnemonic) gtk_toggle_button_new_with_label(label)
+        if (toggleButtonPtr != null) toggleButtonPtr.reinterpret()
+        else if (label.isNotEmpty() && !mnemonic) gtk_toggle_button_new_with_label(label)
         else if (label.isNotEmpty() && mnemonic) gtk_toggle_button_new_with_mnemonic(label)
         else gtk_toggle_button_new()
 }
 
-fun toggleButtonWidget(label: String = "", mnemonic: Boolean = false, init: ToggleButton.() -> Unit): ToggleButton {
-    val toggleButton =
-        if (label.isNotEmpty() && mnemonic) ToggleButton(label = label, mnemonic = mnemonic)
-        else if (label.isNotEmpty() && !mnemonic) ToggleButton(label = label, mnemonic = mnemonic)
-        else ToggleButton()
+fun toggleButtonWidget(
+    toggleButtonPtr: CPointer<GtkToggleButton>? = null,
+    label: String = "",
+    mnemonic: Boolean = false,
+    init: ToggleButton.() -> Unit
+): ToggleButton {
+    val toggleButton = ToggleButton(toggleButtonPtr = toggleButtonPtr, label = label, mnemonic = mnemonic)
     toggleButton.init()
     return toggleButton
 }

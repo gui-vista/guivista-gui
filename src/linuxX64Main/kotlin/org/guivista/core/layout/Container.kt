@@ -5,10 +5,10 @@ import gtk3.gtk_container_get_border_width
 import gtk3.gtk_container_set_border_width
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** Base class for widgets which contain other widgets. Deals with basic layout. */
-interface Container : Widget {
+interface Container : WidgetBase {
     val gtkContainerPtr: CPointer<GtkContainer>?
         get() = gtkWidgetPtr?.reinterpret()
     /** The width of the empty border outside the container's children. */

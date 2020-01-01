@@ -2,11 +2,11 @@ package org.guivista.core.widget.display
 
 import gtk3.*
 import kotlinx.cinterop.*
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** A widget displaying an image. */
-class Image : Widget {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_image_new()
+class Image(imagePtr: CPointer<GtkImage>? = null) : WidgetBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = imagePtr?.reinterpret() ?: gtk_image_new()
     val gtkImagePtr: CPointer<GtkImage>?
         get() = gtkWidgetPtr?.reinterpret()
     /**
@@ -50,7 +50,7 @@ class Image : Widget {
 
     /**
      * Gets the icon name, and the icon size.
-     * @return A Pair with the first element being the icon name, and the last element being the icon size.
+     * @return A Pair instance with the first element being the icon name, and the last element being the icon size.
      */
     fun fetchIconName(): Pair<String, GtkIconSize> = memScoped {
         val iconName = alloc<CPointerVar<ByteVar>>()
@@ -59,14 +59,14 @@ class Image : Widget {
         (iconName.value?.toKString() ?: "") to iconSize.value
     }
 
-    /** Resets the image to be empty. */
+    /** Resets the [Image] instance so it doesn't show an image. */
     fun clear() {
         gtk_image_clear(gtkImagePtr)
     }
 }
 
-fun imageWidget(init: Image.() -> Unit): Image {
-    val image = Image()
+fun imageWidget(imagePtr: CPointer<GtkImage>? = null, init: Image.() -> Unit): Image {
+    val image = Image(imagePtr)
     image.init()
     return image
 }

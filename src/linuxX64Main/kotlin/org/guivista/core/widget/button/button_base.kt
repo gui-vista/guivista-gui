@@ -1,9 +1,6 @@
 package org.guivista.core.widget.button
 
-import gtk3.GtkButton
-import gtk3.gpointer
-import gtk3.gtk_button_get_label
-import gtk3.gtk_button_set_label
+import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
@@ -21,6 +18,10 @@ interface ButtonBase : Container {
     var label: String
         set(value) = gtk_button_set_label(gtkButtonPtr, value)
         get() = gtk_button_get_label(gtkButtonPtr)?.toKString() ?: ""
+    /** The border relief style. */
+    var relief: GtkReliefStyle
+        get() = gtk_button_get_relief(gtkButtonPtr)
+        set(value) = gtk_button_set_relief(gtkButtonPtr, value)
 
     /**
      * Connects the *clicked* signal to a [slot] on a button. This signal is used when a user has clicked on the button.

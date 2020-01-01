@@ -3,11 +3,11 @@ package org.guivista.core.widget.display
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /** Show a spinner animation. */
-class Spinner : Widget {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_spinner_new()
+class Spinner(spinnerPtr: CPointer<GtkSpinner>? = null) : WidgetBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = spinnerPtr?.reinterpret() ?: gtk_spinner_new()
     val gtkSpinnerPtr: CPointer<GtkSpinner>?
         get() = gtkWidgetPtr?.reinterpret()
 
@@ -22,8 +22,8 @@ class Spinner : Widget {
     }
 }
 
-fun spinnerWidget(init: Spinner.() -> Unit): Spinner {
-    val spinner = Spinner()
+fun spinnerWidget(spinnerPtr: CPointer<GtkSpinner>? = null, init: Spinner.() -> Unit): Spinner {
+    val spinner = Spinner(spinnerPtr)
     spinner.init()
     return spinner
 }

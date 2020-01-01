@@ -13,8 +13,8 @@ private const val STOP_SEARCH_SIGNAL = "stop-search"
 private const val SEARCH_CHANGED_SIGNAL = "search-changed"
 
 /** An entry which shows a search icon. */
-class SearchEntry : EntryBase {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_search_entry_new()
+class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : EntryBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = searchEntryPtr?.reinterpret() ?: gtk_search_entry_new()
     val gtkSearchEntryPtr: CPointer<GtkSearchEntry>?
         get() = gtkWidgetPtr?.reinterpret()
 
@@ -28,9 +28,8 @@ class SearchEntry : EntryBase {
      * @return *GDK_EVENT_STOP* if the key press event resulted in a search beginning or continuing. Otherwise return
      * *GDK_EVENT_PROPAGATE*.
      */
-    fun handleEvent(event: CPointer<GdkEvent>) {
-        gtk_search_entry_handle_event(gtkSearchEntryPtr, event)
-    }
+    fun handleEvent(event: CPointer<GdkEvent>): Boolean =
+        gtk_search_entry_handle_event(gtkSearchEntryPtr, event) == TRUE
 
     /**
      * Connects the *next-match* signal to a [slot] on a [SearchEntry]. This signal is a key binding signal that is used
@@ -77,8 +76,8 @@ class SearchEntry : EntryBase {
     }
 }
 
-fun searchEntryWidget(init: SearchEntry.() -> Unit): SearchEntry {
-    val searchEntry = SearchEntry()
+fun searchEntryWidget(searchEntryPtr: CPointer<GtkSearchEntry>? = null, init: SearchEntry.() -> Unit): SearchEntry {
+    val searchEntry = SearchEntry(searchEntryPtr)
     searchEntry.init()
     return searchEntry
 }

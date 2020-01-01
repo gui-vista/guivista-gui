@@ -12,8 +12,8 @@ private const val CLOSE_SIGNAL = "close"
 private const val RESPONSE_SIGNAL = "response"
 
 /** Report important messages to the user. */
-class InfoBar : Container {
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = gtk_info_bar_new()
+class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Container {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = infoBarPtr?.reinterpret() ?: gtk_info_bar_new()
     val gtkInfoBarPtr: CPointer<GtkInfoBar>?
         get() = gtkWidgetPtr?.reinterpret()
     /** Type of the message. The type may be used to determine the appearance of the [Info Bar][InfoBar]. */
@@ -90,8 +90,8 @@ class InfoBar : Container {
     }
 }
 
-fun infoBarWidget(init: InfoBar.() -> Unit): InfoBar {
-    val infoBar = InfoBar()
+fun infoBarWidget(infoBarPtr: CPointer<GtkInfoBar>? = null, init: InfoBar.() -> Unit): InfoBar {
+    val infoBar = InfoBar(infoBarPtr)
     infoBar.init()
     return infoBar
 }

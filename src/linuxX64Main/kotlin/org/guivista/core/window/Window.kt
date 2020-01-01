@@ -5,7 +5,7 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
 import org.guivista.core.layout.Container
-import org.guivista.core.widget.Widget
+import org.guivista.core.widget.WidgetBase
 
 /**
  * Represents a top level window that can contain other widgets. Nearly always, the type of the window should be
@@ -100,12 +100,12 @@ abstract class Window(val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPL
     }
 
     /** Adds a new child to the window. */
-    fun addChild(widget: Widget) {
+    fun addChild(widget: WidgetBase) {
         gtk_container_add(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
     /** Removes a child from the window. */
-    fun removeChild(widget: Widget) {
+    fun removeChild(widget: WidgetBase) {
         gtk_container_remove(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
