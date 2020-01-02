@@ -14,18 +14,12 @@ class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
     var baselineRow: Int
         set(value) = gtk_grid_set_baseline_row(gtkGridPtr, value)
         get() = gtk_grid_get_baseline_row(gtkGridPtr)
-    /**
-     * If set to *true* then all columns are the same width. Default value is *false*. Property is the same as
-     * `GtkGrid.column-homogeneous`.
-     */
-    var uniformColumnSize: Boolean
+    /** If set to *true* then all columns are the same width. Default value is *false*. */
+    var columnHomogeneous: Boolean
         set(value) = gtk_grid_set_column_homogeneous(gtkGridPtr, if (value) TRUE else FALSE)
         get() = gtk_grid_get_column_homogeneous(gtkGridPtr) == TRUE
-    /**
-     * If set to *true* then all row are the same height. Default value is *false*. Property is the same as
-     * `GtkGrid.row-homogeneous`.
-     */
-    var uniformRowSize: Boolean
+    /** If set to *true* then all row are the same height. Default value is *false*. */
+    var rowHomogeneous: Boolean
         set(value) = gtk_grid_set_row_homogeneous(gtkGridPtr, if (value) TRUE else FALSE)
         get() = gtk_grid_get_row_homogeneous(gtkGridPtr) == TRUE
     /** The amount of space between two consecutive columns. Default value is *0*. */

@@ -9,15 +9,12 @@ import org.guivista.core.widget.WidgetBase
 interface BoxBase : Container {
     val gtkBoxPtr: CPointer<GtkBox>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** The amount of space between children. */
+    /** The amount of space between children. Default value is *0*. */
     var spacing: Int
         set(value) = gtk_box_set_spacing(gtkBoxPtr, value)
         get() = gtk_box_get_spacing(gtkBoxPtr)
-    /**
-     * If set to *true* then all the children are the same size. Default value is *false*. Property is the same as
-     * *GtkBox.homogeneous*.
-     */
-    var uniformSizedChildren: Boolean
+    /** If set to *true* then all the children are the same size. Default value is *false*. */
+    var homogeneous: Boolean
         set(value) = gtk_box_set_homogeneous(gtkBoxPtr, if (value) TRUE else FALSE)
         get() = gtk_box_get_homogeneous(gtkBoxPtr) == TRUE
     /**
