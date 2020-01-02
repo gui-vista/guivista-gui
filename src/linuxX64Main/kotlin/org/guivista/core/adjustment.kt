@@ -10,33 +10,33 @@ private const val VALUE_CHANGED_SIGNAL = "value-changed"
 /** A representation of an adjustable bounded value. */
 class Adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null) : ObjectBase {
     val gtkAdjustmentPtr: CPointer<GtkAdjustment>? = adjustmentPtr ?: createAdjustment()
-    /** The minimum value of the adjustment. */
+    /** The minimum value of the adjustment. Default value is *0*. */
     var lower: Double
         get() = gtk_adjustment_get_lower(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_lower(gtkAdjustmentPtr, value)
-    /** The page increment of the adjustment. */
+    /** The page increment of the adjustment. Default value is *0*. */
     var pageIncrement: Double
         get() = gtk_adjustment_get_page_increment(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_page_increment(gtkAdjustmentPtr, value)
     /**
      * The page size of the adjustment. Note that the page size is irrelevant, and should be set to zero *if* the
-     * adjustment is used for a simple scalar value, eg in a GtkSpinButton.
+     * adjustment is used for a simple scalar value, eg in a GtkSpinButton. Default value is *0*.
      */
     var pageSize: Double
         get() = gtk_adjustment_get_page_size(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_page_size(gtkAdjustmentPtr, value)
-    /** The step increment of the adjustment. */
+    /** The step increment of the adjustment. Default value is *0*. */
     var stepIncrement: Double
         get() = gtk_adjustment_get_step_increment(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_step_increment(gtkAdjustmentPtr, value)
     /**
      * The maximum value of the adjustment. Note that values will be restricted by upper - [pageSize] if the [pageSize]
-     * property isn't *0*.
+     * property isn't *0*. Default value is *0*.
      */
     var upper: Double
         get() = gtk_adjustment_get_upper(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_upper(gtkAdjustmentPtr, value)
-    /** The value of the adjustment. */
+    /** The value of the adjustment. Default value is *0*. */
     var value: Double
         get() = gtk_adjustment_get_value(gtkAdjustmentPtr)
         set(newValue) = gtk_adjustment_set_value(gtkAdjustmentPtr, newValue)

@@ -8,7 +8,10 @@ import org.guivista.core.widget.Widget
 class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
                 mode: GtkSizeGroupMode = GtkSizeGroupMode.GTK_SIZE_GROUP_NONE) : ObjectBase {
     val gtkSizeGroupPtr: CPointer<GtkSizeGroup>? = sizeGroupPtr ?: gtk_size_group_new(mode)
-    /** The directions in which the size group affects the requested sizes of its component widgets. */
+    /**
+     * The directions in which the size group affects the requested sizes of its component widgets. Default value is
+     * *GtkSizeGroupMode.GTK_SIZE_GROUP_HORIZONTAL*
+     */
     var mode: GtkSizeGroupMode
         get() = gtk_size_group_get_mode(gtkSizeGroupPtr)
         set(value) = gtk_size_group_set_mode(gtkSizeGroupPtr, value)
