@@ -16,15 +16,18 @@ class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Container {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = infoBarPtr?.reinterpret() ?: gtk_info_bar_new()
     val gtkInfoBarPtr: CPointer<GtkInfoBar>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** Type of the message. The type may be used to determine the appearance of the [Info Bar][InfoBar]. */
+    /**
+     * Type of the message. The type may be used to determine the appearance of the [Info Bar][InfoBar]. Default value
+     * is *GtkMessageType.GTK_MESSAGE_INFO*.
+     */
     var messageType: GtkMessageType
         get() = gtk_info_bar_get_message_type(gtkInfoBarPtr)
         set(value) = gtk_info_bar_set_message_type(gtkInfoBarPtr, value)
-    /** Controls whether the action bar shows its contents or not. */
+    /** Controls whether the action bar shows its contents or not. Default value is *true*. */
     var revealed: Boolean
         get() = gtk_info_bar_get_revealed(gtkInfoBarPtr) == TRUE
         set(value) = gtk_info_bar_set_revealed(gtkInfoBarPtr, if (value) TRUE else FALSE)
-    /** Whether to include a standard close button. */
+    /** Whether to include a standard close button. Default value is *false*. */
     var showCloseButton: Boolean
         get() = gtk_info_bar_get_show_close_button(gtkInfoBarPtr) == TRUE
         set(value) = gtk_info_bar_set_show_close_button(gtkInfoBarPtr, if (value) TRUE else FALSE)

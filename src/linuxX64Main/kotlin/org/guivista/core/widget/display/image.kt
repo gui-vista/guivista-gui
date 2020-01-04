@@ -11,17 +11,20 @@ class Image(imagePtr: CPointer<GtkImage>? = null) : WidgetBase {
         get() = gtkWidgetPtr?.reinterpret()
     /**
      * Gets the type of representation being used by the GtkImage to store image data. If the GtkImage has no image
-     * data, the return value will be **GTK_IMAGE_EMPTY**.
+     * data then the return value will be **GtkImageType.GTK_IMAGE_EMPTY**. Default value is
+     * *GtkImageType.GTK_IMAGE_EMPTY*.
      */
     val storageType: GtkImageType
         get() = gtk_image_get_storage_type(gtkImagePtr)
     /**
      * Pixel size to use for named icons. If the pixel size is set to a value != **-1**, it is used instead of the
-     * icon size set by `gtk_image_set_from_icon_name()`.
+     * icon size set by `gtk_image_set_from_icon_name()`. Default value is *-1*.
      */
     var pixelSize: Int
         get() = gtk_image_get_pixel_size(gtkImagePtr)
-        set(value) = gtk_image_set_pixel_size(gtkImagePtr, value)
+        set(value) {
+            if (value >= -1) gtk_image_set_pixel_size(gtkImagePtr, value)
+        }
 
     /**
      * Uses the [file] which is displayed in the [image][Image]. If the [file] isn’t found or can’t be loaded the resulting

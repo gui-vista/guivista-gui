@@ -16,33 +16,42 @@ class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : WidgetBase {
     val gtkLevelBarPtr: CPointer<GtkLevelBar>?
         get() = gtkWidgetPtr?.reinterpret()
     /**
-     * Level bars normally grow from top to bottom or left to right. Inverted level bars grow in the opposite direction.
+     * Level bars normally grow from top to bottom or left to right. Inverted level bars grow in the opposite
+     * direction. Default value is *false*.
      */
     var inverted: Boolean
         get() = gtk_level_bar_get_inverted(gtkLevelBarPtr) == TRUE
         set(value) = gtk_level_bar_set_inverted(gtkLevelBarPtr, if (value) TRUE else FALSE)
-    /** Determines the maximum value of the interval that can be displayed by the bar.*/
+    /** Determines the maximum value of the interval that can be displayed by the bar. Default value is *1.0*. */
     var maxValue: Double
         get() = gtk_level_bar_get_max_value(gtkLevelBarPtr)
-        set(value) = gtk_level_bar_set_max_value(gtkLevelBarPtr, value)
-    /** determines the minimum value of the interval that can be displayed by the bar. */
+        set(value) {
+            if (value >= 0.0) gtk_level_bar_set_max_value(gtkLevelBarPtr, value)
+        }
+    /** determines the minimum value of the interval that can be displayed by the bar. Default value is *0.0*. */
     var minValue: Double
         get() = gtk_level_bar_get_min_value(gtkLevelBarPtr)
-        set(value) = gtk_level_bar_set_min_value(gtkLevelBarPtr, value)
+        set(value) {
+            if (value >= 0.0) gtk_level_bar_set_min_value(gtkLevelBarPtr, value)
+        }
     /**
      * Determines the way [LevelBar] interprets the value properties to draw the level fill area. Specifically when the
      * value is **GTK_LEVEL_BAR_MODE_CONTINUOUS** the [LevelBar] will draw a single block representing the current
      * value in that area. When the value is **GTK_LEVEL_BAR_MODE_DISCRETE** the widget will draw a succession of
      * separate blocks filling the draw area, with the number of blocks being equal to the units separating the
      * integral roundings of [minValue] and [maxValue].
+     *
+     * Default value is *GtkLevelBarMode.GTK_LEVEL_BAR_MODE_CONTINUOUS*.
      */
     var mode: GtkLevelBarMode
         get() = gtk_level_bar_get_mode(gtkLevelBarPtr)
         set(value) = gtk_level_bar_set_mode(gtkLevelBarPtr, value)
-    /** Determines the currently filled value of the level bar. */
+    /** Determines the currently filled value of the level bar. Default value is *0.0*. */
     var value: Double
         get() = gtk_level_bar_get_value(gtkLevelBarPtr)
-        set(value) = gtk_level_bar_set_value(gtkLevelBarPtr, value)
+        set(value) {
+            if (value >= 0.0) gtk_level_bar_set_value(gtkLevelBarPtr, value)
+        }
 
     /**
      * Connects the *offset-changed* signal to a [slot] on a [LevelBar]. This signal is used when the
