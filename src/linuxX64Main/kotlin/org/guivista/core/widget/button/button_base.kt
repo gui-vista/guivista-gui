@@ -14,11 +14,14 @@ private const val CLICKED_SIGNAL = "clicked"
 interface ButtonBase : Container {
     val gtkButtonPtr: CPointer<GtkButton>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** Text of the label widget inside the button, if the button contains a label widget. */
+    /**
+     * Text of the label widget inside the button, if the button contains a label widget. Default value is *""* (an
+     * empty String).
+     */
     var label: String
         set(value) = gtk_button_set_label(gtkButtonPtr, value)
         get() = gtk_button_get_label(gtkButtonPtr)?.toKString() ?: ""
-    /** The border relief style. */
+    /** The border relief style. Default value is *GtkReliefStyle.GTK_RELIEF_NORMAL*. */
     var relief: GtkReliefStyle
         get() = gtk_button_get_relief(gtkButtonPtr)
         set(value) = gtk_button_set_relief(gtkButtonPtr, value)

@@ -15,13 +15,14 @@ class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = switchPtr?.reinterpret() ?: gtk_switch_new()
     val gtkSwitchPtr: CPointer<GtkSwitch>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** Whether the GtkSwitch widget is in its on or off state. */
+    /** Whether the GtkSwitch widget is in its on or off state. Default value is *false*. */
     var active: Boolean
         get() = gtk_switch_get_active(gtkSwitchPtr) == TRUE
         set(value) = gtk_switch_set_active(gtkSwitchPtr, if (value) TRUE else FALSE)
     /**
      * The backend state that is controlled by the switch. Normally this is the same as “active”, unless the switch is
-     * set up for delayed state changes. This function is typically called from a “state-set” signal handler.
+     * set up for delayed state changes. This function is typically called from a “state-set” signal handler. Default
+     * value is *false*.
      */
     var state: Boolean
         get() = gtk_switch_get_state(gtkSwitchPtr) == TRUE

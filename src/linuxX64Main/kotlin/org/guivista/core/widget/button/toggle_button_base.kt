@@ -13,11 +13,11 @@ private const val TOGGLED_SIGNAL = "toggled"
 interface ToggleButtonBase : ButtonBase {
     val gtkToggleButtonPtr: CPointer<GtkToggleButton>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** If the toggle button should be pressed in. */
+    /** If the toggle button should be pressed in. Default value is *false*. */
     var active: Boolean
         get() = gtk_toggle_button_get_active(gtkToggleButtonPtr) == TRUE
         set(value) = gtk_toggle_button_set_active(gtkToggleButtonPtr, if (value) TRUE else FALSE)
-    /** If the toggle button is in an "in between" state. */
+    /** If the toggle button is in an "in between" state. Default value is *false*. */
     var inconsistent: Boolean
         get() = gtk_toggle_button_get_inconsistent(gtkToggleButtonPtr) == TRUE
         set(value) = gtk_toggle_button_set_inconsistent(gtkToggleButtonPtr, if (value) TRUE else FALSE)

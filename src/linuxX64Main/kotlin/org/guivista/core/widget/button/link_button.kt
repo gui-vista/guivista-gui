@@ -20,11 +20,11 @@ class LinkButton(linkButtonPtr: CPointer<GtkLinkButton>? = null, uri: String = "
     }
     val gtkLinkButtonPtr: CPointer<GtkLinkButton>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** The URI bound to this button. */
+    /** The URI bound to this button. Default value is *""* (an empty String) */
     var uri: String
         get() = gtk_link_button_get_uri(gtkLinkButtonPtr)?.toKString() ?: ""
         set(value) = gtk_link_button_set_uri(gtkLinkButtonPtr, value)
-    /** The 'visited' state of this button. A visited link is drawn in a different color. */
+    /** The 'visited' state of this button. A visited link is drawn in a different color. Default value is *false*. */
     var visited: Boolean
         get() = gtk_link_button_get_visited(gtkLinkButtonPtr) == TRUE
         set(value) = gtk_link_button_set_visited(gtkLinkButtonPtr, if (value) TRUE else FALSE)
