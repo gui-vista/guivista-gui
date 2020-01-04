@@ -17,19 +17,21 @@ class Scale(scalePtr: CPointer<GtkScale>? = null,
         scalePtr?.reinterpret() ?: gtk_scale_new(orientation, null)
     val gtkScalePtr: CPointer<GtkScale>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** The number of decimal places that are displayed in the value. */
+    /** The number of decimal places that are displayed in the value. Default value is *1*. */
     var digits: Int
         get() = gtk_scale_get_digits(gtkScalePtr)
-        set(value) = gtk_scale_set_digits(gtkScalePtr, value)
-    /** Whether the current value is displayed as a string next to the slider. */
+        set(value) {
+            if (value in (-1..64)) gtk_scale_set_digits(gtkScalePtr, value)
+        }
+    /** Whether the current value is displayed as a string next to the slider. Default value is *false*. */
     var drawValue: Boolean
         get() = gtk_scale_get_draw_value(gtkScalePtr) == TRUE
         set(value) = gtk_scale_set_draw_value(gtkScalePtr, if (value) TRUE else FALSE)
-    /** Whether the scale has an origin. */
+    /** Whether the scale has an origin. Default value is *true*. */
     var hasOrigin: Boolean
         get() = gtk_scale_get_has_origin(gtkScalePtr) == TRUE
         set(value) = gtk_scale_set_has_origin(gtkScalePtr, if (value) TRUE else FALSE)
-    /** The position in which the current value is displayed. */
+    /** The position in which the current value is displayed. Default value is *GtkPositionType.GTK_POS_TOP*. */
     var valuePos: GtkPositionType
         get() = gtk_scale_get_value_pos(gtkScalePtr)
         set(value) = gtk_scale_set_value_pos(gtkScalePtr, value)

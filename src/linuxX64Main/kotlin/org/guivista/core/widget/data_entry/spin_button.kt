@@ -12,7 +12,7 @@ private const val VALUE_CHANGED_SIGNAL = "value-changed"
 private const val CHANGE_VALUE_SIGNAL = "change-value"
 
 /** Retrieve an integer or floating-point number from the user. */
-class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, climbRate: Double = 1.0,
+class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, climbRate: Double = 0.0,
                  digits: UInt = 1u) : EntryBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = spinButtonPtr?.reinterpret()
         ?: gtk_spin_button_new(climb_rate = climbRate, digits = digits, adjustment = null)
@@ -26,27 +26,35 @@ class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, climbRate: Doub
             else null
         }
         set(value) = gtk_spin_button_set_adjustment(gtkSpinButtonPtr, value?.gtkAdjustmentPtr)
-    /** The number of decimal places to display. */
+    /** The number of decimal places to display. Default value is *0*. */
     var digits: UInt
         get() = gtk_spin_button_get_digits(gtkSpinButtonPtr)
-        set(value) = gtk_spin_button_set_digits(gtkSpinButtonPtr, value)
-    /** Whether non-numeric characters should be ignored. */
+        set(value) {
+            if (value <= 20u) gtk_spin_button_set_digits(gtkSpinButtonPtr, value)
+        }
+    /** Whether non-numeric characters should be ignored. Default value is *false*. */
     var numeric: Boolean
         get() = gtk_spin_button_get_numeric(gtkSpinButtonPtr) == TRUE
         set(value) = gtk_spin_button_set_numeric(gtkSpinButtonPtr, if (value) TRUE else FALSE)
-    /** Whether erroneous values are automatically changed to a spin button's nearest step increment. */
+    /**
+     * Whether erroneous values are automatically changed to a [spin button's][SpinButton] nearest step increment.
+     * Default value is *false*.
+     */
     var snapToTicks: Boolean
         get() = gtk_spin_button_get_snap_to_ticks(gtkSpinButtonPtr) == TRUE
         set(value) = gtk_spin_button_set_snap_to_ticks(gtkSpinButtonPtr, if (value) TRUE else FALSE)
-    /** Reads the current value, or sets a new value. */
+    /** Reads the current value, or sets a new value. Default value is *0*. */
     var value: Double
         get() = gtk_spin_button_get_value(gtkSpinButtonPtr)
         set(value) = gtk_spin_button_set_value(gtkSpinButtonPtr, value)
-    /** Whether a spin button should wrap upon reaching its limits. */
+    /** Whether a spin button should wrap upon reaching its limits. Default value is *false*. */
     var wrap: Boolean
         get() = gtk_spin_button_get_wrap(gtkSpinButtonPtr) == TRUE
         set(value) = gtk_spin_button_set_wrap(gtkSpinButtonPtr, if (value) TRUE else FALSE)
-    /** Whether the spin button should update always, or only when the value is legal. */
+    /**
+     * Whether the spin button should update always, or only when the value is legal. Default value is
+     * *GtkSpinButtonUpdatePolicy.GTK_UPDATE_ALWAYS*.
+     */
     var updatePolicy: GtkSpinButtonUpdatePolicy
         get() = gtk_spin_button_get_update_policy(gtkSpinButtonPtr)
         set(value) = gtk_spin_button_set_update_policy(gtkSpinButtonPtr, value)
