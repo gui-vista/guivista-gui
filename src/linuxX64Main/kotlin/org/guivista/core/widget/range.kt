@@ -28,31 +28,44 @@ interface Range : WidgetBase {
      * To enable fill level display use `gtk_range_set_show_fill_level()`. The range defaults to not showing the fill
      * level. Additionally it’s possible to restrict the range’s slider position to values which are smaller than the
      * fill level. This is controlled by `gtk_range_set_restrict_to_fill_level()`, and is by default enabled.
+     *
+     * Default value is *1.79769e+308*.
      */
     var fillLevel: Double
         get() = gtk_range_get_fill_level(gtkRangePtr)
         set(value) = gtk_range_set_fill_level(gtkRangePtr, value)
-    /** Invert direction slider moves to increase range value. */
+    /** Invert direction slider moves to increase range value. Default value is *false*. */
     var inverted: Boolean
         get() = gtk_range_get_inverted(gtkRangePtr) == TRUE
         set(value) = gtk_range_set_inverted(gtkRangePtr, if (value) TRUE else FALSE)
-    /** The sensitivity policy for the stepper that points to the adjustment's lower side. */
+    /**
+     * The sensitivity policy for the stepper that points to the adjustment's lower side. Default value is
+     * *GtkSensitivityType.GTK_SENSITIVITY_AUTO*.
+     */
     var lowerStepperSensitivity: GtkSensitivityType
         get() = gtk_range_get_lower_stepper_sensitivity(gtkRangePtr)
         set(value) = gtk_range_set_lower_stepper_sensitivity(gtkRangePtr, value)
-    /** Controls whether slider movement is restricted to an upper boundary set by the fill level. */
+    /**
+     * Controls whether slider movement is restricted to an upper boundary set by the fill level. Default value is
+     * *true*.
+     */
     var restrictToFillLevel: Boolean
         get() = gtk_range_get_restrict_to_fill_level(gtkRangePtr) == TRUE
         set(value) = gtk_range_set_restrict_to_fill_level(gtkRangePtr, if (value) TRUE else FALSE)
-    /** The number of digits to round the value to when it changes, or -1. */
+    /** The number of digits to round the value to when it changes, or -1. Default value is *-1*. */
     var roundDigits: Int
         get() = gtk_range_get_round_digits(gtkRangePtr)
-        set(value) = gtk_range_set_round_digits(gtkRangePtr, value)
-    /** Controls whether fill level indicator graphics are displayed on the trough. */
+        set(value) {
+            if (value >= -1) gtk_range_set_round_digits(gtkRangePtr, value)
+        }
+    /** Controls whether fill level indicator graphics are displayed on the trough. Default value is *false*. */
     var showFillLevel: Boolean
         get() = gtk_range_get_show_fill_level(gtkRangePtr) == TRUE
         set(value) = gtk_range_set_show_fill_level(gtkRangePtr, if (value) TRUE else FALSE)
-    /** The sensitivity policy for the stepper that points to the adjustment's upper side. */
+    /**
+     * The sensitivity policy for the stepper that points to the adjustment's upper side. Default value is
+     * *GtkSensitivityType.GTK_SENSITIVITY_AUTO*.
+     */
     var upperStepperSensitivity: GtkSensitivityType
         get() = gtk_range_get_upper_stepper_sensitivity(gtkRangePtr)
         set(value) = gtk_range_set_upper_stepper_sensitivity(gtkRangePtr, value)
