@@ -13,17 +13,17 @@ import org.guivista.core.widget.WidgetBase
 interface MenuItemBase : Container {
     val gtkMenuItemPtr: CPointer<GtkMenuItem>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** The text for the child label. */
+    /** The text for the child label. Default value is *""* (an empty String). */
     var label: String
         get() = gtk_menu_item_get_label(gtkMenuItemPtr)?.toKString() ?: ""
         set(value) = gtk_menu_item_set_label(gtkMenuItemPtr, value)
-    /** When *true* the text is underlined to indicate mnemonics. */
+    /** When *true* the text is underlined to indicate mnemonics. Default value is *false*. */
     var useUnderline: Boolean
         get() = gtk_menu_item_get_use_underline(gtkMenuItemPtr) == TRUE
         set(value) = gtk_menu_item_set_use_underline(gtkMenuItemPtr, if (value) TRUE else FALSE)
     /**
      * Sets the accelerator path of the menu item, through which runtime changes of the menu item's accelerator caused
-     * by the user can be identified and saved to persistent storage.
+     * by the user can be identified and saved to persistent storage. Default value is *""* (an empty String).
      */
     var accelPath: String
         get() = gtk_menu_item_get_accel_path(gtkMenuItemPtr)?.toKString() ?: ""

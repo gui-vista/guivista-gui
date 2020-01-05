@@ -10,15 +10,15 @@ import org.guivista.core.connectGSignal
 interface CheckMenuItemBase : MenuItemBase {
     val gtkCheckMenuItemPtr: CPointer<GtkCheckMenuItem>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** Whether the menu item is checked. */
+    /** Whether the menu item is checked. Default value is *false*. */
     var active: Boolean
         get() = gtk_check_menu_item_get_active(gtkCheckMenuItemPtr) == TRUE
         set(value) = gtk_check_menu_item_set_active(gtkCheckMenuItemPtr, if (value) TRUE else FALSE)
-    /** Whether the menu item looks like a radio menu item. */
+    /** Whether the menu item looks like a radio menu item. Default value is *false*. */
     var drawAsRadio: Boolean
         get() = gtk_check_menu_item_get_draw_as_radio(gtkCheckMenuItemPtr) == TRUE
         set(value) = gtk_check_menu_item_set_draw_as_radio(gtkCheckMenuItemPtr, if (value) TRUE else FALSE)
-    /** Whether to display an "inconsistent" state. */
+    /** Whether to display an "inconsistent" state. Default value is *false*. */
     var inconsistent: Boolean
         get() = gtk_check_menu_item_get_inconsistent(gtkCheckMenuItemPtr) == TRUE
         set(value) = gtk_check_menu_item_set_inconsistent(gtkCheckMenuItemPtr, if (value) TRUE else FALSE)
