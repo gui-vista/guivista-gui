@@ -13,13 +13,17 @@ import org.guivista.core.widget.WidgetBase
 interface MenuBase : Container {
     val gtkMenuPtr: CPointer<GtkMenu>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** An accel path used to conveniently construct accel paths of child items. */
+    /**
+     * An accel path used to conveniently construct accel paths of child items. Default value is *""* (an empty
+     * String).
+     */
     var accelPath: String
         get() = gtk_menu_get_accel_path(gtkMenuPtr)?.toKString() ?: ""
         set(value) = gtk_menu_set_accel_path(gtkMenuPtr, value)
 
     /**
-     * Gets the selected menu item from the menu. This is used by the GtkComboBox.
+     * Gets the selected menu item from the menu. This is used by the GtkComboBox. Default value is *-1*.
+     * @return The index for the selected item, or *-1* if no item is selected.
      */
     fun fetchActive(): CPointer<GtkWidget>? = gtk_menu_get_active(gtkMenuPtr)
 

@@ -13,7 +13,7 @@ import org.guivista.core.widget.WidgetBase
 interface MenuShell : Container {
     val gtkMenuShellPtr: CPointer<GtkMenuShell>?
         get() = gtkWidgetPtr?.reinterpret()
-    /** Determines whether the menu, and its submenus grab the keyboard focus. */
+    /** Determines whether the menu, and its submenus grab the keyboard focus. Default value is *true*. */
     var takeFocus: Boolean
         get() = gtk_menu_shell_get_take_focus(gtkMenuShellPtr) == TRUE
         set(value) = gtk_menu_shell_set_take_focus(gtkMenuShellPtr, if (value) TRUE else FALSE)
@@ -36,6 +36,14 @@ interface MenuShell : Container {
      */
     fun append(child: WidgetBase) {
         gtk_menu_shell_append(gtkMenuShellPtr, child.gtkWidgetPtr)
+    }
+
+    /**
+     * Adds a new GtkMenuItem to the end of the menu shell's item list.
+     * @param child The menu item to append.
+     */
+    operator fun plusAssign(child: WidgetBase) {
+        append(child)
     }
 
     /**
