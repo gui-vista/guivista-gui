@@ -23,19 +23,21 @@ interface ToolItemBase : Container {
         get() = gtk_tool_item_get_relief_style(gtkToolItemPtr)
     /**
      * Whether the toolbar item is considered important. When *true* the toolbar buttons show text in
-     * `GTK_TOOLBAR_BOTH_HORIZ` mode.
+     * `GTK_TOOLBAR_BOTH_HORIZ` mode. Default value is *false*.
      */
     var isImportant: Boolean
         get() = gtk_tool_item_get_is_important(gtkToolItemPtr) == TRUE
         set(value) = gtk_tool_item_set_is_important(gtkToolItemPtr, if (value) TRUE else FALSE)
     /**
-     * Whether the toolbar item is visible when the [org.guivista.core.widget.tool.ToolBar] is in a horizontal orientation.
+     * Whether the toolbar item is visible when the [org.guivista.core.widget.tool.ToolBar] is in a horizontal
+     * orientation. Default value is *true*.
      */
     var visibleHorizontal: Boolean
         get() = gtk_tool_item_get_visible_horizontal(gtkToolItemPtr) == TRUE
         set(value) = gtk_tool_item_set_visible_horizontal(gtkToolItemPtr, if (value) TRUE else FALSE)
     /**
-     * Whether the toolbar item is visible when the [org.guivista.core.widget.tool.ToolBar] is in a vertical orientation.
+     * Whether the toolbar item is visible when the [org.guivista.core.widget.tool.ToolBar] is in a vertical
+     * orientation. Default value is *true*.
      */
     var visibleVertical: Boolean
         get() = gtk_tool_item_get_visible_vertical(gtkToolItemPtr) == TRUE

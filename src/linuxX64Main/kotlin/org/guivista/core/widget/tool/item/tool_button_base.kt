@@ -14,7 +14,7 @@ interface ToolButtonBase : ToolItemBase {
     val gtkToolButtonPtr: CPointer<GtkToolButton>?
     /**
      * The name of the themed icon displayed on the item. This property only has an effect if not overridden by
-     * [labelWidget], or [iconWidget] properties.
+     * [labelWidget], or [iconWidget] properties. Default value is *""* (an empty String).
      */
     var iconName: String
         get() = gtk_tool_button_get_icon_name(gtkToolButtonPtr)?.toKString() ?: ""
@@ -26,7 +26,7 @@ interface ToolButtonBase : ToolItemBase {
             return if (tmp != null) Widget(tmp) else null
         }
         set(value) = gtk_tool_button_set_icon_widget(gtkToolButtonPtr, value?.gtkWidgetPtr)
-    /** Text to show in the item. */
+    /** Text to show in the item. Default value is *""* (an empty String). */
     var label: String
         get() = gtk_tool_button_get_label(gtkToolButtonPtr)?.toKString() ?: ""
         set(value) = gtk_tool_button_set_label(gtkToolButtonPtr, value)
@@ -39,7 +39,7 @@ interface ToolButtonBase : ToolItemBase {
         set(value) = gtk_tool_button_set_label_widget(gtkToolButtonPtr, value?.gtkWidgetPtr)
     /**
      * If set an underline in the [label] property indicates that the next character should be used for the mnemonic
-     * accelerator key in the overflow menu.
+     * accelerator key in the overflow menu. Default value is *false*.
      */
     var useUnderline: Boolean
         get() = gtk_tool_button_get_use_underline(gtkToolButtonPtr) == TRUE

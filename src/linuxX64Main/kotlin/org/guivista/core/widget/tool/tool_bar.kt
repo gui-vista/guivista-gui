@@ -16,16 +16,17 @@ class ToolBar(toolBarPtr: CPointer<GtkToolbar>? = null) : Container, ToolShell {
     /**
      * The size of the icons in a [ToolBar] is normally determined by the [iconSize] setting. When this property is set
      * it overrides the setting. This should only be used for special-purpose toolbars. Normal application toolbars
-     * should respect the user preferences for the size of icons.
+     * should respect the user preferences for the size of icons. Default value
+     * is *GtkIconSize.GTK_ICON_SIZE_LARGE_TOOLBAR*.
      */
     override var iconSize: GtkIconSize
         get() = gtk_toolbar_get_icon_size(gtkToolBarPtr)
         set(value) = gtk_toolbar_set_icon_size(gtkToolBarPtr, value)
-    /** If an arrow should be shown if the toolbar doesn't fit. */
+    /** If an arrow should be shown if the toolbar doesn't fit. Default value is *true*. */
     var showArrow: Boolean
         get() = gtk_toolbar_get_show_arrow(gtkToolBarPtr) == TRUE
         set(value) = gtk_toolbar_set_show_arrow(gtkToolBarPtr, if (value) TRUE else FALSE)
-    /** How to draw the toolbar. */
+    /** How to draw the toolbar. Default value is *GtkToolbarStyle.GTK_TOOLBAR_BOTH_HORIZ*. */
     var toolBarStyle: GtkToolbarStyle
         get() = gtk_toolbar_get_style(gtkToolBarPtr)
         set(value) = gtk_toolbar_set_style(gtkToolBarPtr, value)
