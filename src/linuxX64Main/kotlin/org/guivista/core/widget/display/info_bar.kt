@@ -80,11 +80,25 @@ class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Container {
      * Adds more buttons which is the same as calling [addButton] repeatedly. The variable argument list should be null
      * terminated. Each button must have both text and response ID.
      * @param firstButtonText Button text or stock ID.
-     * @param responseIds Response ID for first button, then more text-response_id pairs ending with *null*.
+     * @param responseId1 Response ID for first button.
+     * @param responseId2 Response ID for second button.
+     * @param responseId3 Response ID for third button.
+     * @param responseId4 Response ID for fourth button.
+     * @param responseId5 Response ID for fifth button.
      */
-    fun addMultipleButtons(firstButtonText: String, vararg responseIds: Int?) {
-        gtk_info_bar_add_buttons(info_bar = gtkInfoBarPtr, first_button_text = firstButtonText,
-                variadicArguments = *responseIds)
+    fun addMultipleButtons(
+        firstButtonText: String,
+        responseId1: Int,
+        responseId2: Int,
+        responseId3: Int = 0,
+        responseId4: Int = 0,
+        responseId5: Int = 0
+    ) {
+        gtk_info_bar_add_buttons(
+            info_bar = gtkInfoBarPtr,
+            first_button_text = firstButtonText,
+            variadicArguments = *arrayOf(responseId1, responseId2, responseId3, responseId4, responseId5, null)
+        )
     }
 
     /** Emits the *response* signal with the given [Response ID][responseId] .*/
