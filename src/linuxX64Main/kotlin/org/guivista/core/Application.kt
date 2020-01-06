@@ -5,8 +5,8 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlin.system.exitProcess
 
-class Application(val id: String) : ApplicationBase {
-    val gtkAppPtr: CPointer<GtkApplication> = createGtkAppPtr()
+class Application(appPtr: CPointer<GApplication>? = null, id: String = "org.example.gui-app") : ApplicationBase {
+    val gtkAppPtr: CPointer<GtkApplication> = appPtr?.reinterpret() ?: createGtkAppPtr(id)
     override val gAppPtr: CPointer<GApplication>
         get() = gtkAppPtr.reinterpret()
 
@@ -17,7 +17,7 @@ class Application(val id: String) : ApplicationBase {
         disposeEmptyDataRef()
     }
 
-    private fun createGtkAppPtr(): CPointer<GtkApplication> {
+    private fun createGtkAppPtr(id: String): CPointer<GtkApplication> {
         if (id.trim().isEmpty()) {
             g_printerr("GTK Application ID cannot be empty!\n")
             exitProcess(-1)

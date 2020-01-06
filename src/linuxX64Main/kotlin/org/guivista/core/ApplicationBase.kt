@@ -1,13 +1,23 @@
 package org.guivista.core
 
-import gtk3.GApplication
-import gtk3.g_application_run
-import gtk3.gpointer
+import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.toKString
 
-interface ApplicationBase {
+interface ApplicationBase : ObjectBase {
     val gAppPtr: CPointer<GApplication>
+    /** The unique identifier for the application. Default value is *""* (an empty String). */
+    val appId: String
+        get() = g_application_get_application_id(gAppPtr)?.toKString() ?: ""
+    /** Time (in ms) to stay alive after becoming idle. Default value is *0*. */
+    var inactivityTimeout: UInt
+        get() = g_application_get_inactivity_timeout(gAppPtr)
+        set(value) = g_application_set_inactivity_timeout(gAppPtr, value)
+    /** The base resource path for the application. Default value is *""* (an empty String). */
+    var resourceBasePath: String
+        get() = g_application_get_resource_base_path(gAppPtr)?.toKString() ?: ""
+        set(value) = g_application_set_resource_base_path(gAppPtr, value)
 
     /**
      * Connects the *activate* signal to a [slot] on a application. The *activate* signal is used for initialising the
@@ -51,4 +61,9 @@ interface ApplicationBase {
      * occurred.
      */
     fun run(): Int = g_application_run(gAppPtr, 0, null)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gAppPtr, handlerId)
+    }
 }
