@@ -116,6 +116,10 @@ class Adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null) : ObjectBase {
         super.disconnectSignal(handlerId)
         disconnectGSignal(gtkAdjustmentPtr, handlerId)
     }
+
+    override fun close() {
+        g_object_unref(gtkAdjustmentPtr)
+    }
 }
 
 fun adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null, init: Adjustment.() -> Unit): Adjustment {

@@ -40,10 +40,10 @@ interface MenuShell : Container {
 
     /**
      * Adds a new GtkMenuItem to the end of the menu shell's item list.
-     * @param child The menu item to append.
+     * @param widget The menu item to append.
      */
-    operator fun plusAssign(child: WidgetBase) {
-        append(child)
+    override operator fun plusAssign(widget: WidgetBase) {
+        append(widget)
     }
 
     /**

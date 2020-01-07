@@ -18,8 +18,7 @@ class Application(appPtr: CPointer<GApplication>? = null, id: String = "org.exam
     @Suppress("unused")
     fun use(init: Application.() -> Unit) {
         this.init()
-        g_object_unref(gtkAppPtr)
-        disposeEmptyDataRef()
+        close()
     }
 
     private fun createGtkAppPtr(id: String): CPointer<GtkApplication> {
@@ -28,5 +27,10 @@ class Application(appPtr: CPointer<GApplication>? = null, id: String = "org.exam
             exitProcess(-1)
         }
         return gtk_application_new(id, G_APPLICATION_FLAGS_NONE)!!
+    }
+
+    override fun close() {
+        g_object_unref(gtkAppPtr)
+        disposeEmptyDataRef()
     }
 }

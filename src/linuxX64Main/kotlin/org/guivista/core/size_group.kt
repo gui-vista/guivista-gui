@@ -2,6 +2,7 @@ package org.guivista.core
 
 import gtk3.*
 import kotlinx.cinterop.CPointer
+import org.guivista.core.data_type.SinglyLinkedList
 import org.guivista.core.widget.Widget
 
 /** Grouping widgets so they request the same size. */
@@ -58,6 +59,10 @@ class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
      */
     fun removeWidget(widget: Widget) {
         gtk_size_group_remove_widget(gtkSizeGroupPtr, widget.gtkWidgetPtr)
+    }
+
+    override fun close() {
+        g_object_unref(gtkSizeGroupPtr)
     }
 }
 

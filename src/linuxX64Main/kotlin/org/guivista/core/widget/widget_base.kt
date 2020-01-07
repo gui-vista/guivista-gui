@@ -154,6 +154,10 @@ interface WidgetBase : ObjectBase {
     fun showAll() {
         gtk_widget_show_all(gtkWidgetPtr)
     }
+
+    override fun close() {
+        gtk_widget_destroy(gtkWidgetPtr)
+    }
 }
 
 /**

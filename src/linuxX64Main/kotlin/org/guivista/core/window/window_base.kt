@@ -231,9 +231,11 @@ interface WindowBase : Container {
         gtk_window_set_default_size(gtkWindowPtr, width, height)
     }
 
-    /** Closes the window. */
-    fun close() {
+    /** Closes the window, and frees up resources. */
+    override fun close() {
         gtk_window_close(gtkWindowPtr)
+        super.close()
+        g_object_unref(gtkWindowPtr)
     }
 
     /**
@@ -266,7 +268,7 @@ interface WindowBase : Container {
     }
 
     /** Adds a new child to the window. */
-    operator fun plusAssign(widget: WidgetBase) {
+    override operator fun plusAssign(widget: WidgetBase) {
         addChild(widget)
     }
 
@@ -276,7 +278,7 @@ interface WindowBase : Container {
     }
 
     /** Remove a child from the window. */
-    operator fun minusAssign(widget: WidgetBase) {
+    override operator fun minusAssign(widget: WidgetBase) {
         removeChild(widget)
     }
 

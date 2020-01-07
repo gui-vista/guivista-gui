@@ -4,7 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guivista.core.SinglyLinkedList
+import org.guivista.core.data_type.SinglyLinkedList
 import org.guivista.core.connectGSignal
 import org.guivista.core.disconnectGSignal
 
