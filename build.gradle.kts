@@ -1,9 +1,12 @@
+import org.jetbrains.dokka.gradle.DokkaTask
+
 group = "org.guivista"
 version = "0.1-SNAPSHOT"
 
 plugins {
     kotlin("multiplatform") version "1.3.61"
     id("maven-publish")
+    id("org.jetbrains.dokka") version "0.10.0"
 }
 
 repositories {
@@ -32,5 +35,13 @@ kotlin {
         @Suppress("UNUSED_VARIABLE") val linuxX64Main by getting {
             languageSettings.useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
         }
+    }
+}
+
+tasks.getByName("dokka", DokkaTask::class) {
+    outputDirectory = "$buildDir/dokka"
+    outputFormat = "html"
+    multiplatform {
+        create("linuxX64")
     }
 }
