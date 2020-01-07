@@ -10,6 +10,7 @@ private val emptyDataRef = StableRef.create(emptyData)
 @Suppress("unused")
 fun fetchEmptyDataPointer(): COpaquePointer = emptyDataRef.asCPointer()
 
+/** Frees up the empty data reference. */
 fun disposeEmptyDataRef() {
     emptyDataRef.dispose()
 }

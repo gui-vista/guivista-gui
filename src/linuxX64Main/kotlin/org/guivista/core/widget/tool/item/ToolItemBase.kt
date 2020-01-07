@@ -29,14 +29,14 @@ interface ToolItemBase : Container {
         get() = gtk_tool_item_get_is_important(gtkToolItemPtr) == TRUE
         set(value) = gtk_tool_item_set_is_important(gtkToolItemPtr, if (value) TRUE else FALSE)
     /**
-     * Whether the toolbar item is visible when the [org.guivista.core.widget.tool.ToolBar] is in a horizontal
+     * Whether the toolbar item is visible when the [ToolBar][org.guivista.core.widget.tool.ToolBar] is in a horizontal
      * orientation. Default value is *true*.
      */
     var visibleHorizontal: Boolean
         get() = gtk_tool_item_get_visible_horizontal(gtkToolItemPtr) == TRUE
         set(value) = gtk_tool_item_set_visible_horizontal(gtkToolItemPtr, if (value) TRUE else FALSE)
     /**
-     * Whether the toolbar item is visible when the [org.guivista.core.widget.tool.ToolBar] is in a vertical
+     * Whether the toolbar item is visible when the [ToolBar][org.guivista.core.widget.tool.ToolBar] is in a vertical
      * orientation. Default value is *true*.
      */
     var visibleVertical: Boolean
@@ -44,9 +44,9 @@ interface ToolItemBase : Container {
         set(value) = gtk_tool_item_set_visible_vertical(gtkToolItemPtr, if (value) TRUE else FALSE)
     /**
      * Whether tool item is allocated extra space when there is more room on the
-     * [org.guivista.core.widget.tool.ToolBar] then needed for the items. The effect is that the item gets bigger when
-     * the [org.guivista.core.widget.tool.ToolBar] gets bigger, and smaller when the
-     * [org.guivista.core.widget.tool.ToolBar] gets smaller.
+     * [ToolBar][org.guivista.core.widget.tool.ToolBar] then needed for the items. The effect is that the item gets
+     * bigger when the [ToolBar][org.guivista.core.widget.tool.ToolBar] gets bigger, and smaller when the
+     * [ToolBar][org.guivista.core.widget.tool.ToolBar] gets smaller.
      */
     var expand: Boolean
         get() = gtk_tool_item_get_expand(gtkToolItemPtr) == TRUE

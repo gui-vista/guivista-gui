@@ -5,6 +5,7 @@ import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
 
+/** Base interface for application objects. */
 interface ApplicationBase : ObjectBase {
     val gAppPtr: CPointer<GApplication>
     /** The unique identifier for the application. Default value is *""* (an empty String). */
@@ -57,7 +58,7 @@ interface ApplicationBase : ObjectBase {
 
     /**
      * Runs the application.
-     * @return A status code is returned when the application exits. Any code not equal to **0** means a error has
+     * @return A status code is returned when the application exits. Any code not equal to *0* means a error has
      * occurred.
      */
     fun run(): Int = g_application_run(gAppPtr, 0, null)

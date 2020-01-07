@@ -13,6 +13,7 @@ private const val ENABLE_DEBUGGING_SIGNAL = "enable-debugging"
 private const val KEYS_CHANGED_SIGNAL = "keys-changed"
 private const val SET_FOCUS_SIGNAL = "set-focus"
 
+/** Base interface for window objects. */
 interface WindowBase : Container {
     val gtkWindowPtr: CPointer<GtkWindow>?
     /** If set to *true* then the window should receive the input focus. Default value is *true*. */
@@ -33,7 +34,7 @@ interface WindowBase : Container {
     /**
      * The widget to which this window is attached. Examples of places where specifying this relation is useful are
      * for instance a GtkMenu created by a GtkComboBox, a completion popup window created by
-     * [org.guivista.core.widget.data_entry.Entry], or a type ahead search entry created by GtkTreeView.
+     * [Entry][org.guivista.core.widget.data_entry.Entry], or a type ahead search entry created by GtkTreeView.
      */
     var attachedTo: Widget?
         get() {
@@ -279,10 +280,19 @@ interface WindowBase : Container {
         removeChild(widget)
     }
 
+    /** Resets focus on a window. */
     fun resetFocus() {}
 
+    /**
+     * Creates the main layout for the window.
+     * @return The main layout as a [Container], or *null* if there is no main layout.
+     */
     fun createMainLayout(): Container? = null
 
+    /**
+     * Creates the user interface for the window.
+     * @param init Initialization block for creating the user interface.
+     */
     fun createUi(init: WindowBase.() -> Unit)
 
     /**

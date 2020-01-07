@@ -4,6 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
+/** A toolbar item that contains a radio button. */
 class RadioToolButton(radioToolButtonPtr: CPointer<GtkRadioToolButton>? = null,
                       group: RadioToolButton? = null) : ToggleToolButtonBase {
     @Suppress("IfThenToElvis")

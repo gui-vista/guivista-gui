@@ -5,6 +5,7 @@ import gtk3.GtkWidget
 import gtk3.gtk_tool_item_new
 import kotlinx.cinterop.CPointer
 
+/** A widget that can be added to [ToolShell][org.guivista.core.widget.tool.ToolShell]. */
 class ToolItem(toolItemPtr: CPointer<GtkToolItem>? = null) : ToolItemBase {
     override val gtkToolItemPtr: CPointer<GtkToolItem>? = toolItemPtr ?: gtk_tool_item_new()
     override val gtkWidgetPtr: CPointer<GtkWidget>? = null

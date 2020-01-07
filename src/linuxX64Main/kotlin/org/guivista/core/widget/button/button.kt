@@ -4,6 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
+/** A widget that emits a signal when clicked on. */
 class Button(buttonPtr: CPointer<GtkButton>? = null, label: String = "", mnemonic: Boolean = false) : ButtonBase {
     @Suppress("IfThenToElvis")
     override val gtkWidgetPtr: CPointer<GtkWidget>? = when {

@@ -8,6 +8,10 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guivista.core.Application
 
+/**
+ * A window with [Application] support. Maps to
+ * [GtkApplicationWindow](https://developer.gnome.org/gtk3/stable/GtkApplicationWindow.html).
+ */
 open class AppWindow(private val app: Application) : WindowBase {
     private var _gtkWidgetPtr: CPointer<GtkWidget>? = null
     override val gtkWidgetPtr: CPointer<GtkWidget>?
