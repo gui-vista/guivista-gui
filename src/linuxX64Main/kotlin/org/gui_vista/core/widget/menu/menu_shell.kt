@@ -18,13 +18,13 @@ interface MenuShell : Container {
         get() = gtk_menu_shell_get_take_focus(gtkMenuShellPtr) == TRUE
         set(value) = gtk_menu_shell_set_take_focus(gtkMenuShellPtr, if (value) TRUE else FALSE)
     /** The currently selected item in the [MenuShell] */
-    val selectedItem: Widget?
+    val selectedItem: WidgetBase?
         get() {
             val tmp = gtk_menu_shell_get_selected_item(gtkMenuShellPtr)
             return if (tmp != null) Widget(tmp) else null
         }
     /** The parent [MenuShell]. A submenu parent is the GtkMenu or GtkMenuBar from which it was opened up. */
-    val parentShell: Widget?
+    val parentShell: WidgetBase?
         get() {
             val tmp = gtk_menu_shell_get_parent_shell(gtkMenuShellPtr)
             return if (tmp != null) Widget(tmp) else null

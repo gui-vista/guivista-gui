@@ -4,6 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import org.gui_vista.core.data_type.SinglyLinkedList
 import org.gui_vista.core.widget.Widget
+import org.gui_vista.core.widget.WidgetBase
 
 /** Grouping widgets so they request the same size. */
 class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
@@ -27,7 +28,7 @@ class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
      * @param widget The widget to add.
      * @see addWidget
      */
-    operator fun plusAssign(widget: Widget) {
+    operator fun plusAssign(widget: WidgetBase) {
         addWidget(widget)
     }
 
@@ -40,7 +41,7 @@ class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
      * @param widget The widget to add.
      * @see mode
      */
-    fun addWidget(widget: Widget) {
+    fun addWidget(widget: WidgetBase) {
         gtk_size_group_add_widget(gtkSizeGroupPtr, widget.gtkWidgetPtr)
     }
 
@@ -49,7 +50,7 @@ class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
      * @param widget The widget to remove.
      * @see removeWidget
      */
-    operator fun minusAssign(widget: Widget) {
+    operator fun minusAssign(widget: WidgetBase) {
         removeWidget(widget)
     }
 
@@ -57,7 +58,7 @@ class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
      * Removes a widget from a GtkSizeGroup.
      * @param widget The widget to remove.
      */
-    fun removeWidget(widget: Widget) {
+    fun removeWidget(widget: WidgetBase) {
         gtk_size_group_remove_widget(gtkSizeGroupPtr, widget.gtkWidgetPtr)
     }
 

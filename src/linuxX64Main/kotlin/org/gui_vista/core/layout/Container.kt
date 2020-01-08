@@ -3,7 +3,9 @@ package org.gui_vista.core.layout
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
+import org.gui_vista.core.Adjustment
 import org.gui_vista.core.data_type.DoublyLinkedList
+import org.gui_vista.core.widget.Widget
 import org.gui_vista.core.widget.WidgetBase
 
 /** Base class for widgets which contain other widgets. Deals with basic layout. */
@@ -21,6 +23,37 @@ interface Container : WidgetBase {
     /** Gets the [container’s][Container] non internal children. */
     val children: DoublyLinkedList
         get() = DoublyLinkedList(gtk_container_get_children(gtkContainerPtr))
+    /**
+     * Fetches the current focus child widget inside [Container]. This is **not** the currently focused widget. That
+     * can be obtained using the [focus][org.gui_vista.core.window.WindowBase.focus] property from
+     * [WindowBase][org.gui_vista.core.window.WindowBase].
+     */
+    var focusChild: WidgetBase?
+        get() {
+            val tmp = gtk_container_get_focus_child(gtkContainerPtr)
+            return if (tmp != null) Widget(tmp) else null
+        }
+        set(value) = gtk_container_set_focus_child(gtkContainerPtr, value?.gtkWidgetPtr)
+    /** The vertical focus adjustment for the [Container]. */
+    var focusVAdjustment: Adjustment?
+        get() {
+            val tmp = gtk_container_get_focus_vadjustment(gtkContainerPtr)
+            return if (tmp != null) Adjustment(tmp) else null
+        }
+        set(value) = gtk_container_set_focus_vadjustment(gtkContainerPtr, value?.gtkAdjustmentPtr)
+    /** The horizontal focus adjustment for the [Container]. */
+    var focusHAdjustment: Adjustment?
+        get() {
+            val tmp = gtk_container_get_focus_hadjustment(gtkContainerPtr)
+            return if (tmp != null) Adjustment(tmp) else null
+        }
+        set(value) = gtk_container_set_focus_hadjustment(gtkContainerPtr, value?.gtkAdjustmentPtr)
+
+    /**
+     * Gets the type of the children supported by the container.
+     * @return The data type, or *GType.G_TYPE_NONE* if no more children can be added.
+     */
+    fun childType(): GType = gtk_container_child_type(gtkContainerPtr)
 
     /**
      * Adds [widget] to [container][Container]. Typically used for simple containers such as
@@ -36,6 +69,11 @@ interface Container : WidgetBase {
      */
     fun add(widget: WidgetBase) {
         gtk_container_add(gtkContainerPtr, widget.gtkWidgetPtr)
+    }
+
+    /** Emits the *check-resize* signal on the [Container]. */
+    fun checkResize() {
+        gtk_container_check_resize(gtkContainerPtr)
     }
 
     /**

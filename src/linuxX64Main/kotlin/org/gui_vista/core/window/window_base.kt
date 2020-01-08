@@ -36,7 +36,7 @@ interface WindowBase : Container {
      * for instance a GtkMenu created by a GtkComboBox, a completion popup window created by
      * [Entry][org.gui_vista.core.widget.data_entry.Entry], or a type ahead search entry created by GtkTreeView.
      */
-    var attachedTo: Widget?
+    var attachedTo: WidgetBase?
         get() {
             val tmp = gtk_window_get_attached_to(gtkWindowPtr)
             return if (tmp != null) Widget(tmp) else null
@@ -127,6 +127,15 @@ interface WindowBase : Container {
     /** Whether the input focus is within this window. Default value is *false*. */
     val hasTopLevelFocus: Boolean
         get() = gtk_window_has_toplevel_focus(gtkWindowPtr) == TRUE
+    /**
+     * The focused widget in the window. To set the focus to a particular widget in the top level, it is usually more
+     * convenient to use the [grabFocus][WidgetBase.grabFocus] function from [WidgetBase] instead of this function. */
+    var focus: WidgetBase?
+        get() {
+            val tmp = gtk_window_get_focus(gtkWindowPtr)
+            return if (tmp != null) Widget(tmp) else null
+        }
+        set(value) = gtk_window_set_focus(gtkWindowPtr, value?.gtkWidgetPtr)
 
     /**
      * This function returns the position you need to pass to [move] to keep window in its current position. This means

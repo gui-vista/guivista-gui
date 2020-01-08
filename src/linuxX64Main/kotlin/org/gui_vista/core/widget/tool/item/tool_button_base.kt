@@ -6,6 +6,7 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
 import org.gui_vista.core.connectGSignal
 import org.gui_vista.core.widget.Widget
+import org.gui_vista.core.widget.WidgetBase
 
 private const val CLICKED_SIGNAL = "clicked"
 
@@ -20,7 +21,7 @@ interface ToolButtonBase : ToolItemBase {
         get() = gtk_tool_button_get_icon_name(gtkToolButtonPtr)?.toKString() ?: ""
         set(value) = gtk_tool_button_set_icon_name(gtkToolButtonPtr, value)
     /** Icon widget to display in the item. */
-    var iconWidget: Widget?
+    var iconWidget: WidgetBase?
         get() {
             val tmp = gtk_tool_button_get_icon_widget(gtkToolButtonPtr)
             return if (tmp != null) Widget(tmp) else null
@@ -31,7 +32,7 @@ interface ToolButtonBase : ToolItemBase {
         get() = gtk_tool_button_get_label(gtkToolButtonPtr)?.toKString() ?: ""
         set(value) = gtk_tool_button_set_label(gtkToolButtonPtr, value)
     /** Widget to use as the item label. */
-    var labelWidget: Widget?
+    var labelWidget: WidgetBase?
         get() {
             val tmp = gtk_tool_button_get_label_widget(gtkToolButtonPtr)
             return if (tmp != null) Widget(tmp) else null
