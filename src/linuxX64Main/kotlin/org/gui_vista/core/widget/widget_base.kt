@@ -81,6 +81,96 @@ interface WidgetBase : ObjectBase {
             if (value in marginRange) gtk_widget_set_margin_top(gtkWidgetPtr, value)
         }
         get() = gtk_widget_get_margin_top(gtkWidgetPtr)
+    /** Whether the application will paint directly on the widget. Default value is *false*. */
+    var appPaintable: Boolean
+        get() = gtk_widget_get_app_paintable(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_app_paintable(gtkWidgetPtr, if (value) TRUE else FALSE)
+    /** Whether the widget can be the default widget. Default value is *false*. */
+    var canDefault: Boolean
+        get() = gtk_widget_get_can_default(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_can_default(gtkWidgetPtr, if (value) TRUE else FALSE)
+    /**
+     * Whether the widget should grab focus when it is clicked with the mouse. This property is only relevant for
+     * widgets that can take focus. Before 3.20 several widgets (GtkButton, GtkFileChooserButton, GtkComboBox)
+     * implemented this property individually.
+     *
+     * Default value is *true*.
+     */
+    var focusOnClick: Boolean
+        get() = gtk_widget_get_focus_on_click(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_focus_on_click(gtkWidgetPtr, if (value) TRUE else FALSE)
+    /** How to distribute horizontal space if widget gets extra space. */
+    var hAlign: GtkAlign
+        get() = gtk_widget_get_halign(gtkWidgetPtr)
+        set(value) = gtk_widget_set_halign(gtkWidgetPtr, value)
+    /** Whether the widget is the default widget. Default value is *false*. */
+    val hasDefault: Boolean
+        get() = gtk_widget_has_default(gtkWidgetPtr) == TRUE
+    /** Whether the widget has the input focus. Default value is *false*. */
+    val hasFocus: Boolean
+        get() = gtk_widget_has_focus(gtkWidgetPtr) == TRUE
+    /** Whether to expand horizontally. Default value is *false*. */
+    var hExpand: Boolean
+        get() = gtk_widget_get_hexpand(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_hexpand(gtkWidgetPtr, if (value) TRUE else FALSE)
+    /** Whether to use the [hExpand] property. Default value is *false*. */
+    var hExpandSet: Boolean
+        get() = gtk_widget_get_hexpand_set(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_hexpand_set(gtkWidgetPtr, if (value) TRUE else FALSE)
+    /** Whether the widget is the focus widget within the top level. Default value is *false*. */
+    val isFocus: Boolean
+        get() = gtk_widget_is_focus(gtkWidgetPtr) == TRUE
+    /** The name of the widget. Default value is *""* (an empty String). */
+    var name: String
+        get() = gtk_widget_get_name(gtkWidgetPtr)?.toKString() ?: ""
+        set(value) = gtk_widget_set_name(gtkWidgetPtr, value)
+    /** Whether the [showAll] function should not affect this widget. Default value is *false*. */
+    var noShowAll: Boolean
+        get() = gtk_widget_get_no_show_all(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_no_show_all(gtkWidgetPtr, if (value) TRUE else FALSE)
+    /**
+     * The requested opacity of the widget. Before 3.8 this was only available in GtkWindow. Default value is *1.0*.
+     */
+    var opacity: Double
+        get() = gtk_widget_get_opacity(gtkWidgetPtr)
+        set(value) {
+            if (value in (0.0..1.0)) gtk_widget_set_opacity(gtkWidgetPtr, value)
+        }
+    /** If *true* then the widget will receive the default action when it is focused. Default value is *false*. */
+    var receivesDefault: Boolean
+        get() = gtk_widget_get_receives_default(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_receives_default(gtkWidgetPtr, if (value) TRUE else FALSE)
+    /** The scale factor of the widget. */
+    val scaleFactor: Int
+        get() = gtk_widget_get_scale_factor(gtkWidgetPtr)
+    /** Whether the widget responds to input. */
+    var sensitive: Boolean
+        get() = gtk_widget_get_sensitive(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_sensitive(gtkWidgetPtr, if (value) TRUE else FALSE)
+    /**
+     * Sets the text of tooltip to be the given string, which is marked up with the Pango text markup language. Also
+     * see `gtk_tooltip_set_markup()`. This is a convenience property which will take care of getting the tooltip
+     * shown if the given string isn't *null*, [hasTooltip] will automatically be set to *true*, and the
+     * "query-tooltip" signal will be handled in the default signal handler. Note that if both [tooltipText], and
+     * [tooltipMarkup] are set the last one wins.
+     *
+     * Default value is *""* (an empty String).
+     */
+    var tooltipMarkup: String
+        get() = gtk_widget_get_tooltip_markup(gtkWidgetPtr)?.toKString() ?: ""
+        set(value) = gtk_widget_set_tooltip_markup(gtkWidgetPtr, value)
+    /** How to distribute vertical space if widget gets extra space. Default value is *GtkAlign.GTK_ALIGN_FILL*. */
+    var vAlign: GtkAlign
+        get() = gtk_widget_get_valign(gtkWidgetPtr)
+        set(value) = gtk_widget_set_valign(gtkWidgetPtr, value)
+    /** Whether to expand vertically. Default value is *false*. */
+    var vExpand: Boolean
+        get() = gtk_widget_get_vexpand(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_vexpand(gtkWidgetPtr, if (value) TRUE else FALSE)
+    /** Whether to use the [vExpand] property. Default value is *false*. */
+    var vExpandSet: Boolean
+        get() = gtk_widget_get_vexpand_set(gtkWidgetPtr) == TRUE
+        set(value) = gtk_widget_set_vexpand_set(gtkWidgetPtr, if (value) TRUE else FALSE)
 
     companion object {
         private val marginRange = 0..32767

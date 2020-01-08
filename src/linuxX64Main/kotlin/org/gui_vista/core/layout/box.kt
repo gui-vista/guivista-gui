@@ -6,7 +6,7 @@ import kotlinx.cinterop.reinterpret
 
 /** A container for packing widgets in a single row or column. */
 class Box(boxPtr: CPointer<GtkBox>? = null, orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTAL) :
-    Container {
+    BoxBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = boxPtr?.reinterpret() ?: gtk_box_new(orientation, 0)
 }
 
