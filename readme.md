@@ -84,9 +84,9 @@ Application("org.example.basicgui").use {
 - import kotlinx.cinterop.CPointer
 - import kotlinx.cinterop.StableRef
 - import kotlinx.cinterop.staticCFunction
-- import org.guivista.core.Application
-- import org.guivista.core.window.AppWindow
-- import org.guivista.core.fetchEmptyDataPointer
+- import org.gui_vista.core.Application
+- import org.gui_vista.core.window.AppWindow
+- import org.gui_vista.core.fetchEmptyDataPointer
 
 
 After completing the steps above the **main.kt** file should look like the following:
@@ -96,9 +96,9 @@ import gtk3.gpointer
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.StableRef
 import kotlinx.cinterop.staticCFunction
-import org.guivista.core.Application
-import org.guivista.core.window.AppWindow
-import org.guivista.core.fetchEmptyDataPointer
+import org.gui_vista.core.Application
+import org.gui_vista.core.window.AppWindow
+import org.gui_vista.core.fetchEmptyDataPointer
 
 private lateinit var appWin: AppWindow
 

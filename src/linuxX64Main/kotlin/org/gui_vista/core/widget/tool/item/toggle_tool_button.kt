@@ -1,0 +1,23 @@
+package org.gui_vista.core.widget.tool.item
+
+import gtk3.*
+import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.reinterpret
+
+/** A tool item containing a toggle button. */
+class ToggleToolButton(toggleToolButtonPtr: CPointer<GtkToggleToolButton>? = null) : ToggleToolButtonBase {
+    override val gtkToolItemPtr: CPointer<GtkToolItem>? =
+        toggleToolButtonPtr?.reinterpret() ?: gtk_toggle_tool_button_new()
+    override val gtkToggleToolButtonPtr: CPointer<GtkToggleToolButton>?
+        get() = gtkToolItemPtr?.reinterpret()
+    override val gtkToolButtonPtr: CPointer<GtkToolButton>?
+        get() = gtkToolItemPtr?.reinterpret()
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = null
+}
+
+fun toggleToolButtonWidget(toggleToolButtonPtr: CPointer<GtkToggleToolButton>? = null,
+                           init: ToggleToolButton.() -> Unit): ToggleToolButton {
+    val button = ToggleToolButton(toggleToolButtonPtr)
+    button.init()
+    return button
+}
