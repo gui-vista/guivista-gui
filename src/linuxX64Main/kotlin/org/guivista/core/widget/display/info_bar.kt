@@ -69,36 +69,19 @@ class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Container {
      * @param responseId Response ID to use for the button.
      * @return A button widget. Usually you don't need it.
      */
-    fun addButton(buttonText: String, responseId: Int): CPointer<GtkButton>? =
-        gtk_info_bar_add_button(
-                    info_bar = gtkInfoBarPtr,
-                    button_text = buttonText,
-                    response_id = responseId
-            )?.reinterpret()
+    fun addButton(buttonText: String, responseId: Int): CPointer<GtkButton>? = gtk_info_bar_add_button(
+        info_bar = gtkInfoBarPtr,
+        button_text = buttonText,
+        response_id = responseId
+    )?.reinterpret()
 
     /**
-     * Adds more buttons which is the same as calling [addButton] repeatedly. The variable argument list should be null
-     * terminated. Each button must have both text and response ID.
-     * @param firstButtonText Button text or stock ID.
-     * @param responseId1 Response ID for first button.
-     * @param responseId2 Response ID for second button.
-     * @param responseId3 Response ID for third button.
-     * @param responseId4 Response ID for fourth button.
-     * @param responseId5 Response ID for fifth button.
+     * Adds more buttons which is the same as calling [addButton] repeatedly. Does the same thing as
+     * `gtk_info_bar_add_buttons`.
+     * @param buttons Pairs where each one consists of a Response ID, and button text.
      */
-    fun addMultipleButtons(
-        firstButtonText: String,
-        responseId1: Int,
-        responseId2: Int,
-        responseId3: Int = 0,
-        responseId4: Int = 0,
-        responseId5: Int = 0
-    ) {
-        gtk_info_bar_add_buttons(
-            info_bar = gtkInfoBarPtr,
-            first_button_text = firstButtonText,
-            variadicArguments = *arrayOf(responseId1, responseId2, responseId3, responseId4, responseId5, null)
-        )
+    fun addMultipleButtons(vararg buttons: Pair<Int, String>) {
+        buttons.forEach { (responseId, txt) -> addButton(txt, responseId) }
     }
 
     /** Emits the *response* signal with the given [Response ID][responseId] .*/
