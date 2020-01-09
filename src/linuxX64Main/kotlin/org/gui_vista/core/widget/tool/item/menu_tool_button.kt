@@ -15,7 +15,6 @@ class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : ToolButt
         get() = gtkToolItemPtr?.reinterpret()
     override val gtkToolButtonPtr: CPointer<GtkToolButton>?
         get() = gtkToolItemPtr?.reinterpret()
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = null
     var menu: CPointer<GtkWidget>?
         get() = gtk_menu_tool_button_get_menu(gtkMenuToolButtonPtr)
         set(value) = gtk_menu_tool_button_set_menu(gtkMenuToolButtonPtr, value)

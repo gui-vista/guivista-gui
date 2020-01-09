@@ -10,7 +10,6 @@ class SeparatorToolItem(separatorToolItemPtr: CPointer<GtkSeparatorToolItem>? = 
         separatorToolItemPtr?.reinterpret() ?: gtk_separator_tool_item_new()
     val gtkSeparatorToolItemPtr: CPointer<GtkSeparatorToolItem>?
         get() = gtkToolItemPtr?.reinterpret()
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = null
     /** Whether the separator is drawn, or just blank. */
     var draw: Boolean
         get() = gtk_separator_tool_item_get_draw(gtkSeparatorToolItemPtr) == TRUE

@@ -12,7 +12,6 @@ class ToggleToolButton(toggleToolButtonPtr: CPointer<GtkToggleToolButton>? = nul
         get() = gtkToolItemPtr?.reinterpret()
     override val gtkToolButtonPtr: CPointer<GtkToolButton>?
         get() = gtkToolItemPtr?.reinterpret()
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = null
 }
 
 fun toggleToolButtonWidget(toggleToolButtonPtr: CPointer<GtkToggleToolButton>? = null,

@@ -11,7 +11,6 @@ class ToolButton(toolButtonPtr: CPointer<GtkToolButton>? = null, iconWidget: CPo
         toolButtonPtr?.reinterpret() ?: gtk_tool_button_new(iconWidget, label)
     override val gtkToolButtonPtr: CPointer<GtkToolButton>?
         get() = gtkToolItemPtr?.reinterpret()
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = null
 }
 
 fun toolButtonWidget(toolButtonPtr: CPointer<GtkToolButton>? = null, iconWidget: CPointer<GtkWidget>?, label: String,

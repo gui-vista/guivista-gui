@@ -2,12 +2,15 @@ package org.gui_vista.core.widget.tool.item
 
 import gtk3.*
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.reinterpret
 import org.gui_vista.core.SizeGroup
 import org.gui_vista.core.layout.Container
 
 /** The base interface of widgets that can be added to a tool shell. */
 interface ToolItemBase : Container {
     val gtkToolItemPtr: CPointer<GtkToolItem>?
+    override val gtkWidgetPtr: CPointer<GtkWidget>?
+        get() = gtkToolItemPtr?.reinterpret()
     /**
      * The size group used for labels in the tool item. Custom implementations of [ToolItemBase] should call this
      * function, and use the size group for labels.

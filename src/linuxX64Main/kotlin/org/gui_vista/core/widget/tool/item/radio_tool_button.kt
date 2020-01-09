@@ -19,7 +19,6 @@ class RadioToolButton(radioToolButtonPtr: CPointer<GtkRadioToolButton>? = null,
         get() = gtkToolItemPtr?.reinterpret()
     val gtkRadioToolButtonPtr: CPointer<GtkRadioToolButton>?
         get() = gtkToolItemPtr?.reinterpret()
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = null
 }
 
 fun radioToolButtonWidget(radioToolButtonPtr: CPointer<GtkRadioToolButton>? = null, group: RadioToolButton? = null,
