@@ -57,9 +57,10 @@ private lateinit var appWin: AppWindow
 ```kotlin
 private fun activateApplication(app: CPointer<GApplication>, userData: gpointer) {}
 ```
-4. Create the AppWindow UI in the **activateApplication** function:
+4. Print the Application ID, and create the AppWindow UI in the **activateApplication** function:
 ```kotlin
 private fun activateApplication(app: CPointer<GApplication>, userData: gpointer) {
+    println("Application ID: ${Application(appPtr = app).appId}")
     appWin.createUi {
         title = "GUI App"
         visible = true
@@ -70,7 +71,7 @@ private fun activateApplication(app: CPointer<GApplication>, userData: gpointer)
 ```kotlin
 Application("org.example.basicgui").use {}
 ```
-6. In the lambda initialise **appWin**, connect the **activate** signal, run the application, and dispose of the stable reference to **data** after the application exits:
+6. In the lambda initialise **appWin**, connect the **activate** signal, and run the application:
 ```kotlin
 Application("org.example.basicgui").use {
     appWin = AppWin(this)
@@ -84,9 +85,9 @@ Application("org.example.basicgui").use {
 - import kotlinx.cinterop.CPointer
 - import kotlinx.cinterop.StableRef
 - import kotlinx.cinterop.staticCFunction
-- import org.gui_vista.core.Application
-- import org.gui_vista.core.window.AppWindow
-- import org.gui_vista.core.fetchEmptyDataPointer
+- import org.guiVista.core.Application
+- import org.guiVista.core.window.AppWindow
+- import org.guiVista.core.fetchEmptyDataPointer
 
 
 After completing the steps above the **main.kt** file should look like the following:
@@ -96,9 +97,9 @@ import gtk3.gpointer
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.StableRef
 import kotlinx.cinterop.staticCFunction
-import org.gui_vista.core.Application
-import org.gui_vista.core.window.AppWindow
-import org.gui_vista.core.fetchEmptyDataPointer
+import org.guiVista.core.Application
+import org.guiVista.core.window.AppWindow
+import org.guiVista.core.fetchEmptyDataPointer
 
 private lateinit var appWin: AppWindow
 
