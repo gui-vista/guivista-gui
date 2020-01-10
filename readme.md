@@ -19,8 +19,7 @@ In order to use the library with Gradle do the following:
 1. Open/create a Kotlin Native project which targets **linuxX64**
 2. Open the project's **build.gradle.kts** file
 3. Insert `mavenLocal()` into the **repositories** block
-4. Add the library dependency:
-`implementation("org.guivista:guivista-core:0.1-SNAPSHOT")`
+4. Add the library dependency: `implementation("org.guivista:guivista-gui:0.1-SNAPSHOT")`
 
 The build file should look similar to the following:
 ```kotlin
@@ -36,7 +35,7 @@ kotlin {
         compilations.getByName("main") {
             dependencies {
                 val guiVistaVer = "0.1-SNAPSHOT"
-                implementation("org.guivista:guivista-core-linuxx64:$guiVistaVer")
+                implementation("org.guivista:guivista-gui-linuxx64:$guiVistaVer")
             }
         }
     }
@@ -85,9 +84,9 @@ Application("org.example.basicgui").use {
 - import kotlinx.cinterop.CPointer
 - import kotlinx.cinterop.StableRef
 - import kotlinx.cinterop.staticCFunction
-- import org.guiVista.core.Application
-- import org.guiVista.core.window.AppWindow
-- import org.guiVista.core.fetchEmptyDataPointer
+- import org.guiVista.gui.Application
+- import org.guiVista.gui.window.AppWindow
+- import org.guiVista.gui.fetchEmptyDataPointer
 
 
 After completing the steps above the **main.kt** file should look like the following:
@@ -97,9 +96,9 @@ import gtk3.gpointer
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.StableRef
 import kotlinx.cinterop.staticCFunction
-import org.guiVista.core.Application
-import org.guiVista.core.window.AppWindow
-import org.guiVista.core.fetchEmptyDataPointer
+import org.guiVista.gui.Application
+import org.guiVista.gui.window.AppWindow
+import org.guiVista.gui.fetchEmptyDataPointer
 
 private lateinit var appWin: AppWindow
 
