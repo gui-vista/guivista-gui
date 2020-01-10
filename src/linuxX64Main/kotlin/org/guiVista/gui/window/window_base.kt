@@ -1,8 +1,9 @@
 package org.guiVista.gui.window
 
+import glib2.*
 import gtk3.*
 import kotlinx.cinterop.*
-import org.guiVista.gui.connectGSignal
+import org.guiVista.core.connectGSignal
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase

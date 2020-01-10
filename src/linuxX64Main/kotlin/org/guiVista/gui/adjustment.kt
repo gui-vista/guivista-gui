@@ -1,8 +1,13 @@
 package org.guiVista.gui
 
+import glib2.g_object_unref
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
+import org.guiVista.core.ObjectBase
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 
 private const val CHANGED_SIGNAL = "changed"
 private const val VALUE_CHANGED_SIGNAL = "value-changed"

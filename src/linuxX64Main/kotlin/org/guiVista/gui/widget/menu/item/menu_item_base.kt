@@ -1,11 +1,15 @@
 package org.guiVista.gui.widget.menu.item
 
+import glib2.FALSE
+import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guiVista.gui.connectGSignal
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.WidgetBase
 
@@ -76,6 +80,11 @@ interface MenuItemBase : Container {
      */
     fun connectSelectSignal(slot: CPointer<SelectSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkMenuItemPtr, signal = "select", slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkMenuItemPtr, handlerId)
+    }
 }
 
 /**
@@ -90,7 +99,7 @@ typealias ActivateSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: g
  * 1. menuItem: CPointer<GtkMenuItem>
  * 2. userData: gpointer
  */
-typealias ActivateItemSlot = CFunction<(infoBar: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>
+typealias ActivateItemSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *deselect* signal. Arguments:

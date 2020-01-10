@@ -1,10 +1,13 @@
 package org.guiVista.gui.widget.menu.item
 
+import glib2.FALSE
+import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guiVista.gui.connectGSignal
+import org.guiVista.core.connectGSignal
 
 /** Base interface for check menu item objects. */
 interface CheckMenuItemBase : MenuItemBase {

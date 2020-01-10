@@ -12,6 +12,7 @@ plugins {
 repositories {
     jcenter()
     mavenCentral()
+    mavenLocal()
 }
 
 kotlin {
@@ -28,6 +29,10 @@ kotlin {
                     "$userIncludeDir/glib-2.0",
                     "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
                 )
+            }
+            dependencies {
+                val guiVistaCoreVer = "0.1-SNAPSHOT"
+                implementation("org.guivista:guivista-core:$guiVistaCoreVer")
             }
         }
     }

@@ -1,10 +1,12 @@
 package org.guiVista.gui.widget.tool.item
 
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guiVista.gui.connectGSignal
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 
 private const val SHOW_MENU_SIGNAL = "show-menu"
 
@@ -37,6 +39,11 @@ class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : ToolButt
      */
     fun connectShowMenuSignal(slot: CPointer<ShowMenuSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkMenuToolButtonPtr, signal = SHOW_MENU_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkMenuToolButtonPtr, handlerId)
+    }
 }
 
 fun menuToolButtonWidget(iconWidget: CPointer<GtkWidget>?, label: String,

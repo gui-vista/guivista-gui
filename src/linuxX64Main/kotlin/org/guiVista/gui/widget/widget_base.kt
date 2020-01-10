@@ -1,11 +1,14 @@
 package org.guiVista.gui.widget
 
+import glib2.FALSE
+import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
-import org.guiVista.gui.ObjectBase
-import org.guiVista.gui.connectGSignal
+import org.guiVista.core.ObjectBase
+import org.guiVista.core.connectGSignal
 
 private const val GRAB_FOCUS_SIGNAL = "grab-focus"
 private const val SHOW_SIGNAL = "show"

@@ -1,12 +1,15 @@
 package org.guiVista.gui.widget.dataEntry
 
+import glib2.FALSE
+import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.Adjustment
-import org.guiVista.gui.connectGSignal
-import org.guiVista.gui.disconnectGSignal
 
 private const val VALUE_CHANGED_SIGNAL = "value-changed"
 private const val CHANGE_VALUE_SIGNAL = "change-value"

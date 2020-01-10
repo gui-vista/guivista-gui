@@ -1,11 +1,13 @@
 package org.guiVista.gui.widget.menu
 
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guiVista.gui.connectGSignal
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.WidgetBase
 
@@ -98,6 +100,11 @@ interface MenuBase : Container {
      */
     fun connectPoppedUpSignal(slot: CPointer<PoppedUpSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkMenuPtr, signal = "popped-up", slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkMenuPtr, handlerId)
+    }
 }
 
 /**

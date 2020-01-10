@@ -1,5 +1,7 @@
 package org.guiVista.gui.widget.tool
 
+import glib2.FALSE
+import glib2.TRUE
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret

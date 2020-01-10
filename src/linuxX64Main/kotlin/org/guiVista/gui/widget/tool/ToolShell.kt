@@ -2,7 +2,7 @@ package org.guiVista.gui.widget.tool
 
 import gtk3.*
 import kotlinx.cinterop.CPointer
-import org.guiVista.gui.ObjectBase
+import org.guiVista.core.ObjectBase
 import org.guiVista.gui.SizeGroup
 
 /** An interface for containers containing tool item widgets. */

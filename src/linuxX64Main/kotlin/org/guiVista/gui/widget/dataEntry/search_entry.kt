@@ -1,11 +1,13 @@
 package org.guiVista.gui.widget.dataEntry
 
+import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guiVista.gui.connectGSignal
-import org.guiVista.gui.disconnectGSignal
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 
 private const val NEXT_MATCH_SIGNAL = "next-match"
 private const val PREVIOUS_MATCH_SIGNAL = "previous-match"

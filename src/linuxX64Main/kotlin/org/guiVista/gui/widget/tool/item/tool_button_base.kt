@@ -1,10 +1,14 @@
 package org.guiVista.gui.widget.tool.item
 
+import glib2.FALSE
+import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
-import org.guiVista.gui.connectGSignal
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
@@ -54,6 +58,11 @@ interface ToolButtonBase : ToolItemBase {
      */
     fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkToolButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkToolButtonPtr, handlerId)
+    }
 }
 
 /**

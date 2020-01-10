@@ -1,12 +1,15 @@
 package org.guiVista.gui.widget.button
 
+import glib2.FALSE
+import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guiVista.gui.connectGSignal
-import org.guiVista.gui.disconnectGSignal
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 
 private const val ACTIVATE_LINK_SIGNAL = "activate-link"
 

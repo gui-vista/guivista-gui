@@ -1,8 +1,11 @@
 package org.guiVista.gui
 
+import glib2.g_object_unref
+import glib2.g_printerr
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
+import org.guiVista.core.disposeEmptyDataRef
 import kotlin.system.exitProcess
 
 /** Handles a GTK application including application lifecycle, and session management. */

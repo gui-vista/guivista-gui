@@ -1,10 +1,11 @@
 package org.guiVista.gui.layout
 
+import glib2.GType
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
+import org.guiVista.core.dataType.DoublyLinkedList
 import org.guiVista.gui.Adjustment
-import org.guiVista.gui.dataType.DoublyLinkedList
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 

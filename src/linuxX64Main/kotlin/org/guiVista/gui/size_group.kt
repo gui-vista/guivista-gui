@@ -1,8 +1,10 @@
 package org.guiVista.gui
 
+import glib2.g_object_unref
 import gtk3.*
 import kotlinx.cinterop.CPointer
-import org.guiVista.gui.dataType.SinglyLinkedList
+import org.guiVista.core.ObjectBase
+import org.guiVista.core.dataType.SinglyLinkedList
 import org.guiVista.gui.widget.WidgetBase
 
 /** Grouping widgets so they request the same size. */

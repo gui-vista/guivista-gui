@@ -1,10 +1,12 @@
 package org.guiVista.gui.widget.menu.item
 
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guiVista.gui.connectGSignal
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 
 /** A choice from multiple check menu items. */
 class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label: String = "",
@@ -35,6 +37,11 @@ class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label:
      */
     fun joinGroup(groupSource: RadioMenuItem?) {
         gtk_radio_menu_item_join_group(gtkRadioMenuItemPtr, groupSource?.gtkRadioMenuItemPtr)
+    }
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkRadioMenuItemPtr, handlerId)
     }
 }
 

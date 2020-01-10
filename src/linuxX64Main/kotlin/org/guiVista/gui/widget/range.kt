@@ -1,11 +1,15 @@
 package org.guiVista.gui.widget
 
+import glib2.FALSE
+import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.Adjustment
-import org.guiVista.gui.connectGSignal
 
 /** A base for widgets which visualize an adjustment. */
 interface Range : WidgetBase {
@@ -112,6 +116,11 @@ interface Range : WidgetBase {
      */
     fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkRangePtr, signal = "value-changed", slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkRangePtr, handlerId)
+    }
 }
 
 /**

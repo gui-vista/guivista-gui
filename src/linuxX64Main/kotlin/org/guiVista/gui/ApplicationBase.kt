@@ -1,9 +1,13 @@
 package org.guiVista.gui
 
+import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
+import org.guiVista.core.ObjectBase
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 
 /** Base interface for application objects. */
 interface ApplicationBase : ObjectBase {
