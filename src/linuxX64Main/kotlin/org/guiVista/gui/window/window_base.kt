@@ -245,7 +245,6 @@ interface WindowBase : Container {
     override fun close() {
         gtk_window_close(gtkWindowPtr)
         super.close()
-        g_object_unref(gtkWindowPtr)
     }
 
     /**

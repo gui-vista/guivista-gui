@@ -9,7 +9,7 @@ import org.guiVista.gui.Adjustment
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-/** Base class for widgets which contain other widgets. Deals with basic layout. */
+/** Base interface for widgets which contain other widgets. Deals with basic layout. */
 interface Container : WidgetBase {
     val gtkContainerPtr: CPointer<GtkContainer>?
         get() = gtkWidgetPtr?.reinterpret()
