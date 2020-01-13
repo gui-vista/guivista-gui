@@ -31,8 +31,8 @@ kotlin {
                 )
             }
             dependencies {
-                val guiVistaCoreVer = "0.1-SNAPSHOT"
-                implementation("org.guivista:guivista-core:$guiVistaCoreVer")
+                val guiVistaIoVer = "0.1-SNAPSHOT"
+                implementation("org.guivista:guivista-io:$guiVistaIoVer")
             }
         }
     }

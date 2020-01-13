@@ -24,7 +24,7 @@ open class AppWindow(private val app: GuiApplication) : WindowBase {
     }
 
     override fun createUi(init: WindowBase.() -> Unit) {
-        _gtkWidgetPtr = gtk_application_window_new(app.gtkAppPtr)
+        _gtkWidgetPtr = gtk_application_window_new(app.gtkApplicationPtr)
         this.init()
         val mainLayout = createMainLayout()
         if (mainLayout != null) this += mainLayout
