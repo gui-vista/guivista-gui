@@ -9,17 +9,17 @@ import org.guiVista.core.disposeEmptyDataRef
 import kotlin.system.exitProcess
 
 /** Handles a GTK application including application lifecycle, and session management. */
-class Application(appPtr: CPointer<GApplication>? = null, id: String = "org.example.gui-app") : ApplicationBase {
+class GuiApplication(appPtr: CPointer<GApplication>? = null, id: String = "org.example.gui-app") : GuiApplicationBase {
     val gtkAppPtr: CPointer<GtkApplication> = appPtr?.reinterpret() ?: createGtkAppPtr(id)
     override val gAppPtr: CPointer<GApplication>
         get() = gtkAppPtr.reinterpret()
 
     /**
-     * Use a [Application] instance before closing it.
-     * @param init Initialization block for the [Application] instance.
+     * Use a [GuiApplication] instance before closing it.
+     * @param init Initialization block for the [GuiApplication] instance.
      */
     @Suppress("unused")
-    fun use(init: Application.() -> Unit) {
+    fun use(init: GuiApplication.() -> Unit) {
         this.init()
         close()
     }

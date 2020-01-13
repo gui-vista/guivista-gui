@@ -6,13 +6,13 @@ import gtk3.GtkWindow
 import gtk3.gtk_application_window_new
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
-import org.guiVista.gui.Application
+import org.guiVista.gui.GuiApplication
 
 /**
- * A window with [Application] support. Maps to
+ * A window with [GuiApplication] support. Maps to
  * [GtkApplicationWindow](https://developer.gnome.org/gtk3/stable/GtkApplicationWindow.html).
  */
-open class AppWindow(private val app: Application) : WindowBase {
+open class AppWindow(private val app: GuiApplication) : WindowBase {
     private var _gtkWidgetPtr: CPointer<GtkWidget>? = null
     override val gtkWidgetPtr: CPointer<GtkWidget>?
         get() = _gtkWidgetPtr?.reinterpret()

@@ -10,7 +10,7 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
 /** Base interface for application objects. */
-interface ApplicationBase : ObjectBase {
+interface GuiApplicationBase : ObjectBase {
     val gAppPtr: CPointer<GApplication>
     /** The unique identifier for the application. Default value is *""* (an empty String). */
     val appId: String
