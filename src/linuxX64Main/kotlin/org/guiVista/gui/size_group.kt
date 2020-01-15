@@ -42,7 +42,7 @@ class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
      * @param widget The widget to add.
      * @see mode
      */
-    fun addWidget(widget: WidgetBase) {
+    infix fun addWidget(widget: WidgetBase) {
         gtk_size_group_add_widget(gtkSizeGroupPtr, widget.gtkWidgetPtr)
     }
 
@@ -59,7 +59,7 @@ class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
      * Removes a widget from a GtkSizeGroup.
      * @param widget The widget to remove.
      */
-    fun removeWidget(widget: WidgetBase) {
+    infix fun removeWidget(widget: WidgetBase) {
         gtk_size_group_remove_widget(gtkSizeGroupPtr, widget.gtkWidgetPtr)
     }
 

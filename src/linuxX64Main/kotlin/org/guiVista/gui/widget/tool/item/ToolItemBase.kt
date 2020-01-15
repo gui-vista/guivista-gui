@@ -120,7 +120,7 @@ interface ToolItemBase : Container {
      * Changes the text to be displayed as tooltip on the item. See `gtk_widget_set_tooltip_text()`.
      * @param text The text to be used as tooltip for the tool item.
      */
-    fun changeTooltipText(text: String) {
+    infix fun changeTooltipText(text: String) {
         gtk_tool_item_set_tooltip_text(gtkToolItemPtr, text)
     }
 }

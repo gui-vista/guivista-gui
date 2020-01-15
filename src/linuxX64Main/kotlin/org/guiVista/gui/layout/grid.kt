@@ -38,7 +38,7 @@ class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * down. Children which span across this position are grown to span the new row.
      * @param pos The position to insert the row.
      */
-    fun insertRow(pos: Int) {
+    infix fun insertRow(pos: Int) {
         gtk_grid_insert_row(gtkGridPtr, pos)
     }
 
@@ -47,7 +47,7 @@ class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * moved one column to the right. Children which span across this position are grown to span the new column.
      * @param pos The position to insert the column.
      */
-    fun insertColumn(pos: Int) {
+    infix fun insertColumn(pos: Int) {
         gtk_grid_insert_column(gtkGridPtr, pos)
     }
 
@@ -56,7 +56,7 @@ class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * this row have their height reduced by one, and children below the row are moved up.
      * @param pos The position of the row to remove.
      */
-    fun removeRow(pos: Int) {
+    infix fun removeRow(pos: Int) {
         gtk_grid_remove_row(gtkGridPtr, pos)
     }
 
@@ -65,7 +65,7 @@ class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * overlap this column have their width reduced by one, and children after the column are moved to the left.
      * @param pos The position of the column to remove.
      */
-    fun removeColumn(pos: Int) {
+    infix fun removeColumn(pos: Int) {
         gtk_grid_remove_column(gtkGridPtr, pos)
     }
 

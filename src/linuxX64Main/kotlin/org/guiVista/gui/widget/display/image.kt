@@ -38,7 +38,7 @@ class Image(imagePtr: CPointer<GtkImage>? = null) : WidgetBase {
      *
      * @param file Absolute path to the file (a image) that will be displayed.
      */
-    fun changeFile(file: String) {
+    infix fun changeFile(file: String) {
         gtk_image_set_from_file(gtkImagePtr, file)
     }
 

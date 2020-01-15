@@ -26,7 +26,7 @@ class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : ToolButt
      * `gtk_tool_item_set_tooltip_text()` for setting a tooltip on the whole [MenuToolButton].
      * @param text Text to be used as tooltip text for button’s arrow button.
      */
-    fun changeArrowTooltipText(text: String) {
+    infix fun changeArrowTooltipText(text: String) {
         gtk_menu_tool_button_set_arrow_tooltip_text(gtkMenuToolButtonPtr, text)
     }
 

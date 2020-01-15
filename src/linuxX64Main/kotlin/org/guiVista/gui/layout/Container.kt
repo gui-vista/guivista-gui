@@ -68,7 +68,7 @@ interface Container : WidgetBase {
      * added widget, and the container.
      * @param widget A widget to be placed inside container.
      */
-    fun add(widget: WidgetBase) {
+    infix fun add(widget: WidgetBase) {
         gtk_container_add(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
@@ -85,7 +85,7 @@ interface Container : WidgetBase {
      * usually more efficient to simply destroy it directly using `gtk_widget_destroy()` since this will remove it from
      * the container, and help break any circular reference count cycles.
      */
-    fun remove(widget: WidgetBase) {
+    infix fun remove(widget: WidgetBase) {
         gtk_container_remove(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 

@@ -20,8 +20,8 @@ class StatusBar(statusBarPtr: CPointer<GtkStatusbar>? = null) : Container {
      * @param contextDescription Textual description of what context the new message is being used in.
      * @return A ID.
      */
-    fun fetchContextId(contextDescription: String): UInt =
-            gtk_statusbar_get_context_id(gtkStatusBarPtr, contextDescription)
+    infix fun fetchContextId(contextDescription: String): UInt =
+        gtk_statusbar_get_context_id(gtkStatusBarPtr, contextDescription)
 
     /**
      * Pushes a new message onto a statusbar’s stack.

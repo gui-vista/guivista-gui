@@ -4,6 +4,7 @@ import glib2.*
 import gtk3.*
 import kotlinx.cinterop.*
 import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
@@ -201,7 +202,7 @@ interface WindowBase : Container {
      * Changes the [window's][Window] position.
      * @param position The window position to use.
      */
-    fun changePosition(position: GtkWindowPosition) {
+    infix fun changePosition(position: GtkWindowPosition) {
         gtk_window_set_position(gtkWindowPtr, position)
     }
 
@@ -209,7 +210,7 @@ interface WindowBase : Container {
      * Changes the [window's][Window] startup notification identifier.
      * @param startupId The startup identifier to use.
      */
-    fun changeStartupId(startupId: String) {
+    infix fun changeStartupId(startupId: String) {
         gtk_window_set_startup_id(gtkWindowPtr, startupId)
     }
 
@@ -272,7 +273,7 @@ interface WindowBase : Container {
     }
 
     /** Adds a new child to the window. */
-    fun addChild(widget: WidgetBase) {
+    infix fun addChild(widget: WidgetBase) {
         gtk_container_add(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
@@ -282,7 +283,7 @@ interface WindowBase : Container {
     }
 
     /** Removes a child from the window. */
-    fun removeChild(widget: WidgetBase) {
+    infix fun removeChild(widget: WidgetBase) {
         gtk_container_remove(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
@@ -353,6 +354,11 @@ interface WindowBase : Container {
      */
     fun connectSetFocusSignal(slot: CPointer<SetFocusSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkWindowPtr, signal = SET_FOCUS_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkWindowPtr, handlerId)
+    }
 }
 
 /**

@@ -38,7 +38,7 @@ interface MenuShell : Container {
      * Adds a new GtkMenuItem to the end of the menu shell's item list.
      * @param child The menu item to append.
      */
-    fun append(child: WidgetBase) {
+    infix fun append(child: WidgetBase) {
         gtk_menu_shell_append(gtkMenuShellPtr, child.gtkWidgetPtr)
     }
 
@@ -54,7 +54,7 @@ interface MenuShell : Container {
      * Adds a new menu item to the beginning of the menu shell's item list.
      * @param child The menu item to prepend.
      */
-    fun prepend(child: WidgetBase) {
+    infix fun prepend(child: WidgetBase) {
         gtk_menu_shell_prepend(gtkMenuShellPtr, child.gtkWidgetPtr)
     }
 
@@ -76,7 +76,7 @@ interface MenuShell : Container {
      * Selects the menu item from the menu shell.
      * @param menuItem The menu item to select.
      */
-    fun selectItem(menuItem: WidgetBase) {
+    infix fun selectItem(menuItem: WidgetBase) {
         gtk_menu_shell_select_item(gtkMenuShellPtr, menuItem.gtkWidgetPtr)
     }
 
@@ -86,7 +86,7 @@ interface MenuShell : Container {
      * @param searchSensitive If *true* search for the first selectable menu item, otherwise select nothing if the
      * first item isn’t sensitive. This should be *false* if the menu is being popped up initially.
      */
-    fun selectFirst(searchSensitive: Boolean) {
+    fun selectFirst(searchSensitive: Boolean = true) {
         gtk_menu_shell_select_first(gtkMenuShellPtr, if (searchSensitive) TRUE else FALSE)
     }
 
