@@ -1,2 +1,2 @@
-rootProject.name = "guivista-core"
+rootProject.name = "guivista-gui"
 enableFeaturePreview("GRADLE_METADATA")
