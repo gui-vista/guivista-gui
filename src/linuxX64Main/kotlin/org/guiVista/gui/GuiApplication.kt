@@ -12,17 +12,16 @@ import org.guiVista.io.application.ApplicationBase
 import kotlin.system.exitProcess
 
 /** Handles a GTK application including application lifecycle, and session management. */
-class GuiApplication(appPtr: CPointer<GApplication>? = null, id: String = "org.example.gui-app") : ApplicationBase {
+actual class GuiApplication(
+    appPtr: CPointer<GApplication>? = null,
+    id: String = "org.example.gui-app"
+) : ApplicationBase {
     val gtkApplicationPtr: CPointer<GtkApplication>? = appPtr?.reinterpret() ?: createGtkApplicationPtr(id)
     override val gApplicationPtr: CPointer<GApplication>?
         get() = gtkApplicationPtr?.reinterpret()
 
-    /**
-     * Use a [GuiApplication] instance before closing it.
-     * @param init Initialization block for the [GuiApplication] instance.
-     */
     @Suppress("unused")
-    fun use(init: GuiApplication.() -> Unit) {
+    actual fun use(init: GuiApplication.() -> Unit) {
         this.init()
         close()
     }

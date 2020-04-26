@@ -9,14 +9,15 @@ import org.guiVista.gui.Adjustment
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-/** Base interface for widgets which contain other widgets. Deals with basic layout. */
-interface Container : WidgetBase {
+actual interface Container : WidgetBase {
     val gtkContainerPtr: CPointer<GtkContainer>?
         get() = gtkWidgetPtr?.reinterpret()
+
     /** The width of the empty border outside the container's children. Default value is *0*. */
     var borderWidth: UInt
         set(value) = gtk_container_set_border_width(gtkContainerPtr, value)
         get() = gtk_container_get_border_width(gtkContainerPtr)
+
     /** Specify how resize events are handled. Default value is *GtkResizeMode.GTK_RESIZE_PARENT*. */
     var resizeMode: GtkResizeMode
         get() = gtk_container_get_resize_mode(gtkContainerPtr)

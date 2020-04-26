@@ -5,9 +5,9 @@ import kotlinx.cinterop.CPointer
 import org.guiVista.core.ObjectBase
 import org.guiVista.gui.SizeGroup
 
-/** An interface for containers containing tool item widgets. */
-interface ToolShell : ObjectBase {
+actual interface ToolShell : ObjectBase {
     val gtkToolShellPtr: CPointer<GtkToolShell>?
+
     /**
      * Retrieves the icon size for the [ToolShell]. Tool items must not call this function directly, but rely on
      * [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]
@@ -15,6 +15,7 @@ interface ToolShell : ObjectBase {
      */
     val iconSize: GtkIconSize
         get() = gtk_tool_shell_get_icon_size(gtkToolShellPtr)
+
     /**
      * Retrieves the current orientation for the [ToolShell]. Tool items must not call this function directly, but rely
      * on [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]

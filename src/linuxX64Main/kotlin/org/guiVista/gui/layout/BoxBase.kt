@@ -7,14 +7,15 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guiVista.gui.widget.WidgetBase
 
-/** Base interface for box objects. */
-interface BoxBase : Container {
+actual interface BoxBase : Container {
     val gtkBoxPtr: CPointer<GtkBox>?
         get() = gtkWidgetPtr?.reinterpret()
+
     /** The amount of space between children. Default value is *0*. */
     var spacing: Int
         set(value) = gtk_box_set_spacing(gtkBoxPtr, value)
         get() = gtk_box_get_spacing(gtkBoxPtr)
+
     /** If set to *true* then all the children are the same size. Default value is *false*. */
     var homogeneous: Boolean
         set(value) = gtk_box_set_homogeneous(gtkBoxPtr, if (value) TRUE else FALSE)

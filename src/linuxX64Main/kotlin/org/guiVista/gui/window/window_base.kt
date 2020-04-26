@@ -15,17 +15,19 @@ private const val ENABLE_DEBUGGING_SIGNAL = "enable-debugging"
 private const val KEYS_CHANGED_SIGNAL = "keys-changed"
 private const val SET_FOCUS_SIGNAL = "set-focus"
 
-/** Base interface for window objects. */
-interface WindowBase : Container {
+actual interface WindowBase : Container {
     val gtkWindowPtr: CPointer<GtkWindow>?
+
     /** If set to *true* then the window should receive the input focus. Default value is *true*. */
     var acceptFocus: Boolean
         set(value) = gtk_window_set_accept_focus(gtkWindowPtr, if (value) TRUE else FALSE)
         get() = gtk_window_get_accept_focus(gtkWindowPtr) == TRUE
+
     /** Name of the window. Default value is *""* (an empty String). */
     var title: String
         set(value) = gtk_window_set_title(gtkWindowPtr, value)
         get() = gtk_window_get_title(gtkWindowPtr)?.toKString() ?: ""
+
     /** If set to *true* then a user can resize the window. Default value is *true*. */
     var resizable: Boolean
         set(value) = gtk_window_set_resizable(gtkWindowPtr, if (value) TRUE else FALSE)

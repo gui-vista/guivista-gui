@@ -14,9 +14,9 @@ import org.guiVista.gui.widget.WidgetBase
 
 private const val CLICKED_SIGNAL = "clicked"
 
-/** Base interface for tool button objects. */
-interface ToolButtonBase : ToolItemBase {
+actual interface ToolButtonBase : ToolItemBase {
     val gtkToolButtonPtr: CPointer<GtkToolButton>?
+
     /**
      * The name of the themed icon displayed on the item. This property only has an effect if not overridden by
      * [labelWidget], or [iconWidget] properties. Default value is *""* (an empty String).
@@ -24,6 +24,7 @@ interface ToolButtonBase : ToolItemBase {
     var iconName: String
         get() = gtk_tool_button_get_icon_name(gtkToolButtonPtr)?.toKString() ?: ""
         set(value) = gtk_tool_button_set_icon_name(gtkToolButtonPtr, value)
+
     /** Icon widget to display in the item. */
     var iconWidget: WidgetBase?
         get() {

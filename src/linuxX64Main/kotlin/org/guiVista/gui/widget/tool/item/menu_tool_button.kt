@@ -10,8 +10,7 @@ import org.guiVista.core.disconnectGSignal
 
 private const val SHOW_MENU_SIGNAL = "show-menu"
 
-/** A tool item containing a button with an additional drop down menu. */
-class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : ToolButtonBase {
+actual class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : ToolButtonBase {
     override val gtkToolItemPtr: CPointer<GtkToolItem>? = gtk_menu_tool_button_new(iconWidget, label)
     val gtkMenuToolButtonPtr: CPointer<GtkMenuToolButton>?
         get() = gtkToolItemPtr?.reinterpret()
@@ -21,12 +20,7 @@ class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : ToolButt
         get() = gtk_menu_tool_button_get_menu(gtkMenuToolButtonPtr)
         set(value) = gtk_menu_tool_button_set_menu(gtkMenuToolButtonPtr, value)
 
-    /**
-     * Changes the tooltip text to be used as tooltip for the arrow button which pops up the menu. See
-     * `gtk_tool_item_set_tooltip_text()` for setting a tooltip on the whole [MenuToolButton].
-     * @param text Text to be used as tooltip text for button’s arrow button.
-     */
-    infix fun changeArrowTooltipText(text: String) {
+    actual infix fun changeArrowTooltipText(text: String) {
         gtk_menu_tool_button_set_arrow_tooltip_text(gtkMenuToolButtonPtr, text)
     }
 

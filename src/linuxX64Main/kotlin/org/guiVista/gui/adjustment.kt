@@ -12,41 +12,27 @@ import org.guiVista.core.disconnectGSignal
 private const val CHANGED_SIGNAL = "changed"
 private const val VALUE_CHANGED_SIGNAL = "value-changed"
 
-/** A representation of an adjustable bounded value. */
-class Adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null) : ObjectBase {
+actual class Adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null) : ObjectBase {
     val gtkAdjustmentPtr: CPointer<GtkAdjustment>? = adjustmentPtr ?: createAdjustment()
-    /** The minimum value of the adjustment. Default value is *0*. */
-    var lower: Double
+    actual var lower: Double
         get() = gtk_adjustment_get_lower(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_lower(gtkAdjustmentPtr, value)
-    /** The page increment of the adjustment. Default value is *0*. */
-    var pageIncrement: Double
+    actual var pageIncrement: Double
         get() = gtk_adjustment_get_page_increment(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_page_increment(gtkAdjustmentPtr, value)
-    /**
-     * The page size of the adjustment. Note that the page size is irrelevant, and should be set to zero *if* the
-     * adjustment is used for a simple scalar value, eg in a GtkSpinButton. Default value is *0*.
-     */
-    var pageSize: Double
+    actual var pageSize: Double
         get() = gtk_adjustment_get_page_size(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_page_size(gtkAdjustmentPtr, value)
-    /** The step increment of the adjustment. Default value is *0*. */
-    var stepIncrement: Double
+    actual var stepIncrement: Double
         get() = gtk_adjustment_get_step_increment(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_step_increment(gtkAdjustmentPtr, value)
-    /**
-     * The maximum value of the adjustment. Note that values will be restricted by upper - [pageSize] if the [pageSize]
-     * property isn't *0*. Default value is *0*.
-     */
-    var upper: Double
+    actual var upper: Double
         get() = gtk_adjustment_get_upper(gtkAdjustmentPtr)
         set(value) = gtk_adjustment_set_upper(gtkAdjustmentPtr, value)
-    /** The value of the adjustment. Default value is *0*. */
-    var value: Double
+    actual var value: Double
         get() = gtk_adjustment_get_value(gtkAdjustmentPtr)
         set(newValue) = gtk_adjustment_set_value(gtkAdjustmentPtr, newValue)
-    /** The smaller value of [step increment][stepIncrement] and [page increment][pageIncrement]. */
-    val minimumIncrement: Double
+    actual val minimumIncrement: Double
         get() = gtk_adjustment_get_minimum_increment(gtkAdjustmentPtr)
 
     private fun createAdjustment() = gtk_adjustment_new(
@@ -58,28 +44,11 @@ class Adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null) : ObjectBase {
         page_size = 0.0
     )
 
-    /**
-     * Updates the [value] property to ensure that the range between [lower] and [upper] is in the current page
-     * (i.e. between [value] and [value] + [page size][pageSize]). If the range is larger than the page size then only
-     * the start of it will be in the current page. A “value-changed” signal will be emitted if the value is changed.
-     */
-    fun clampPage(adjustment: Adjustment, lower: Double, upper: Double) {
+    actual fun clampPage(adjustment: Adjustment, lower: Double, upper: Double) {
         gtk_adjustment_clamp_page(adjustment = adjustment.gtkAdjustmentPtr, lower = lower, upper = upper)
     }
 
-    /**
-     * Sets all properties of the [Adjustment] at once. Use this function to avoid multiple emissions of the “changed”
-     * signal.
-     * @param adjustment The adjustment.
-     * @param value The new value.
-     * @param lower The new minimum value.
-     * @param upper The new maximum value.
-     * @param stepIncrement The new step increment.
-     * @param pageIncrement The new page increment.
-     * @param pageSize The new page size.
-     * @see lower For an alternative way of compressing multiple emissions of “changed” into one.
-     */
-    fun configure(
+    actual fun configure(
         adjustment: Adjustment,
         value: Double,
         lower: Double,
@@ -146,4 +115,3 @@ typealias ChangedSlot = CFunction<(button: CPointer<GtkAdjustment>?, userData: g
  * 2. userData: gpointer
  */
 typealias ValueChangedSlot = CFunction<(button: CPointer<GtkButton>?, userData: gpointer) -> Unit>
-

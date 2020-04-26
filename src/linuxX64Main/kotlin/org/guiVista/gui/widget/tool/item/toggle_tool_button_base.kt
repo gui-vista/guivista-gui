@@ -11,9 +11,9 @@ import org.guiVista.core.disconnectGSignal
 
 private const val TOGGLED_SIGNAL = "toggled"
 
-/** Base interface for toggle tool button objects. */
-interface ToggleToolButtonBase : ToolButtonBase {
+actual interface ToggleToolButtonBase : ToolButtonBase {
     val gtkToggleToolButtonPtr: CPointer<GtkToggleToolButton>?
+
     /** If the toggle tool button should be pressed in. Default value is *false*. */
     var active: Boolean
         get() = gtk_toggle_tool_button_get_active(gtkToggleToolButtonPtr) == TRUE

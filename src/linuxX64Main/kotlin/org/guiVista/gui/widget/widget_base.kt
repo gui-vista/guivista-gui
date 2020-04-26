@@ -15,12 +15,14 @@ private const val SHOW_SIGNAL = "show"
 private const val HIDE_SIGNAL = "hide"
 
 /** Base interface for all widget's (controls). */
-interface WidgetBase : ObjectBase {
+actual interface WidgetBase : ObjectBase {
     val gtkWidgetPtr: CPointer<GtkWidget>?
+
     /** If set to *true* then the widget can accept the input focus. Default value is *false*. */
     var canFocus: Boolean
         set(value) = gtk_widget_set_can_focus(gtkWidgetPtr, if (value) TRUE else FALSE)
         get() = gtk_widget_get_can_focus(gtkWidgetPtr) == TRUE
+
     /**
      * Enables or disables the emission of “query-tooltip” on widget. A value of *true* indicates that widget can have
      * a tooltip, in this case the widget will be queried using “query-tooltip” to determine whether it will provide a

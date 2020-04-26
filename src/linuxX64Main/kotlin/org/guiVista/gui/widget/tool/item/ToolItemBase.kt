@@ -8,17 +8,18 @@ import kotlinx.cinterop.reinterpret
 import org.guiVista.gui.SizeGroup
 import org.guiVista.gui.layout.Container
 
-/** The base interface of widgets that can be added to a tool shell. */
-interface ToolItemBase : Container {
+actual interface ToolItemBase : Container {
     val gtkToolItemPtr: CPointer<GtkToolItem>?
     override val gtkWidgetPtr: CPointer<GtkWidget>?
         get() = gtkToolItemPtr?.reinterpret()
+
     /**
      * The size group used for labels in the tool item. Custom implementations of [ToolItemBase] should call this
      * function, and use the size group for labels.
      */
     val textSizeGroup: SizeGroup
         get() = SizeGroup(gtk_tool_item_get_text_size_group(gtkToolItemPtr))
+
     /**
      * The relief style of the tool item . Custom implementations of [ToolItemBase] should call this function in the
      * handler of the “toolbar_reconfigured” signal to find out the relief style of buttons.
