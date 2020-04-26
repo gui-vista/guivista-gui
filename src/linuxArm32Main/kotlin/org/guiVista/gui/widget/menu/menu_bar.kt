@@ -16,6 +16,7 @@ actual class MenuBar(menuBarPtr: CPointer<GtkMenuBar>? = null) : MenuShell {
     var childPackDirection: GtkPackDirection
         get() = gtk_menu_bar_get_child_pack_direction(gtkMenuBarPtr)
         set(value) = gtk_menu_bar_set_child_pack_direction(gtkMenuBarPtr, value)
+
     /**
      * The pack direction of the menubar. It determines how menuitems are arranged in the menubar. Default value is
      * *GtkPackDirection.GTK_PACK_DIRECTION_LTR*.

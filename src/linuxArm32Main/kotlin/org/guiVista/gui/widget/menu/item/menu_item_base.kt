@@ -26,6 +26,7 @@ actual interface MenuItemBase : Container {
     var useUnderline: Boolean
         get() = gtk_menu_item_get_use_underline(gtkMenuItemPtr) == TRUE
         set(value) = gtk_menu_item_set_use_underline(gtkMenuItemPtr, if (value) TRUE else FALSE)
+
     /**
      * Sets the accelerator path of the menu item, through which runtime changes of the menu item's accelerator caused
      * by the user can be identified and saved to persistent storage. Default value is *""* (an empty String).
@@ -54,7 +55,7 @@ actual interface MenuItemBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): ULong =
+    fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuItemPtr, signal = "activate", slot = slot, data = userData)
 
     /**
@@ -63,7 +64,7 @@ actual interface MenuItemBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateItemSignal(slot: CPointer<ActivateItemSlot>, userData: gpointer): ULong =
+    fun connectActivateItemSignal(slot: CPointer<ActivateItemSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuItemPtr, signal = "activate-item", slot = slot, data = userData)
 
     /**
@@ -71,7 +72,7 @@ actual interface MenuItemBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectDeselectSignal(slot: CPointer<DeselectSlot>, userData: gpointer): ULong =
+    fun connectDeselectSignal(slot: CPointer<DeselectSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuItemPtr, signal = "deselect", slot = slot, data = userData)
 
     /**
@@ -79,12 +80,12 @@ actual interface MenuItemBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectSelectSignal(slot: CPointer<SelectSlot>, userData: gpointer): ULong =
+    fun connectSelectSignal(slot: CPointer<SelectSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuItemPtr, signal = "select", slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkMenuItemPtr, handlerId)
+        disconnectGSignal(gtkMenuItemPtr, handlerId.toUInt())
     }
 }
 

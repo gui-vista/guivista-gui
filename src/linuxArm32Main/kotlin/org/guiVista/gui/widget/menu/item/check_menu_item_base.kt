@@ -23,6 +23,7 @@ actual interface CheckMenuItemBase : MenuItemBase {
     var drawAsRadio: Boolean
         get() = gtk_check_menu_item_get_draw_as_radio(gtkCheckMenuItemPtr) == TRUE
         set(value) = gtk_check_menu_item_set_draw_as_radio(gtkCheckMenuItemPtr, if (value) TRUE else FALSE)
+
     /** Whether to display an "inconsistent" state. Default value is *false*. */
     var inconsistent: Boolean
         get() = gtk_check_menu_item_get_inconsistent(gtkCheckMenuItemPtr) == TRUE
@@ -34,12 +35,12 @@ actual interface CheckMenuItemBase : MenuItemBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectToggledSignal(slot: CPointer<ToggledSlot>, userData: gpointer): ULong =
+    fun connectToggledSignal(slot: CPointer<ToggledSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkCheckMenuItemPtr, signal = "toggled", slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkCheckMenuItemPtr, handlerId)
+        disconnectGSignal(gtkCheckMenuItemPtr, handlerId.toUInt())
     }
 }
 

@@ -26,7 +26,7 @@ actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null,
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): ULong =
+    fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkRadioMenuItemPtr, signal = "group-changed", slot = slot, data = userData)
 
     /**
@@ -40,7 +40,7 @@ actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null,
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkRadioMenuItemPtr, handlerId)
+        disconnectGSignal(gtkRadioMenuItemPtr, handlerId.toUInt())
     }
 }
 

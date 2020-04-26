@@ -28,6 +28,7 @@ actual interface MenuShell : Container {
             val tmp = gtk_menu_shell_get_selected_item(gtkMenuShellPtr)
             return if (tmp != null) Widget(tmp) else null
         }
+
     /** The parent [MenuShell]. A submenu parent is the GtkMenu or GtkMenuBar from which it was opened up. */
     val parentShell: WidgetBase?
         get() {
@@ -117,7 +118,7 @@ actual interface MenuShell : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectCancelSignal(slot: CPointer<CancelSlot>, userData: gpointer): ULong =
+    fun connectCancelSignal(slot: CPointer<CancelSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuShellPtr, signal = "cancel", slot = slot, data = userData)
 
     /**
@@ -126,7 +127,7 @@ actual interface MenuShell : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectSelectionDoneSignal(slot: CPointer<SelectionDoneSlot>, userData: gpointer): ULong =
+    fun connectSelectionDoneSignal(slot: CPointer<SelectionDoneSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuShellPtr, signal = "selection-done", slot = slot, data = userData)
 
     /**
@@ -135,7 +136,7 @@ actual interface MenuShell : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateCurrentSignal(slot: CPointer<ActivateCurrentSlot>, userData: gpointer): ULong =
+    fun connectActivateCurrentSignal(slot: CPointer<ActivateCurrentSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuShellPtr, signal = "activate-current", slot = slot, data = userData)
 
     /**
@@ -144,12 +145,12 @@ actual interface MenuShell : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectDeactivateSignal(slot: CPointer<DeactivateSlot>, userData: gpointer): ULong =
+    fun connectDeactivateSignal(slot: CPointer<DeactivateSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuShellPtr, signal = "deactivate", slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkMenuShellPtr, handlerId)
+        disconnectGSignal(gtkMenuShellPtr, handlerId.toUInt())
     }
 }
 

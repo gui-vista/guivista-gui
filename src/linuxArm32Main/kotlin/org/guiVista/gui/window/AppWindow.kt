@@ -15,12 +15,14 @@ actual open class AppWindow(private val app: GuiApplication) : WindowBase {
     val gtkAppWinPtr: CPointer<GtkApplicationWindow>?
         get() = _gtkWidgetPtr?.reinterpret()
     override val gtkWindowPtr: CPointer<GtkWindow>? by lazy {
-        _gtkWidgetPtr?.reinterpret()
+        // Need to specify type explicitly otherwise a compilation error WILL occur.
+        @Suppress("RemoveExplicitTypeArguments")
+        _gtkWidgetPtr?.reinterpret<GtkWindow>()
     }
 
     override fun createUi(init: WindowBase.() -> Unit) {
         _gtkWidgetPtr = gtk_application_window_new(app.gtkApplicationPtr)
-        this.init()
+        init()
         val mainLayout = createMainLayout()
         if (mainLayout != null) this += mainLayout
         if (visible) {

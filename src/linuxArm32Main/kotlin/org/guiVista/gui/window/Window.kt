@@ -26,12 +26,14 @@ actual abstract class Window(
     override val gtkWidgetPtr: CPointer<GtkWidget>?
         get() = _gtkWidgetPtr
     override val gtkWindowPtr: CPointer<GtkWindow>? by lazy {
-        _gtkWidgetPtr?.reinterpret()
+        // Need to specify type explicitly otherwise a compilation error WILL occur.
+        @Suppress("RemoveExplicitTypeArguments")
+        _gtkWidgetPtr?.reinterpret<GtkWindow>()
     }
 
     override fun createUi(init: WindowBase.() -> Unit) {
         _gtkWidgetPtr = gtk_window_new(winType)
-        this.init()
+        init()
         val mainLayout = createMainLayout()
         if (mainLayout != null) this += mainLayout
         if (visible) {

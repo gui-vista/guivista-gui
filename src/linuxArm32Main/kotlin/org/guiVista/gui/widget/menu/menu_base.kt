@@ -98,12 +98,12 @@ actual interface MenuBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectPoppedUpSignal(slot: CPointer<PoppedUpSlot>, userData: gpointer): ULong =
+    fun connectPoppedUpSignal(slot: CPointer<PoppedUpSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuPtr, signal = "popped-up", slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkMenuPtr, handlerId)
+        disconnectGSignal(gtkMenuPtr, handlerId.toUInt())
     }
 }
 
