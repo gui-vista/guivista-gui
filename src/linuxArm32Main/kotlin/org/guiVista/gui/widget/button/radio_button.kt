@@ -48,12 +48,12 @@ actual class RadioButton(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): ULong =
+    fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkRadioButtonPtr, signal = GROUP_CHANGED_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkRadioButtonPtr, handlerId)
+        disconnectGSignal(gtkRadioButtonPtr, handlerId.toUInt())
     }
 }
 

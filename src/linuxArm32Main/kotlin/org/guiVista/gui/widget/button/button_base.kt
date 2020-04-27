@@ -33,6 +33,7 @@ actual interface ButtonBase : Container {
     var relief: GtkReliefStyle
         get() = gtk_button_get_relief(gtkButtonPtr)
         set(value) = gtk_button_set_relief(gtkButtonPtr, value)
+
     /**
      * If *true* the button will ignore the “gtk-button-images” setting, and always show the image if available. Use
      * this property if the button would be useless, or hard to use without the image. Default value is *false*.
@@ -40,6 +41,7 @@ actual interface ButtonBase : Container {
     var alwaysShowImage: Boolean
         get() = gtk_button_get_always_show_image(gtkButtonPtr) == TRUE
         set(value) = gtk_button_set_always_show_image(gtkButtonPtr, if (value) TRUE else FALSE)
+
     /** The child widget to appear next to the button text. */
     var image: WidgetBase?
         set(value) = gtk_button_set_image(gtkButtonPtr, value?.gtkWidgetPtr)
@@ -47,6 +49,7 @@ actual interface ButtonBase : Container {
             val tmp = gtk_button_get_image(gtkButtonPtr)
             return if (tmp != null) Widget(tmp) else null
         }
+
     /**
      * The position of the image relative to the text inside the button. Default value is
      * *GtkPositionType.GTK_POS_LEFT*.
@@ -54,6 +57,7 @@ actual interface ButtonBase : Container {
     var imagePosition: GtkPositionType
         get() = gtk_button_get_image_position(gtkButtonPtr)
         set(value) = gtk_button_set_image_position(gtkButtonPtr, value)
+
     /**
      * If set an underline in the text indicates the next character should be used for the mnemonic accelerator key.
      * Default value is *false*.
@@ -67,7 +71,7 @@ actual interface ButtonBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): ULong =
+    fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -77,12 +81,12 @@ actual interface ButtonBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): ULong =
+    fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkButtonPtr, signal = ACTIVATE_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkButtonPtr, handlerId)
+        disconnectGSignal(gtkButtonPtr, handlerId.toUInt())
     }
 }
 
