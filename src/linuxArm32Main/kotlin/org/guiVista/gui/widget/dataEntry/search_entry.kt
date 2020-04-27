@@ -39,7 +39,7 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectNextMatchSignal(slot: CPointer<NextMatchSlot>, userData: gpointer): ULong =
+    fun connectNextMatchSignal(slot: CPointer<NextMatchSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSearchEntryPtr, signal = NEXT_MATCH_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -49,7 +49,7 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectPreviousMatchSignal(slot: CPointer<PreviousMatchSlot>, userData: gpointer): ULong =
+    fun connectPreviousMatchSignal(slot: CPointer<PreviousMatchSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSearchEntryPtr, signal = PREVIOUS_MATCH_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -58,7 +58,7 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectSearchChangedSignal(slot: CPointer<SearchChangedSlot>, userData: gpointer): ULong =
+    fun connectSearchChangedSignal(slot: CPointer<SearchChangedSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSearchEntryPtr, signal = SEARCH_CHANGED_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -68,12 +68,12 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectStopSearchSignal(slot: CPointer<StopSearchSlot>, userData: gpointer): ULong =
+    fun connectStopSearchSignal(slot: CPointer<StopSearchSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSearchEntryPtr, signal = STOP_SEARCH_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkSearchEntryPtr, handlerId)
+        disconnectGSignal(gtkSearchEntryPtr, handlerId.toUInt())
     }
 }
 

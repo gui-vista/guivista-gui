@@ -46,12 +46,12 @@ actual class Scale(scalePtr: CPointer<GtkScale>? = null,
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectFormatValueSignal(slot: CPointer<FormatValueSlot>, userData: gpointer): ULong =
+    fun connectFormatValueSignal(slot: CPointer<FormatValueSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkScalePtr, signal = FORMAT_VALUE_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkScalePtr, handlerId)
+        disconnectGSignal(gtkScalePtr, handlerId.toUInt())
     }
 }
 

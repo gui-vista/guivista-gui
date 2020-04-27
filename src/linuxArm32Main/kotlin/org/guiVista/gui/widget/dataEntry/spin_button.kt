@@ -80,7 +80,7 @@ actual class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, climbRat
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
+    fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSpinButtonPtr, signal = VALUE_CHANGED_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -91,12 +91,12 @@ actual class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, climbRat
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectChangeValueSignal(slot: CPointer<ChangeValueSlot>, userData: gpointer): ULong =
+    fun connectChangeValueSignal(slot: CPointer<ChangeValueSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSpinButtonPtr, signal = CHANGE_VALUE_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkSpinButtonPtr, handlerId)
+        disconnectGSignal(gtkSpinButtonPtr, handlerId.toUInt())
     }
 }
 
