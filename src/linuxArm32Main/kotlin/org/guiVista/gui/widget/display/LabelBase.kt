@@ -26,6 +26,7 @@ actual interface LabelBase : WidgetBase {
     var justify: GtkJustification
         set(value) = gtk_label_set_justify(gtkLabelPtr, value)
         get() = gtk_label_get_justify(gtkLabelPtr)
+
     /**
      * The desired maximum width of the label in characters. If this property is set to *-1* the width will be
      * calculated automatically. See the section on text layout for details of how “width-chars” and “max-width-chars”
@@ -36,6 +37,7 @@ actual interface LabelBase : WidgetBase {
             if (value >= -1) gtk_label_set_max_width_chars(gtkLabelPtr, value)
         }
         get() = gtk_label_get_max_width_chars(gtkLabelPtr)
+
     /**
      * The desired width of the label in characters. If this property is set to *-1* the width will be calculated
      * automatically. See the section on text layout for details of how widthChars and [maxWidthChars] determine
@@ -46,6 +48,7 @@ actual interface LabelBase : WidgetBase {
             if (value >= -1) gtk_label_set_width_chars(gtkLabelPtr, value)
         }
         get() = gtk_label_get_width_chars(gtkLabelPtr)
+
     /**
      * The angle that the baseline of the label makes with the horizontal, in degrees, measured counterclockwise. An
      * angle of 90 reads from from bottom to top, an angle of 270, from top to bottom. Ignored if the label is
@@ -56,6 +59,7 @@ actual interface LabelBase : WidgetBase {
         set(value) {
             if (value in (0.0..360.0)) gtk_label_set_angle(gtkLabelPtr, value)
         }
+
     /**
      * The preferred place to "ellipsize" the string, if the label does not have enough room to display the entire
      * string, specified as a PangoEllipsizeMode. Note that setting this property to a value other than
@@ -69,6 +73,7 @@ actual interface LabelBase : WidgetBase {
     var ellipsize: PangoEllipsizeMode
         get() = gtk_label_get_ellipsize(gtkLabelPtr)
         set(value) = gtk_label_set_ellipsize(gtkLabelPtr, value)
+
     /**
      * The contents of the label. If the string contains Pango XML markup you will have to set the “use-markup”
      * property to *true* in order for the label to display the markup attributes. See also `gtk_label_set_markup()`
@@ -80,6 +85,7 @@ actual interface LabelBase : WidgetBase {
     var label: String
         get() = gtk_label_get_label(gtkLabelPtr)?.toKString() ?: ""
         set(value) = gtk_label_set_label(gtkLabelPtr, value)
+
     /**
      * The number of lines to which an "ellipsized", wrapping label should be limited. This property has no effect if
      * the label is not wrapping or "ellipsized". Set this property to *-1* if you don't want to limit the number of
@@ -90,9 +96,11 @@ actual interface LabelBase : WidgetBase {
         set(value) {
             if (value >= -1) gtk_label_set_lines(gtkLabelPtr, value)
         }
+
     /** The mnemonic accelerator key for this label. Default value is *16777215*. */
     val mnemonicKeyval: UInt
         get() = gtk_label_get_mnemonic_keyval(gtkLabelPtr)
+
     /** The widget to be activated when the label's mnemonic key is pressed. */
     var mnemonicWidget: WidgetBase?
         get() {
@@ -100,10 +108,12 @@ actual interface LabelBase : WidgetBase {
             return if (tmp != null) Widget(tmp) else null
         }
         set(value) = gtk_label_set_mnemonic_widget(gtkLabelPtr, value?.gtkWidgetPtr)
+
     /** Whether the label text can be selected with the mouse. Default value is *false*. */
     var selectable: Boolean
         get() = gtk_label_get_selectable(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_selectable(gtkLabelPtr, if (value) TRUE else FALSE)
+
     /**
      * Whether the label is in single line mode. In single line mode the height of the label does not depend on the
      * actual text, it is always set to ascent + descent of the font. This can be an advantage in situations where
@@ -114,6 +124,7 @@ actual interface LabelBase : WidgetBase {
     var singleLineMode: Boolean
         get() = gtk_label_get_single_line_mode(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_single_line_mode(gtkLabelPtr, if (value) TRUE else FALSE)
+
     /**
      * Set this property to *true* to make the label track which links have been visited. It will then apply the
      * GTK_STATE_FLAG_VISITED when rendering this link in addition to GTK_STATE_FLAG_LINK. Default value is *true*.
@@ -121,10 +132,12 @@ actual interface LabelBase : WidgetBase {
     var trackVisitedLinks: Boolean
         get() = gtk_label_get_track_visited_links(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_track_visited_links(gtkLabelPtr, if (value) TRUE else FALSE)
+
     /** The text of the label includes XML markup. See pango_parse_markup(). Default value is *false*. */
     var useMarkup: Boolean
         get() = gtk_label_get_use_markup(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_use_markup(gtkLabelPtr, if (value) TRUE else FALSE)
+
     /**
      * If set an underline in the text indicates the next character should be used for the mnemonic accelerator key.
      * Default value is *false*.
@@ -132,10 +145,12 @@ actual interface LabelBase : WidgetBase {
     var useUnderline: Boolean
         get() = gtk_label_get_use_underline(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_use_underline(gtkLabelPtr, if (value) TRUE else FALSE)
+
     /** If set wrap lines if the text becomes too wide. Default value is *false*. */
     var lineWrap: Boolean
         get() = gtk_label_get_line_wrap(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_line_wrap(gtkLabelPtr, if (value) TRUE else FALSE)
+
     /**
      * If line wrapping is on (see the [lineWrap] property) this controls how the line wrapping is done. Default value
      * is *PangoWrapMode.PANGO_WRAP_WORD* (wrap on word boundaries).
@@ -143,6 +158,7 @@ actual interface LabelBase : WidgetBase {
     var lineWrapMode: PangoWrapMode
         get() = gtk_label_get_line_wrap_mode(gtkLabelPtr)
         set(value) = gtk_label_set_line_wrap_mode(gtkLabelPtr, value)
+
     /**
      * This property determines the horizontal alignment of the label text inside the labels size allocation. Compare
      * this to “halign”, which determines how the labels size allocation is positioned in the space available for the
@@ -153,6 +169,7 @@ actual interface LabelBase : WidgetBase {
         set(value) {
             if (value in (0.0f..1.0f)) gtk_label_set_xalign(gtkLabelPtr, value)
         }
+
     /**
      * This property determines the horizontal alignment of the label text inside the labels size allocation. Compare
      * this to “valign”, which determines how the labels size allocation is positioned in the space available for the

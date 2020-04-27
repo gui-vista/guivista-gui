@@ -36,6 +36,7 @@ actual class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Container {
     /** The action area of the [InfoBar]. */
     val actionArea: CPointer<GtkWidget>?
         get() = gtk_info_bar_get_action_area(gtkInfoBarPtr)
+
     /** The content area of the [InfoBar]. */
     val contentArea: CPointer<GtkWidget>?
         get() = gtk_info_bar_get_content_area(gtkInfoBarPtr)
@@ -46,7 +47,7 @@ actual class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectCloseSignal(slot: CPointer<CloseSlot>, userData: gpointer): ULong =
+    fun connectCloseSignal(slot: CPointer<CloseSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkInfoBarPtr, signal = CLOSE_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -56,12 +57,12 @@ actual class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectResponseSignal(slot: CPointer<ResponseSlot>, userData: gpointer): ULong =
+    fun connectResponseSignal(slot: CPointer<ResponseSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkInfoBarPtr, signal = RESPONSE_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkInfoBarPtr, handlerId)
+        disconnectGSignal(gtkInfoBarPtr, handlerId.toUInt())
     }
 
     /**
