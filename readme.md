@@ -2,49 +2,91 @@
 
 A Kotlin Native library for developing a GTK application in a Kotlin Native project. This library uses GTK 3, and 
 utilises GTK concepts (Slot, Signal, Widget etc). **Warning** - This library depends on Kotlin Native which is 
-currently in beta, and doesn't provide any backwards compatibility guarantees!
-
-
-## Publish Library
-
-Currently GUI Vista GUI isn't available in Maven Central, JCenter, or any other remote Maven repository. Do the 
-following to publish the library:
-
-1. Clone this repository
-2. Change working directory to where the repository has been cloned to
-3. Publish the library locally via Gradle, eg `./gradlew publishLinuxX64PublicationToMavenLocal`
+currently in beta, and doesn't provide any backwards compatibility guarantees! Currently, GUI Vista GUI isn't available 
+in Maven Central or JCenter, but is available in a remote GitLab Maven repository.
 
 
 ## Setup Gradle Build File
 
 In order to use the library with Gradle do the following:
 
-1. Open/create a Kotlin Native project which targets **linuxX64**
+1. Open/create a Kotlin Native project which targets **linuxX64** or **linuxArm32Hfp**
 2. Open the project's **build.gradle.kts** file
-3. Insert `mavenLocal()` into the **repositories** block
-4. Add the library dependency: `implementation("org.guivista:guivista-gui:0.1-SNAPSHOT")`
+3. Insert the following into the **repositories** block:
+```kotlin
+maven {
+    val guiVistaCore = "16245519"
+    url = uri("https://gitlab.com/api/v4/projects/$guiVistaCore/packages/maven")
+}
+maven {
+    val guiVistaIo = "16243425"
+    url = uri("https://gitlab.com/api/v4/projects/$guiVistaIo/packages/maven")
+}
+maven {
+    val guiVistaGui = "15889948"
+    url = uri("https://gitlab.com/api/v4/projects/$guiVistaGui/packages/maven")
+}
+```
+4. Create a library definition file called **glib2.def** which contains the following:
+```
+linkerOpts = -lglib-2.0 -lgobject-2.0
+linkerOpts.linux_x64 = -L/usr/lib/x86_64-linux-gnu
+linkerOpts.linux_arm32_hfp = -L/mnt/pi_image/usr/lib/arm-linux-gnueabihf
+```
+5. Create a library definition file called **gio2.def** which contains the following:
+```
+linkerOpts = -lgio-2.0
+linkerOpts.linux_x64 = -L/usr/lib/x86_64-linux-gnu
+linkerOpts.linux_arm32_hfp = -L/mnt/pi_image/usr/lib/arm-linux-gnueabihf
+```
+6. Create a library definition file called **gtk3.def** which contains the following:
+```
+linkerOpts = -lgtk-3 -lgdk-3 -latk-1.0 -lpangocairo-1.0 -lgdk_pixbuf-2.0 -lcairo-gobject -lpango-1.0 -lcairo
+linkerOpts.linux_x64 = -L/usr/lib/x86_64-linux-gnu
+linkerOpts.linux_arm32_hfp = -L/mnt/pi_image/usr/lib/arm-linux-gnueabihf
+```
+7. Add the following C library dependencies:
+```kotlin
+cinterops.create("glib2")
+cinterops.create("gio2")
+cinterops.create("gtk3")
+```
+8. Add the GUI Vista GUI library dependency: `implementation("org.guivista:guivista-gui:$guiVistaVer")`
 
 The build file should look similar to the following:
 ```kotlin
 // ...
 repositories {
-    mavenLocal()
+    maven {
+        val guiVistaCore = "16245519"
+        url = uri("https://gitlab.com/api/v4/projects/$guiVistaCore/packages/maven")
+    }
+    maven {
+        val guiVistaIo = "16243425"
+        url = uri("https://gitlab.com/api/v4/projects/$guiVistaIo/packages/maven")
+    }
+    maven {
+        val guiVistaGui = "15889948"
+        url = uri("https://gitlab.com/api/v4/projects/$guiVistaGui/packages/maven")
+    }
 }
 
 kotlin {
     // ...
-    linuxX64() {
+    linuxX64 {
         // ...
         compilations.getByName("main") {
             dependencies {
-                val guiVistaVer = "0.1-SNAPSHOT"
-                implementation("org.guivista:guivista-gui-linuxx64:$guiVistaVer")
+                val guiVistaVer = "0.1.1"
+                cinterops.create("glib2")
+                cinterops.create("gio2")
+                cinterops.create("gtk3")
+                implementation("org.guivista:guivista-gui:$guiVistaVer")
             }
         }
     }
 }
 ```
-
 
 ## Basic Usage
 
