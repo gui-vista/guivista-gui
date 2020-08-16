@@ -15,16 +15,7 @@ In order to use the library with Gradle do the following:
 3. Insert the following into the **repositories** block:
 ```kotlin
 maven {
-    val guiVistaCore = "16245519"
-    url = uri("https://gitlab.com/api/v4/projects/$guiVistaCore/packages/maven")
-}
-maven {
-    val guiVistaIo = "16243425"
-    url = uri("https://gitlab.com/api/v4/projects/$guiVistaIo/packages/maven")
-}
-maven {
-    val guiVistaGui = "15889948"
-    url = uri("https://gitlab.com/api/v4/projects/$guiVistaGui/packages/maven")
+    url = uri("https://dl.bintray.com/guivista/public")
 }
 ```
 4. Create a library definition file called **glib2.def** which contains the following:
@@ -58,16 +49,7 @@ The build file should look similar to the following:
 // ...
 repositories {
     maven {
-        val guiVistaCore = "16245519"
-        url = uri("https://gitlab.com/api/v4/projects/$guiVistaCore/packages/maven")
-    }
-    maven {
-        val guiVistaIo = "16243425"
-        url = uri("https://gitlab.com/api/v4/projects/$guiVistaIo/packages/maven")
-    }
-    maven {
-        val guiVistaGui = "15889948"
-        url = uri("https://gitlab.com/api/v4/projects/$guiVistaGui/packages/maven")
+        url = uri("https://dl.bintray.com/guivista/public")
     }
 }
 
@@ -77,7 +59,7 @@ kotlin {
         // ...
         compilations.getByName("main") {
             dependencies {
-                val guiVistaVer = "0.1.1"
+                val guiVistaVer = "0.1.2"
                 cinterops.create("glib2")
                 cinterops.create("gio2")
                 cinterops.create("gtk3")
