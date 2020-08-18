@@ -9,7 +9,7 @@ group = "org.guivista"
 version = if (projectSettings.isDevVer) "${projectSettings.libVer}-dev" else projectSettings.libVer
 
 plugins {
-    kotlin("multiplatform") version "1.3.72"
+    kotlin("multiplatform") version "1.4.0"
     id("maven-publish")
     id("org.jetbrains.dokka") version "0.10.0"
 }
@@ -71,7 +71,7 @@ kotlin {
         val commonMain by getting {
             languageSettings.useExperimentalAnnotation(unsignedTypes)
             dependencies {
-                val kotlinVer = "1.3.72"
+                val kotlinVer = "1.4.0"
                 implementation(kotlin("stdlib-common", kotlinVer))
                 implementation("org.guivista:guivista-core:${projectSettings.libVer}")
                 implementation("org.guivista:guivista-io:${projectSettings.libVer}")
