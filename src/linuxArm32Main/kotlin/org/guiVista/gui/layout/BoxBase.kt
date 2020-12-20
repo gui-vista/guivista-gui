@@ -7,17 +7,17 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guiVista.gui.widget.WidgetBase
 
-actual interface BoxBase : Container {
-    val gtkBoxPtr: CPointer<GtkBox>?
+public actual interface BoxBase : Container {
+    public val gtkBoxPtr: CPointer<GtkBox>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /** The amount of space between children. Default value is *0*. */
-    var spacing: Int
+    public var spacing: Int
         set(value) = gtk_box_set_spacing(gtkBoxPtr, value)
         get() = gtk_box_get_spacing(gtkBoxPtr)
 
     /** If set to *true* then all the children are the same size. Default value is *false*. */
-    var homogeneous: Boolean
+    public var homogeneous: Boolean
         set(value) = gtk_box_set_homogeneous(gtkBoxPtr, if (value) TRUE else FALSE)
         get() = gtk_box_get_homogeneous(gtkBoxPtr) == TRUE
 
@@ -25,7 +25,7 @@ actual interface BoxBase : Container {
      * The position of the baseline aligned widgets if extra space is available. Default value is
      * *GtkBaselinePosition.GTK_BASELINE_POSITION_CENTER*.
      */
-    var baselinePosition: GtkBaselinePosition
+    public var baselinePosition: GtkBaselinePosition
         set(value) = gtk_box_set_baseline_position(gtkBoxPtr, value)
         get() = gtk_box_get_baseline_position(gtkBoxPtr)
 
@@ -38,7 +38,7 @@ actual interface BoxBase : Container {
      * @param pos The new position for the child in the box starting from 0. If negative this indicates the end of the
      * list.
      */
-    fun reorderChild(child: WidgetBase, pos: Int) {
+    public fun reorderChild(child: WidgetBase, pos: Int) {
         gtk_box_reorder_child(box = gtkBoxPtr, child = child.gtkWidgetPtr, position = pos)
     }
 
@@ -50,7 +50,7 @@ actual interface BoxBase : Container {
      * @param expand If *true* then the added [child] will be resized every time the box is resized.
      * @param padding The amount of padding to use for the [child] which is in pixels. By default no padding is used.
      */
-    fun prependChild(
+    public fun prependChild(
         child: WidgetBase,
         fill: Boolean = true,
         expand: Boolean = false,
@@ -71,7 +71,7 @@ actual interface BoxBase : Container {
      * @param expand If *true* then the added [child] will be resized every time the box is resized.
      * @param padding The amount of padding to use for the [child] which is in pixels. By default no padding is used.
      */
-    fun appendChild(
+    public fun appendChild(
         child: WidgetBase,
         fill: Boolean = true,
         expand: Boolean = false,

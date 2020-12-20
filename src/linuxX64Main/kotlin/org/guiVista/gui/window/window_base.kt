@@ -15,126 +15,146 @@ private const val ENABLE_DEBUGGING_SIGNAL = "enable-debugging"
 private const val KEYS_CHANGED_SIGNAL = "keys-changed"
 private const val SET_FOCUS_SIGNAL = "set-focus"
 
-actual interface WindowBase : Container {
-    val gtkWindowPtr: CPointer<GtkWindow>?
+public actual interface WindowBase : Container {
+    public val gtkWindowPtr: CPointer<GtkWindow>?
 
     /** If set to *true* then the window should receive the input focus. Default value is *true*. */
-    var acceptFocus: Boolean
+    public var acceptFocus: Boolean
         set(value) = gtk_window_set_accept_focus(gtkWindowPtr, if (value) TRUE else FALSE)
         get() = gtk_window_get_accept_focus(gtkWindowPtr) == TRUE
 
     /** Name of the window. Default value is *""* (an empty String). */
-    var title: String
+    public var title: String
         set(value) = gtk_window_set_title(gtkWindowPtr, value)
         get() = gtk_window_get_title(gtkWindowPtr)?.toKString() ?: ""
 
     /** If set to *true* then a user can resize the window. Default value is *true*. */
-    var resizable: Boolean
+    public var resizable: Boolean
         set(value) = gtk_window_set_resizable(gtkWindowPtr, if (value) TRUE else FALSE)
         get() = gtk_window_get_resizable(gtkWindowPtr) == TRUE
+
     /** If set to *true* then the window is maximized. Default value is *false*. */
-    val isMaximized: Boolean
+    public val isMaximized: Boolean
         get() = gtk_window_is_maximized(gtkWindowPtr) == TRUE
+
     /**
      * The widget to which this window is attached. Examples of places where specifying this relation is useful are
      * for instance a GtkMenu created by a GtkComboBox, a completion popup window created by
      * [Entry][org.guiVista.gui.widget.dataEntry.Entry], or a type ahead search entry created by GtkTreeView.
      */
-    var attachedTo: WidgetBase?
+    public var attachedTo: WidgetBase?
         get() {
             val tmp = gtk_window_get_attached_to(gtkWindowPtr)
             return if (tmp != null) Widget(tmp) else null
         }
         set(value) = gtk_window_set_attached_to(gtkWindowPtr, value?.gtkWidgetPtr)
+
     /** Whether the [Window] should be decorated by the window manager. Default value is *true*. */
-    var decorated: Boolean
+    public var decorated: Boolean
         get() = gtk_window_get_decorated(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_decorated(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /** Whether the window frame should have a close button. Default value is *true*. */
-    var deletable: Boolean
+    public var deletable: Boolean
         get() = gtk_window_get_deletable(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_deletable(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /** If this window should be destroyed when the parent is destroyed. Default value is *false*. */
-    var destroyWithParent: Boolean
+    public var destroyWithParent: Boolean
         get() = gtk_window_get_destroy_with_parent(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_destroy_with_parent(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /** Whether the window should receive the input focus when mapped. Default value is *true*. */
-    var focusOnMap: Boolean
+    public var focusOnMap: Boolean
         get() = gtk_window_get_focus_on_map(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_focus_on_map(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /**
      * Whether 'focus rectangles' are currently visible in this [Window]. Default value is *true*. This property is
      * maintained by GTK based on user input and should **NOT** be set by applications!
      */
-    var focusVisible: Boolean
+    public var focusVisible: Boolean
         get() = gtk_window_get_focus_visible(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_focus_visible(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /**
      * The window gravity of the window. Default value is *GdkGravity.GDK_GRAVITY_NORTH_WEST*. See [move], and
      * GdkGravity for more details about window gravity.
      */
-    var gravity: GdkGravity
+    public var gravity: GdkGravity
         get() = gtk_window_get_gravity(gtkWindowPtr)
         set(value) = gtk_window_set_gravity(gtkWindowPtr, value)
+
     /** Whether the titlebar should be hidden during maximization. Default value is *false*. */
-    var hideTitleBarWhenMaximized: Boolean
+    public var hideTitleBarWhenMaximized: Boolean
         get() = gtk_window_get_hide_titlebar_when_maximized(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_hide_titlebar_when_maximized(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /**
      * This property specifies the name of the themed icon to use as the window icon. Default value is *""*
      * (an empty String). See GtkIconTheme for more details.
      */
-    var iconName: String
+    public var iconName: String
         get() = gtk_window_get_icon_name(gtkWindowPtr)?.toKString() ?: ""
         set(value) = gtk_window_set_icon_name(gtkWindowPtr, value)
+
     /** Whether the top level is the current active window. Default value is *false*. */
-    val isActive: Boolean
+    public val isActive: Boolean
         get() = gtk_window_is_active(gtkWindowPtr) == TRUE
+
     /**
      * Whether mnemonics are currently visible in this window. Default value is *true*. This property is maintained by
      * GTK based on user input, and should **NOT** be set by applications!
      */
-    var mnemonicsVisible: Boolean
+    public var mnemonicsVisible: Boolean
         get() = gtk_window_get_mnemonics_visible(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_mnemonics_visible(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /**
      * When *true* the window is modal (other windows are not usable while this one is up). Default value is *false*.
      */
-    var modal: Boolean
+    public var modal: Boolean
         get() = gtk_window_get_modal(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_modal(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /**
      * Unique identifier for the [Window] to be used when restoring a session. Default value is *""* (an empty String).
      */
-    var role: String
+    public var role: String
         get() = gtk_window_get_role(gtkWindowPtr)?.toKString() ?: ""
         set(value) = gtk_window_set_role(gtkWindowPtr, value)
+
     /** When *true* the window should not be in the pager. Default value is *false*. */
-    var skipPagerHint: Boolean
+    public var skipPagerHint: Boolean
         get() = gtk_window_get_skip_pager_hint(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_skip_pager_hint(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /** When *true* the window should not be in the task bar. Default value is *false*. */
-    var skipTaskBarHint: Boolean
+    public var skipTaskBarHint: Boolean
         get() = gtk_window_get_skip_taskbar_hint(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_skip_taskbar_hint(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /**
      * Hint to help the desktop environment understand what kind of window this is, and how to treat it. Default value
      * is *GdkWindowTypeHint.GDK_WINDOW_TYPE_HINT_NORMAL*.
      */
-    var typeHint: GdkWindowTypeHint
+    public var typeHint: GdkWindowTypeHint
         get() = gtk_window_get_type_hint(gtkWindowPtr)
         set(value) = gtk_window_set_type_hint(gtkWindowPtr, value)
+
     /** When *true* the window should be brought to the user's attention. Default value is *false*. */
-    var urgencyHint: Boolean
+    public var urgencyHint: Boolean
         get() = gtk_window_get_urgency_hint(gtkWindowPtr) == TRUE
         set(value) = gtk_window_set_urgency_hint(gtkWindowPtr, if (value) TRUE else FALSE)
+
     /** Whether the input focus is within this window. Default value is *false*. */
-    val hasTopLevelFocus: Boolean
+    public val hasTopLevelFocus: Boolean
         get() = gtk_window_has_toplevel_focus(gtkWindowPtr) == TRUE
+
     /**
      * The focused widget in the window. To set the focus to a particular widget in the top level, it is usually more
      * convenient to use the [grabFocus][WidgetBase.grabFocus] function from [WidgetBase] instead of this function. */
-    var focus: WidgetBase?
+    public var focus: WidgetBase?
         get() {
             val tmp = gtk_window_get_focus(gtkWindowPtr)
             return if (tmp != null) Widget(tmp) else null
@@ -167,7 +187,7 @@ actual interface WindowBase : Container {
      * being the root y coordinate.
      * @see move
      */
-    fun fetchPosition(): Pair<Int, Int> = memScoped {
+    public fun fetchPosition(): Pair<Int, Int> = memScoped {
         val rootX = alloc<gintVar>()
         val rootY = alloc<gintVar>()
         gtk_window_get_position(window = gtkWindowPtr, root_x = rootX.ptr, root_y = rootY.ptr)
@@ -196,7 +216,7 @@ actual interface WindowBase : Container {
      * @param x The X coordinate to move the [Window] to.
      * @param y The Y coordinate to move the [Window] to.
      */
-    fun move(x: Int, y: Int) {
+    public fun move(x: Int, y: Int) {
         gtk_window_move(window = gtkWindowPtr, x = x, y = y)
     }
 
@@ -204,7 +224,7 @@ actual interface WindowBase : Container {
      * Changes the [window's][Window] position.
      * @param position The window position to use.
      */
-    infix fun changePosition(position: GtkWindowPosition) {
+    public infix fun changePosition(position: GtkWindowPosition) {
         gtk_window_set_position(gtkWindowPtr, position)
     }
 
@@ -212,7 +232,7 @@ actual interface WindowBase : Container {
      * Changes the [window's][Window] startup notification identifier.
      * @param startupId The startup identifier to use.
      */
-    infix fun changeStartupId(startupId: String) {
+    public infix fun changeStartupId(startupId: String) {
         gtk_window_set_startup_id(gtkWindowPtr, startupId)
     }
 
@@ -240,7 +260,7 @@ actual interface WindowBase : Container {
      * @param width Width in pixels, or -1 to unset the default width.
      * @param height Height in pixels, or -1 to unset the default height.
      */
-    fun changeDefaultSize(width: Int, height: Int) {
+    public fun changeDefaultSize(width: Int, height: Int) {
         gtk_window_set_default_size(gtkWindowPtr, width, height)
     }
 
@@ -260,7 +280,7 @@ actual interface WindowBase : Container {
      * appears onscreen initially. You can track maximization via the “window-state-event” signal on GtkWidget, or by
      * listening to notifications on the “is-maximized” property.
      */
-    fun maximize() {
+    public fun maximize() {
         gtk_window_maximize(gtkWindowPtr)
     }
 
@@ -270,12 +290,12 @@ actual interface WindowBase : Container {
      * honor requests to unmaximize. But normally the window will end up unmaximized. Just don’t write code that
      * crashes if not. You can track maximization via the “window-state-event” signal on GtkWidget.
      */
-    fun unmaximize() {
+    public fun unmaximize() {
         gtk_window_unmaximize(gtkWindowPtr)
     }
 
     /** Adds a new child to the window. */
-    infix fun addChild(widget: WidgetBase) {
+    public infix fun addChild(widget: WidgetBase) {
         gtk_container_add(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
@@ -285,7 +305,7 @@ actual interface WindowBase : Container {
     }
 
     /** Removes a child from the window. */
-    infix fun removeChild(widget: WidgetBase) {
+    public infix fun removeChild(widget: WidgetBase) {
         gtk_container_remove(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
@@ -295,19 +315,19 @@ actual interface WindowBase : Container {
     }
 
     /** Resets focus on a window. */
-    fun resetFocus() {}
+    public fun resetFocus() {}
 
     /**
      * Creates the main layout for the window.
      * @return The main layout as a [Container], or *null* if there is no main layout.
      */
-    fun createMainLayout(): Container? = null
+    public fun createMainLayout(): Container? = null
 
     /**
      * Creates the user interface for the window.
      * @param init Initialization block for creating the user interface.
      */
-    fun createUi(init: WindowBase.() -> Unit)
+    public fun createUi(init: WindowBase.() -> Unit)
 
     /**
      * Connects the *activate-default* signal to a [slot] on a [WindowBase]. This signal is used when the user
@@ -315,7 +335,7 @@ actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateDefaultSignal(slot: CPointer<ActivateDefaultSlot>, userData: gpointer): ULong =
+    public fun connectActivateDefaultSignal(slot: CPointer<ActivateDefaultSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkWindowPtr, signal = ACTIVATE_DEFAULT_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -324,7 +344,7 @@ actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateFocusSignal(slot: CPointer<ActivateFocusSlot>, userData: gpointer): ULong =
+    public fun connectActivateFocusSignal(slot: CPointer<ActivateFocusSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkWindowPtr, signal = ACTIVATE_FOCUS_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -336,7 +356,7 @@ actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectEnableDebuggingSignal(slot: CPointer<EnableDebuggingSlot>, userData: gpointer): ULong =
+    public fun connectEnableDebuggingSignal(slot: CPointer<EnableDebuggingSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkWindowPtr, signal = ENABLE_DEBUGGING_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -345,7 +365,7 @@ actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectKeysChangedSignal(slot: CPointer<KeysChangedSlot>, userData: gpointer): ULong =
+    public fun connectKeysChangedSignal(slot: CPointer<KeysChangedSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkWindowPtr, signal = KEYS_CHANGED_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -354,7 +374,7 @@ actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectSetFocusSignal(slot: CPointer<SetFocusSlot>, userData: gpointer): ULong =
+    public fun connectSetFocusSignal(slot: CPointer<SetFocusSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkWindowPtr, signal = SET_FOCUS_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -368,14 +388,14 @@ actual interface WindowBase : Container {
  * 1. window: CPointer<GtkWindow>
  * 2. userData: gpointer
  */
-typealias ActivateDefaultSlot = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
+public typealias ActivateDefaultSlot = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *activate-focus* signal. Arguments:
  * 1. window: CPointer<GtkWindow>
  * 2. userData: gpointer
  */
-typealias ActivateFocusSlot = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
+public typealias ActivateFocusSlot = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *enable-debugging* signal. Arguments:
@@ -383,14 +403,14 @@ typealias ActivateFocusSlot = CFunction<(window: CPointer<GtkWindow>, userData: 
  * 2. toggle: Boolean
  * 3. userData: gpointer
  */
-typealias EnableDebuggingSlot = CFunction<(window: CPointer<GtkWindow>, toggle: Boolean, userData: gpointer) -> Unit>
+public typealias EnableDebuggingSlot = CFunction<(window: CPointer<GtkWindow>, toggle: Boolean, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *keys-changed* signal. Arguments:
  * 1. window: CPointer<GtkWindow>
  * 2. userData: gpointer
  */
-typealias KeysChangedSlot = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
+public typealias KeysChangedSlot = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *set-focus* signal. Arguments:
@@ -398,5 +418,5 @@ typealias KeysChangedSlot = CFunction<(window: CPointer<GtkWindow>, userData: gp
  * 2. widget: CPointer<GtkWidget>
  * 3. userData: gpointer
  */
-typealias SetFocusSlot =
+public typealias SetFocusSlot =
     CFunction<(window: CPointer<GtkWindow>, widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>

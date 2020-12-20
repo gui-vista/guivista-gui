@@ -11,12 +11,12 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.Adjustment
 
-actual interface Range : WidgetBase {
-    val gtkRangePtr: CPointer<GtkRange>?
+public actual interface Range : WidgetBase {
+    public val gtkRangePtr: CPointer<GtkRange>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /** Contains the current value of this range object. */
-    var adjustment: Adjustment?
+    public var adjustment: Adjustment?
         get() {
             val tmp = gtk_range_get_adjustment(gtkRangePtr)
             return if (tmp != null) Adjustment(tmp) else null
@@ -36,42 +36,48 @@ actual interface Range : WidgetBase {
      *
      * Default value is *1.79769e+308*.
      */
-    var fillLevel: Double
+    public var fillLevel: Double
         get() = gtk_range_get_fill_level(gtkRangePtr)
         set(value) = gtk_range_set_fill_level(gtkRangePtr, value)
+
     /** Invert direction slider moves to increase range value. Default value is *false*. */
-    var inverted: Boolean
+    public var inverted: Boolean
         get() = gtk_range_get_inverted(gtkRangePtr) == TRUE
         set(value) = gtk_range_set_inverted(gtkRangePtr, if (value) TRUE else FALSE)
+
     /**
      * The sensitivity policy for the stepper that points to the adjustment's lower side. Default value is
      * *GtkSensitivityType.GTK_SENSITIVITY_AUTO*.
      */
-    var lowerStepperSensitivity: GtkSensitivityType
+    public var lowerStepperSensitivity: GtkSensitivityType
         get() = gtk_range_get_lower_stepper_sensitivity(gtkRangePtr)
         set(value) = gtk_range_set_lower_stepper_sensitivity(gtkRangePtr, value)
+
     /**
      * Controls whether slider movement is restricted to an upper boundary set by the fill level. Default value is
      * *true*.
      */
-    var restrictToFillLevel: Boolean
+    public var restrictToFillLevel: Boolean
         get() = gtk_range_get_restrict_to_fill_level(gtkRangePtr) == TRUE
         set(value) = gtk_range_set_restrict_to_fill_level(gtkRangePtr, if (value) TRUE else FALSE)
+
     /** The number of digits to round the value to when it changes, or -1. Default value is *-1*. */
-    var roundDigits: Int
+    public var roundDigits: Int
         get() = gtk_range_get_round_digits(gtkRangePtr)
         set(value) {
             if (value >= -1) gtk_range_set_round_digits(gtkRangePtr, value)
         }
+
     /** Controls whether fill level indicator graphics are displayed on the trough. Default value is *false*. */
-    var showFillLevel: Boolean
+    public var showFillLevel: Boolean
         get() = gtk_range_get_show_fill_level(gtkRangePtr) == TRUE
         set(value) = gtk_range_set_show_fill_level(gtkRangePtr, if (value) TRUE else FALSE)
+
     /**
      * The sensitivity policy for the stepper that points to the adjustment's upper side. Default value is
      * *GtkSensitivityType.GTK_SENSITIVITY_AUTO*.
      */
-    var upperStepperSensitivity: GtkSensitivityType
+    public var upperStepperSensitivity: GtkSensitivityType
         get() = gtk_range_get_upper_stepper_sensitivity(gtkRangePtr)
         set(value) = gtk_range_set_upper_stepper_sensitivity(gtkRangePtr, value)
 
@@ -81,7 +87,7 @@ actual interface Range : WidgetBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectAdjustBoundsSignal(slot: CPointer<AdjustBoundsSlot>, userData: gpointer): ULong =
+    public fun connectAdjustBoundsSignal(slot: CPointer<AdjustBoundsSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkRangePtr, signal = "adjust-bounds", slot = slot, data = userData)
 
     /**
@@ -97,7 +103,7 @@ actual interface Range : WidgetBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectChangeValueSignal(slot: CPointer<ChangeValueSlot>, userData: gpointer): ULong =
+    public fun connectChangeValueSignal(slot: CPointer<ChangeValueSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkRangePtr, signal = "change-value", slot = slot, data = userData)
 
     /**
@@ -106,7 +112,7 @@ actual interface Range : WidgetBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectMoveSliderSignal(slot: CPointer<MoveSliderSlot>, userData: gpointer): ULong =
+    public fun connectMoveSliderSignal(slot: CPointer<MoveSliderSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkRangePtr, signal = "move-slider", slot = slot, data = userData)
 
     /**
@@ -115,7 +121,7 @@ actual interface Range : WidgetBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
+    public fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkRangePtr, signal = "value-changed", slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -130,7 +136,7 @@ actual interface Range : WidgetBase {
  * 2. value: Double
  * 3. userData: gpointer
  */
-typealias AdjustBoundsSlot = CFunction<(range: CPointer<GtkRange>, value: Double, userData: gpointer) -> Unit>
+public typealias AdjustBoundsSlot = CFunction<(range: CPointer<GtkRange>, value: Double, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *change-value* signal. Arguments:
@@ -139,8 +145,8 @@ typealias AdjustBoundsSlot = CFunction<(range: CPointer<GtkRange>, value: Double
  * 3. value: double
  * 4. userData: gpointer
  */
-typealias ChangeValueSlot = CFunction<(range: CPointer<GtkRange>, scroll: GtkScrollType, value: Double,
-                                       userData: gpointer) -> Unit>
+public typealias ChangeValueSlot = CFunction<(range: CPointer<GtkRange>, scroll: GtkScrollType, value: Double,
+                                              userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *move-slider* signal. Arguments:
@@ -148,11 +154,15 @@ typealias ChangeValueSlot = CFunction<(range: CPointer<GtkRange>, scroll: GtkScr
  * 2. step: GtkScrollType
  * 3. userData: gpointer
  */
-typealias MoveSliderSlot = CFunction<(range: CPointer<GtkRange>, step: GtkScrollType, userData: gpointer) -> Unit>
+public typealias MoveSliderSlot = CFunction<(
+    range: CPointer<GtkRange>,
+    step: GtkScrollType,
+    userData: gpointer
+) -> Unit>
 
 /**
  * The event handler for the *value-changed* signal. Arguments:
  * 1. range: CPointer<GtkRange>
  * 2. userData: gpointer
  */
-typealias ValueChangedSlot = CFunction<(range: CPointer<GtkRange>, userData: gpointer) -> Unit>
+public typealias ValueChangedSlot = CFunction<(range: CPointer<GtkRange>, userData: gpointer) -> Unit>

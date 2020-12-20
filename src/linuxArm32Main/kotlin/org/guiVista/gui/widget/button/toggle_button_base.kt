@@ -12,17 +12,17 @@ import org.guiVista.core.disconnectGSignal
 
 private const val TOGGLED_SIGNAL = "toggled"
 
-actual interface ToggleButtonBase : ButtonBase {
-    val gtkToggleButtonPtr: CPointer<GtkToggleButton>?
+public actual interface ToggleButtonBase : ButtonBase {
+    public val gtkToggleButtonPtr: CPointer<GtkToggleButton>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /** If the toggle button should be pressed in. Default value is *false*. */
-    var active: Boolean
+    public var active: Boolean
         get() = gtk_toggle_button_get_active(gtkToggleButtonPtr) == TRUE
         set(value) = gtk_toggle_button_set_active(gtkToggleButtonPtr, if (value) TRUE else FALSE)
 
     /** If the toggle button is in an "in between" state. Default value is *false*. */
-    var inconsistent: Boolean
+    public var inconsistent: Boolean
         get() = gtk_toggle_button_get_inconsistent(gtkToggleButtonPtr) == TRUE
         set(value) = gtk_toggle_button_set_inconsistent(gtkToggleButtonPtr, if (value) TRUE else FALSE)
 
@@ -34,7 +34,7 @@ actual interface ToggleButtonBase : ButtonBase {
      * This function only affects instances of classes like GtkCheckButton and GtkRadioButton that derive from
      * GtkToggleButton, not instances of GtkToggleButton itself.
      */
-    var mode: Boolean
+    public var mode: Boolean
         get() = gtk_toggle_button_get_mode(gtkToggleButtonPtr) == TRUE
         set(value) = gtk_toggle_button_set_mode(gtkToggleButtonPtr, if (value) TRUE else FALSE)
 
@@ -45,7 +45,7 @@ actual interface ToggleButtonBase : ButtonBase {
      * @param userData User data to pass through to the [slot].
      * @return The handler ID for the [slot].
      */
-    fun connectToggledSignal(slot: CPointer<ToggledSlot>, userData: gpointer): UInt =
+    public fun connectToggledSignal(slot: CPointer<ToggledSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkToggleButtonPtr, signal = TOGGLED_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -59,4 +59,4 @@ actual interface ToggleButtonBase : ButtonBase {
  * 1. toggleButton: CPointer<GtkToggleButton>
  * 2. userData: gpointer
  */
-typealias ToggledSlot = CFunction<(toggleButton: CPointer<GtkToggleButton>, userData: gpointer) -> Unit>
+public typealias ToggledSlot = CFunction<(toggleButton: CPointer<GtkToggleButton>, userData: gpointer) -> Unit>

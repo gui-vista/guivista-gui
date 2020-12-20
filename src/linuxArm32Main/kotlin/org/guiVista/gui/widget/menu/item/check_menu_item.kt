@@ -7,8 +7,8 @@ import gtk3.gtk_check_menu_item_new_with_mnemonic
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
-actual class CheckMenuItem(checkMenuItemPtr: CPointer<GtkCheckMenuItem>? = null, label: String = "",
-                           mnemonic: Boolean = false) : CheckMenuItemBase {
+public actual class CheckMenuItem(checkMenuItemPtr: CPointer<GtkCheckMenuItem>? = null, label: String = "",
+                                  mnemonic: Boolean = false) : CheckMenuItemBase {
     @Suppress("IfThenToElvis")
     override val gtkWidgetPtr: CPointer<GtkWidget>? = when {
         checkMenuItemPtr != null -> checkMenuItemPtr.reinterpret()
@@ -18,8 +18,12 @@ actual class CheckMenuItem(checkMenuItemPtr: CPointer<GtkCheckMenuItem>? = null,
     }
 }
 
-fun checkMenuItem(checkMenuItemPtr: CPointer<GtkCheckMenuItem>? = null, label: String = "", mnemonic: Boolean = false,
-                  init: CheckMenuItem.() -> Unit): CheckMenuItem {
+public fun checkMenuItem(
+    checkMenuItemPtr: CPointer<GtkCheckMenuItem>? = null,
+    label: String = "",
+    mnemonic: Boolean = false,
+    init: CheckMenuItem.() -> Unit
+): CheckMenuItem {
     val menuItem = CheckMenuItem(checkMenuItemPtr = checkMenuItemPtr, label = label, mnemonic = mnemonic)
     menuItem.init()
     return menuItem

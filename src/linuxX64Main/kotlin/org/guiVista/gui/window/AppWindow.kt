@@ -8,11 +8,11 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guiVista.gui.GuiApplication
 
-actual open class AppWindow(private val app: GuiApplication) : WindowBase {
+public actual open class AppWindow(private val app: GuiApplication) : WindowBase {
     private var _gtkWidgetPtr: CPointer<GtkWidget>? = null
     override val gtkWidgetPtr: CPointer<GtkWidget>?
         get() = _gtkWidgetPtr?.reinterpret()
-    val gtkAppWinPtr: CPointer<GtkApplicationWindow>?
+    public val gtkAppWinPtr: CPointer<GtkApplicationWindow>?
         get() = _gtkWidgetPtr?.reinterpret()
     override val gtkWindowPtr: CPointer<GtkWindow>? by lazy {
         // Need to specify type explicitly otherwise a compilation error WILL occur.

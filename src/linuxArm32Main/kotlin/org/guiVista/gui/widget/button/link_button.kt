@@ -13,7 +13,7 @@ import org.guiVista.core.disconnectGSignal
 
 private const val ACTIVATE_LINK_SIGNAL = "activate-link"
 
-actual class LinkButton(
+public actual class LinkButton(
     linkButtonPtr: CPointer<GtkLinkButton>? = null,
     uri: String = "",
     label: String = ""
@@ -24,12 +24,12 @@ actual class LinkButton(
         uri.isNotEmpty() && label.isNotEmpty() -> gtk_link_button_new_with_label(uri, label)
         else -> createLinkButton(uri)
     }
-    val gtkLinkButtonPtr: CPointer<GtkLinkButton>?
+    public val gtkLinkButtonPtr: CPointer<GtkLinkButton>?
         get() = gtkWidgetPtr?.reinterpret()
-    actual var uri: String
+    public actual var uri: String
         get() = gtk_link_button_get_uri(gtkLinkButtonPtr)?.toKString() ?: ""
         set(value) = gtk_link_button_set_uri(gtkLinkButtonPtr, value)
-    actual var visited: Boolean
+    public actual var visited: Boolean
         get() = gtk_link_button_get_visited(gtkLinkButtonPtr) == TRUE
         set(value) = gtk_link_button_set_visited(gtkLinkButtonPtr, if (value) TRUE else FALSE)
 
@@ -45,7 +45,7 @@ actual class LinkButton(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateLinkSignal(slot: CPointer<ActivateLinkSlot>, userData: gpointer): UInt =
+    public fun connectActivateLinkSignal(slot: CPointer<ActivateLinkSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkLinkButtonPtr, signal = ACTIVATE_LINK_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -54,7 +54,7 @@ actual class LinkButton(
     }
 }
 
-fun linkButtonWidget(
+public fun linkButtonWidget(
     linkButtonPtr: CPointer<GtkLinkButton>? = null,
     label: String = "",
     uri: String = "",
@@ -70,4 +70,4 @@ fun linkButtonWidget(
  * 1. linkButton: CPointer<GtkLinkButton>
  * 2. userData: gpointer
  */
-typealias ActivateLinkSlot = CFunction<(linkButton: CPointer<GtkLinkButton>, userData: gpointer) -> Unit>
+public typealias ActivateLinkSlot = CFunction<(linkButton: CPointer<GtkLinkButton>, userData: gpointer) -> Unit>

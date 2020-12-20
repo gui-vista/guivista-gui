@@ -4,7 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
-actual class CheckButton(
+public actual class CheckButton(
     checkButtonPtr: CPointer<GtkCheckButton>? = null,
     label: String = "",
     mnemonic: Boolean = false
@@ -18,7 +18,7 @@ actual class CheckButton(
     }
 }
 
-fun checkButtonWidget(
+public fun checkButtonWidget(
     checkButtonPtr: CPointer<GtkCheckButton>? = null,
     label: String = "",
     mnemonic: Boolean = false,

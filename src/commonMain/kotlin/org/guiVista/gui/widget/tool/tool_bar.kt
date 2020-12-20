@@ -4,14 +4,14 @@ import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.tool.item.ToolItemBase
 
 /** Create bars of buttons and other widgets. */
-expect class ToolBar : Container, ToolShell {
+public expect class ToolBar : Container, ToolShell {
     /** If an arrow should be shown if the toolbar doesn't fit. Default value is *true*. */
-    var showArrow: Boolean
+    public var showArrow: Boolean
 
     /**
      * Unsets a toolbar style set with `style` so that user preferences will be used to determine the toolbar style.
      */
-    fun unsetStyle()
+    public fun unsetStyle()
 
     /**
      * Insert a [ToolItemBase] into the [ToolBar] at [position][pos]. If [pos] is 0 then the item is prepended to the
@@ -19,7 +19,7 @@ expect class ToolBar : Container, ToolShell {
      * @param item A tool item.
      * @param pos The position of the new item.
      */
-    fun insert(item: ToolItemBase, pos: Int)
+    public fun insert(item: ToolItemBase, pos: Int)
 
     /**
      * Fetches the position of the item on the [ToolBar], starting from 0. It is an error if the item is not a child of
@@ -27,7 +27,7 @@ expect class ToolBar : Container, ToolShell {
      * @param item A tool item that is a child of the [ToolBar].
      * @return The position of item on the [ToolBar].
      */
-    fun fetchItemIndex(item: ToolItemBase): Int
+    public fun fetchItemIndex(item: ToolItemBase): Int
 
     /**
      * Fetches the position corresponding to the indicated point on [ToolBar]. This is useful when dragging items to
@@ -36,7 +36,7 @@ expect class ToolBar : Container, ToolShell {
      * @param y The y coordinate (vertical) of a point on the [ToolBar].
      * @return The position corresponding to the point ([x], [y]) on the [ToolBar].
      */
-    fun fetchDropIndex(x: Int, y: Int): Int
+    public fun fetchDropIndex(x: Int, y: Int): Int
 
     /**
      * Highlights [ToolBar] to give an idea of what it would look like if the [item][toolItem] was added to the
@@ -47,10 +47,10 @@ expect class ToolBar : Container, ToolShell {
      * is set as drop highlight item it can not added to any widget hierarchy, or used as highlight item for another
      * [ToolBar].
      */
-    fun changeDropHighlightItem(toolItem: ToolItemBase, index: Int)
+    public fun changeDropHighlightItem(toolItem: ToolItemBase, index: Int)
 
     /**
      * Unsets toolbar icon size set with `iconSize` so that user preferences will be used to determine the icon size.
      */
-    fun unsetIconSize()
+    public fun unsetIconSize()
 }

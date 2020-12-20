@@ -9,42 +9,46 @@ import org.guiVista.gui.Adjustment
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-actual interface Container : WidgetBase {
-    val gtkContainerPtr: CPointer<GtkContainer>?
+public actual interface Container : WidgetBase {
+    public val gtkContainerPtr: CPointer<GtkContainer>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /** The width of the empty border outside the container's children. Default value is *0*. */
-    var borderWidth: UInt
+    public var borderWidth: UInt
         set(value) = gtk_container_set_border_width(gtkContainerPtr, value)
         get() = gtk_container_get_border_width(gtkContainerPtr)
 
     /** Specify how resize events are handled. Default value is *GtkResizeMode.GTK_RESIZE_PARENT*. */
-    var resizeMode: GtkResizeMode
+    public var resizeMode: GtkResizeMode
         get() = gtk_container_get_resize_mode(gtkContainerPtr)
         set(value) = gtk_container_set_resize_mode(gtkContainerPtr, value)
+
     /** Gets the [container’s][Container] non internal children. */
-    val children: DoublyLinkedList
+    public val children: DoublyLinkedList
         get() = DoublyLinkedList(gtk_container_get_children(gtkContainerPtr))
+
     /**
      * Fetches the current focus child widget inside [Container]. This is **not** the currently focused widget. That
      * can be obtained using the [focus][org.guiVista.gui.window.WindowBase.focus] property from
      * [WindowBase][org.guiVista.gui.window.WindowBase].
      */
-    var focusChild: WidgetBase?
+    public var focusChild: WidgetBase?
         get() {
             val tmp = gtk_container_get_focus_child(gtkContainerPtr)
             return if (tmp != null) Widget(tmp) else null
         }
         set(value) = gtk_container_set_focus_child(gtkContainerPtr, value?.gtkWidgetPtr)
+
     /** The vertical focus adjustment for the [Container]. */
-    var focusVAdjustment: Adjustment?
+    public var focusVAdjustment: Adjustment?
         get() {
             val tmp = gtk_container_get_focus_vadjustment(gtkContainerPtr)
             return if (tmp != null) Adjustment(tmp) else null
         }
         set(value) = gtk_container_set_focus_vadjustment(gtkContainerPtr, value?.gtkAdjustmentPtr)
+
     /** The horizontal focus adjustment for the [Container]. */
-    var focusHAdjustment: Adjustment?
+    public var focusHAdjustment: Adjustment?
         get() {
             val tmp = gtk_container_get_focus_hadjustment(gtkContainerPtr)
             return if (tmp != null) Adjustment(tmp) else null
@@ -55,7 +59,7 @@ actual interface Container : WidgetBase {
      * Gets the type of the children supported by the container.
      * @return The data type, or *GType.G_TYPE_NONE* if no more children can be added.
      */
-    fun childType(): GType = gtk_container_child_type(gtkContainerPtr)
+    public fun childType(): GType = gtk_container_child_type(gtkContainerPtr)
 
     /**
      * Adds [widget] to [container][Container]. Typically used for simple containers such as
@@ -69,12 +73,12 @@ actual interface Container : WidgetBase {
      * added widget, and the container.
      * @param widget A widget to be placed inside container.
      */
-    infix fun add(widget: WidgetBase) {
+    public infix fun add(widget: WidgetBase) {
         gtk_container_add(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
     /** Emits the *check-resize* signal on the [Container]. */
-    fun checkResize() {
+    public fun checkResize() {
         gtk_container_check_resize(gtkContainerPtr)
     }
 
@@ -86,7 +90,7 @@ actual interface Container : WidgetBase {
      * usually more efficient to simply destroy it directly using `gtk_widget_destroy()` since this will remove it from
      * the container, and help break any circular reference count cycles.
      */
-    infix fun remove(widget: WidgetBase) {
+    public infix fun remove(widget: WidgetBase) {
         gtk_container_remove(gtkContainerPtr, widget.gtkWidgetPtr)
     }
 
@@ -94,7 +98,7 @@ actual interface Container : WidgetBase {
      * Adds [widget] to [container][Container].
      * @see add
      */
-    operator fun plusAssign(widget: WidgetBase) {
+    public operator fun plusAssign(widget: WidgetBase) {
         add(widget)
     }
 
@@ -102,7 +106,7 @@ actual interface Container : WidgetBase {
      * Removes [widget] from [container][Container].
      * @see remove
      */
-    operator fun minusAssign(widget: WidgetBase) {
+    public operator fun minusAssign(widget: WidgetBase) {
         remove(widget)
     }
 }

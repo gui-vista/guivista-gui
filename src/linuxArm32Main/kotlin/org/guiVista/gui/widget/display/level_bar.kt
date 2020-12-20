@@ -13,19 +13,19 @@ import org.guiVista.gui.widget.WidgetBase
 
 private const val OFFSET_CHANGED_SIGNAL = "offset-changed"
 
-actual class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : WidgetBase {
+public actual class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : WidgetBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = levelBarPtr?.reinterpret() ?: gtk_level_bar_new()
-    val gtkLevelBarPtr: CPointer<GtkLevelBar>?
+    public val gtkLevelBarPtr: CPointer<GtkLevelBar>?
         get() = gtkWidgetPtr?.reinterpret()
-    actual var inverted: Boolean
+    public actual var inverted: Boolean
         get() = gtk_level_bar_get_inverted(gtkLevelBarPtr) == TRUE
         set(value) = gtk_level_bar_set_inverted(gtkLevelBarPtr, if (value) TRUE else FALSE)
-    actual var maxValue: Double
+    public actual var maxValue: Double
         get() = gtk_level_bar_get_max_value(gtkLevelBarPtr)
         set(value) {
             if (value >= 0.0) gtk_level_bar_set_max_value(gtkLevelBarPtr, value)
         }
-    actual var minValue: Double
+    public actual var minValue: Double
         get() = gtk_level_bar_get_min_value(gtkLevelBarPtr)
         set(value) {
             if (value >= 0.0) gtk_level_bar_set_min_value(gtkLevelBarPtr, value)
@@ -40,10 +40,10 @@ actual class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : WidgetBase {
      *
      * Default value is *GtkLevelBarMode.GTK_LEVEL_BAR_MODE_CONTINUOUS*.
      */
-    var mode: GtkLevelBarMode
+    public var mode: GtkLevelBarMode
         get() = gtk_level_bar_get_mode(gtkLevelBarPtr)
         set(value) = gtk_level_bar_set_mode(gtkLevelBarPtr, value)
-    actual var value: Double
+    public actual var value: Double
         get() = gtk_level_bar_get_value(gtkLevelBarPtr)
         set(value) {
             if (value >= 0.0) gtk_level_bar_set_value(gtkLevelBarPtr, value)
@@ -56,7 +56,7 @@ actual class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : WidgetBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectOffsetChangedSignal(slot: CPointer<OffsetChangedSlot>, userData: gpointer): UInt =
+    public fun connectOffsetChangedSignal(slot: CPointer<OffsetChangedSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkLevelBarPtr, signal = OFFSET_CHANGED_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -65,7 +65,7 @@ actual class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : WidgetBase {
     }
 }
 
-fun levelBarWidget(levelBarPtr: CPointer<GtkLevelBar>? = null, init: LevelBar.() -> Unit): LevelBar {
+public fun levelBarWidget(levelBarPtr: CPointer<GtkLevelBar>? = null, init: LevelBar.() -> Unit): LevelBar {
     val levelBar = LevelBar(levelBarPtr)
     levelBar.init()
     return levelBar
@@ -77,4 +77,4 @@ fun levelBarWidget(levelBarPtr: CPointer<GtkLevelBar>? = null, init: LevelBar.()
  * 2. name: String
  * 3. userData: gpointer
  */
-typealias OffsetChangedSlot = CFunction<(app: CPointer<GtkLevelBar>, name: String, userData: gpointer) -> Unit>
+public typealias OffsetChangedSlot = CFunction<(app: CPointer<GtkLevelBar>, name: String, userData: gpointer) -> Unit>

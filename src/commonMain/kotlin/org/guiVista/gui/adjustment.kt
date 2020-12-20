@@ -3,40 +3,40 @@ package org.guiVista.gui
 import org.guiVista.core.ObjectBase
 
 /** A representation of an adjustable bounded value. */
-expect class Adjustment : ObjectBase {
+public expect class Adjustment : ObjectBase {
     /** The minimum value of the adjustment. Default value is *0*. */
-    var lower: Double
+    public var lower: Double
 
     /** The page increment of the adjustment. Default value is *0*. */
-    var pageIncrement: Double
+    public var pageIncrement: Double
 
     /**
      * The page size of the adjustment. Note that the page size is irrelevant, and should be set to zero *if* the
      * adjustment is used for a simple scalar value, eg in a GtkSpinButton. Default value is *0*.
      */
-    var pageSize: Double
+    public var pageSize: Double
 
     /** The step increment of the adjustment. Default value is *0*. */
-    var stepIncrement: Double
+    public var stepIncrement: Double
 
     /**
      * The maximum value of the adjustment. Note that values will be restricted by upper - [pageSize] if the [pageSize]
      * property isn't *0*. Default value is *0*.
      */
-    var upper: Double
+    public var upper: Double
 
     /** The value of the adjustment. Default value is *0*. */
-    var value: Double
+    public var value: Double
 
     /** The smaller value of [step increment][stepIncrement] and [page increment][pageIncrement]. */
-    val minimumIncrement: Double
+    public val minimumIncrement: Double
 
     /**
      * Updates the [value] property to ensure that the range between [lower] and [upper] is in the current page
      * (i.e. between [value] and [value] + [page size][pageSize]). If the range is larger than the page size then only
      * the start of it will be in the current page. A “value-changed” signal will be emitted if the value is changed.
      */
-    fun clampPage(adjustment: Adjustment, lower: Double, upper: Double)
+    public fun clampPage(adjustment: Adjustment, lower: Double, upper: Double)
 
     /**
      * Sets all properties of the [Adjustment] at once. Use this function to avoid multiple emissions of the “changed”
@@ -50,7 +50,7 @@ expect class Adjustment : ObjectBase {
      * @param pageSize The new page size.
      * @see lower For an alternative way of compressing multiple emissions of “changed” into one.
      */
-    fun configure(
+    public fun configure(
         adjustment: Adjustment,
         value: Double,
         lower: Double,

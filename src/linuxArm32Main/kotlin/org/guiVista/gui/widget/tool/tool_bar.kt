@@ -8,11 +8,11 @@ import kotlinx.cinterop.reinterpret
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.tool.item.ToolItemBase
 
-actual class ToolBar(toolBarPtr: CPointer<GtkToolbar>? = null) : Container, ToolShell {
+public actual class ToolBar(toolBarPtr: CPointer<GtkToolbar>? = null) : Container, ToolShell {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = toolBarPtr?.reinterpret() ?: gtk_toolbar_new()
     override val gtkToolShellPtr: CPointer<GtkToolShell>?
         get() = gtkWidgetPtr?.reinterpret()
-    val gtkToolBarPtr: CPointer<GtkToolbar>?
+    public val gtkToolBarPtr: CPointer<GtkToolbar>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /**
@@ -24,45 +24,47 @@ actual class ToolBar(toolBarPtr: CPointer<GtkToolbar>? = null) : Container, Tool
     override var iconSize: GtkIconSize
         get() = gtk_toolbar_get_icon_size(gtkToolBarPtr)
         set(value) = gtk_toolbar_set_icon_size(gtkToolBarPtr, value)
-    actual var showArrow: Boolean
+    public actual var showArrow: Boolean
         get() = gtk_toolbar_get_show_arrow(gtkToolBarPtr) == TRUE
         set(value) = gtk_toolbar_set_show_arrow(gtkToolBarPtr, if (value) TRUE else FALSE)
 
     /** How to draw the toolbar. Default value is *GtkToolbarStyle.GTK_TOOLBAR_BOTH_HORIZ*. */
-    var toolBarStyle: GtkToolbarStyle
+    public var toolBarStyle: GtkToolbarStyle
         get() = gtk_toolbar_get_style(gtkToolBarPtr)
         set(value) = gtk_toolbar_set_style(gtkToolBarPtr, value)
 
-    actual fun unsetStyle() {
+    public actual fun unsetStyle() {
         gtk_toolbar_unset_style(gtkToolBarPtr)
     }
 
-    actual fun insert(item: ToolItemBase, pos: Int) {
+    public actual fun insert(item: ToolItemBase, pos: Int) {
         gtk_toolbar_insert(toolbar = gtkToolBarPtr, item = item.gtkToolItemPtr, pos = pos)
     }
 
-    actual fun fetchItemIndex(item: ToolItemBase): Int = gtk_toolbar_get_item_index(gtkToolBarPtr, item.gtkToolItemPtr)
+    public actual fun fetchItemIndex(item: ToolItemBase): Int =
+        gtk_toolbar_get_item_index(gtkToolBarPtr, item.gtkToolItemPtr)
 
     /**
      * Fetches the item by [position][pos] on the [ToolBar], or *null* if the [ToolBar] doesn't contain the item.
      * @param pos The position on the [ToolBar].
      * @return The item on the [ToolBar], or *null* if the item doesn't exist at the [position][pos] on the [ToolBar].
      */
-    fun fetchItemAtPosition(pos: Int): CPointer<GtkToolItem>? = gtk_toolbar_get_nth_item(gtkToolBarPtr, pos)
+    public fun fetchItemAtPosition(pos: Int): CPointer<GtkToolItem>? = gtk_toolbar_get_nth_item(gtkToolBarPtr, pos)
 
-    actual fun fetchDropIndex(x: Int, y: Int): Int = gtk_toolbar_get_drop_index(toolbar = gtkToolBarPtr, x = x, y = y)
+    public actual fun fetchDropIndex(x: Int, y: Int): Int =
+        gtk_toolbar_get_drop_index(toolbar = gtkToolBarPtr, x = x, y = y)
 
-    actual fun changeDropHighlightItem(toolItem: ToolItemBase, index: Int) {
+    public actual fun changeDropHighlightItem(toolItem: ToolItemBase, index: Int) {
         gtk_toolbar_set_drop_highlight_item(toolbar = gtkToolBarPtr, tool_item = toolItem.gtkToolItemPtr,
             index_ = index)
     }
 
-    actual fun unsetIconSize() {
+    public actual fun unsetIconSize() {
         gtk_toolbar_unset_icon_size(gtkToolBarPtr)
     }
 }
 
-fun toolBarWidget(toolBarPtr: CPointer<GtkToolbar>? = null, init: ToolBar.() -> Unit): ToolBar {
+public fun toolBarWidget(toolBarPtr: CPointer<GtkToolbar>? = null, init: ToolBar.() -> Unit): ToolBar {
     val toolBar = ToolBar(toolBarPtr)
     toolBar.init()
     return toolBar

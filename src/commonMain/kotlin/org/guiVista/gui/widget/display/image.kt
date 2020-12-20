@@ -3,12 +3,12 @@ package org.guiVista.gui.widget.display
 import org.guiVista.gui.widget.WidgetBase
 
 /** A widget displaying an image. */
-expect class Image : WidgetBase {
+public expect class Image : WidgetBase {
     /**
      * Pixel size to use for named icons. If the pixel size is set to a value != **-1**, it is used instead of the
      * icon size set by `gtk_image_set_from_icon_name()`. Default value is *-1*.
      */
-    var pixelSize: Int
+    public var pixelSize: Int
 
     /**
      * Uses the [file] which is displayed in the [image][Image]. If the [file] isn’t found or can’t be loaded the resulting
@@ -22,8 +22,8 @@ expect class Image : WidgetBase {
      *
      * @param file Absolute path to the file (a image) that will be displayed.
      */
-    infix fun changeFile(file: String)
+    public infix fun changeFile(file: String)
 
     /** Resets the [Image] instance so it doesn't show an image. */
-    fun clear()
+    public fun clear()
 }

@@ -10,17 +10,17 @@ import org.guiVista.core.disconnectGSignal
 
 private const val SHOW_MENU_SIGNAL = "show-menu"
 
-actual class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : ToolButtonBase {
+public actual class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : ToolButtonBase {
     override val gtkToolItemPtr: CPointer<GtkToolItem>? = gtk_menu_tool_button_new(iconWidget, label)
-    val gtkMenuToolButtonPtr: CPointer<GtkMenuToolButton>?
+    public val gtkMenuToolButtonPtr: CPointer<GtkMenuToolButton>?
         get() = gtkToolItemPtr?.reinterpret()
     override val gtkToolButtonPtr: CPointer<GtkToolButton>?
         get() = gtkToolItemPtr?.reinterpret()
-    var menu: CPointer<GtkWidget>?
+    public var menu: CPointer<GtkWidget>?
         get() = gtk_menu_tool_button_get_menu(gtkMenuToolButtonPtr)
         set(value) = gtk_menu_tool_button_set_menu(gtkMenuToolButtonPtr, value)
 
-    actual infix fun changeArrowTooltipText(text: String) {
+    public actual infix fun changeArrowTooltipText(text: String) {
         gtk_menu_tool_button_set_arrow_tooltip_text(gtkMenuToolButtonPtr, text)
     }
 
@@ -31,7 +31,7 @@ actual class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : T
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectShowMenuSignal(slot: CPointer<ShowMenuSlot>, userData: gpointer): UInt =
+    public fun connectShowMenuSignal(slot: CPointer<ShowMenuSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuToolButtonPtr, signal = SHOW_MENU_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -40,8 +40,8 @@ actual class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : T
     }
 }
 
-fun menuToolButtonWidget(iconWidget: CPointer<GtkWidget>?, label: String,
-                         init: MenuToolButton.() -> Unit): MenuToolButton {
+public fun menuToolButtonWidget(iconWidget: CPointer<GtkWidget>?, label: String,
+                                init: MenuToolButton.() -> Unit): MenuToolButton {
     val menuToolButton = MenuToolButton(iconWidget, label)
     menuToolButton.init()
     return menuToolButton
@@ -52,4 +52,4 @@ fun menuToolButtonWidget(iconWidget: CPointer<GtkWidget>?, label: String,
  * 1. button: CPointer<GtkMenuToolButton>
  * 2. userData: gpointer
  */
-typealias ShowMenuSlot = CFunction<(button: CPointer<GtkMenuToolButton>?, userData: gpointer) -> Unit>
+public typealias ShowMenuSlot = CFunction<(button: CPointer<GtkMenuToolButton>?, userData: gpointer) -> Unit>

@@ -3,15 +3,15 @@ package org.guiVista.gui.widget.display
 import org.guiVista.gui.widget.WidgetBase
 
 /** A widget which indicates progress visually. */
-expect class ProgressBar : WidgetBase {
+public expect class ProgressBar : WidgetBase {
     /** The fraction of total work that has been completed. Default value is *0.0*. */
-    var fraction: Double
+    public var fraction: Double
 
     /** Invert the direction in which the progress bar grows. Default value is *false*. */
-    var inverted: Boolean
+    public var inverted: Boolean
 
     /** The fraction of total progress to move the bouncing block when pulsed. Default value is *0.1*. */
-    var pulseStep: Double
+    public var pulseStep: Double
 
     /**
      * Sets whether the progress bar will show a text in addition to the bar itself. The shown text is either the
@@ -21,15 +21,15 @@ expect class ProgressBar : WidgetBase {
      *
      * Default value is *false*.
      */
-    var showText: Boolean
+    public var showText: Boolean
 
     /** Text to be displayed in the progress bar. Default value is *""* (an empty String). */
-    var text: String
+    public var text: String
 
     /**
      * Indicates that some progress has been made, but you don’t know how much. Causes the progress bar to enter
      * “activity mode” where a block bounces back and forth. Each call to [pulse] causes the block to move by a little
      * bit (the amount of movement per pulse is determined by [pulseStep]).
      */
-    fun pulse()
+    public fun pulse()
 }

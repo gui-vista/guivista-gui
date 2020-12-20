@@ -13,26 +13,26 @@ import org.guiVista.gui.widget.Range
 
 private const val FORMAT_VALUE_SIGNAL = "format-value"
 
-actual class Scale(scalePtr: CPointer<GtkScale>? = null,
-                   orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTAL) : Range {
+public actual class Scale(scalePtr: CPointer<GtkScale>? = null,
+                          orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTAL) : Range {
     override val gtkWidgetPtr: CPointer<GtkWidget>? =
         scalePtr?.reinterpret() ?: gtk_scale_new(orientation, null)
-    val gtkScalePtr: CPointer<GtkScale>?
+    public val gtkScalePtr: CPointer<GtkScale>?
         get() = gtkWidgetPtr?.reinterpret()
-    actual var digits: Int
+    public actual var digits: Int
         get() = gtk_scale_get_digits(gtkScalePtr)
         set(value) {
             if (value in (-1..64)) gtk_scale_set_digits(gtkScalePtr, value)
         }
-    actual var drawValue: Boolean
+    public actual var drawValue: Boolean
         get() = gtk_scale_get_draw_value(gtkScalePtr) == TRUE
         set(value) = gtk_scale_set_draw_value(gtkScalePtr, if (value) TRUE else FALSE)
-    actual var hasOrigin: Boolean
+    public actual var hasOrigin: Boolean
         get() = gtk_scale_get_has_origin(gtkScalePtr) == TRUE
         set(value) = gtk_scale_set_has_origin(gtkScalePtr, if (value) TRUE else FALSE)
 
     /** The position in which the current value is displayed. Default value is *GtkPositionType.GTK_POS_TOP*. */
-    var valuePos: GtkPositionType
+    public var valuePos: GtkPositionType
         get() = gtk_scale_get_value_pos(gtkScalePtr)
         set(value) = gtk_scale_set_value_pos(gtkScalePtr, value)
 
@@ -46,7 +46,7 @@ actual class Scale(scalePtr: CPointer<GtkScale>? = null,
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectFormatValueSignal(slot: CPointer<FormatValueSlot>, userData: gpointer): UInt =
+    public fun connectFormatValueSignal(slot: CPointer<FormatValueSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkScalePtr, signal = FORMAT_VALUE_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -55,7 +55,7 @@ actual class Scale(scalePtr: CPointer<GtkScale>? = null,
     }
 }
 
-fun scaleWidget(scalePtr: CPointer<GtkScale>? = null, init: Scale.() -> Unit): Scale {
+public fun scaleWidget(scalePtr: CPointer<GtkScale>? = null, init: Scale.() -> Unit): Scale {
     val scale = Scale(scalePtr)
     scale.init()
     return scale
@@ -67,4 +67,4 @@ fun scaleWidget(scalePtr: CPointer<GtkScale>? = null, init: Scale.() -> Unit): S
  * 2. value: Double
  * 3. userData: gpointer
  */
-typealias FormatValueSlot = CFunction<(scale: CPointer<GtkScale>, value: Double, userData: gpointer) -> Unit>
+public typealias FormatValueSlot = CFunction<(scale: CPointer<GtkScale>, value: Double, userData: gpointer) -> Unit>

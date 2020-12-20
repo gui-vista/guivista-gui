@@ -6,11 +6,11 @@ import gtk3.gtk_menu_item_new
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
-actual class MenuItem(menuItemPtr: CPointer<GtkMenuItem>? = null) : MenuItemBase {
+public actual class MenuItem(menuItemPtr: CPointer<GtkMenuItem>? = null) : MenuItemBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = menuItemPtr?.reinterpret() ?: gtk_menu_item_new()
 }
 
-fun menuItem(menuItemPtr: CPointer<GtkMenuItem>? = null, init: MenuItem.() -> Unit): MenuItem {
+public fun menuItem(menuItemPtr: CPointer<GtkMenuItem>? = null, init: MenuItem.() -> Unit): MenuItem {
     val menuItem = MenuItem(menuItemPtr)
     menuItem.init()
     return menuItem

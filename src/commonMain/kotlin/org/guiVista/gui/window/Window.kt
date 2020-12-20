@@ -11,4 +11,4 @@ package org.guiVista.gui.window
  * GTK_WINDOW_POPUP. All top level windows are stored in an internal top-level window list. This list can be obtained
  * from `gtk_window_list_toplevels()`. To delete a GtkWindow call `gtk_widget_destroy()`.
  */
-expect abstract class Window : WindowBase
+public expect abstract class Window : WindowBase

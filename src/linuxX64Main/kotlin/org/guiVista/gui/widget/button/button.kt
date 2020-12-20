@@ -4,7 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
-actual class Button(buttonPtr: CPointer<GtkButton>? = null, label: String = "", mnemonic: Boolean = false) : ButtonBase {
+public actual class Button(buttonPtr: CPointer<GtkButton>? = null, label: String = "", mnemonic: Boolean = false) : ButtonBase {
     @Suppress("IfThenToElvis")
     override val gtkWidgetPtr: CPointer<GtkWidget>? = when {
         buttonPtr != null -> buttonPtr.reinterpret()
@@ -14,7 +14,7 @@ actual class Button(buttonPtr: CPointer<GtkButton>? = null, label: String = "", 
     }
 }
 
-fun buttonWidget(
+public fun buttonWidget(
     buttonPtr: CPointer<GtkButton>? = null,
     label: String = "",
     mnemonic: Boolean = false,

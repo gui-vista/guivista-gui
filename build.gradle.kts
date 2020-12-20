@@ -9,7 +9,7 @@ group = "org.guivista"
 version = if (projectSettings.isDevVer) "${projectSettings.libVer}-dev" else projectSettings.libVer
 
 plugins {
-    kotlin("multiplatform") version "1.4.0"
+    kotlin("multiplatform") version "1.4.21"
     id("maven-publish")
     id("org.jetbrains.dokka") version "0.10.0"
 }
@@ -18,11 +18,14 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url = uri("https://dl.bintray.com/guivista/public")
+        val repo = if (!projectSettings.isDevVer) "public" else "development"
+        url = uri("https://dl.bintray.com/guivista/$repo")
     }
 }
 
 kotlin {
+    val guiVistaVer = if (!projectSettings.isDevVer) projectSettings.libVer else "${projectSettings.libVer}-dev"
+    explicitApi()
     linuxX64("linuxX64") {
         compilations.getByName("main") {
             cinterops.create("gtk3") {
@@ -38,8 +41,8 @@ kotlin {
                 )
             }
             dependencies {
-                implementation("org.guivista:guivista-core-linuxx64:${projectSettings.libVer}")
-                implementation("org.guivista:guivista-io-linuxx64:${projectSettings.libVer}")
+                implementation("org.guivista:guivista-core-linuxx64:$guiVistaVer")
+                implementation("org.guivista:guivista-io-linuxx64:$guiVistaVer")
             }
         }
     }
@@ -58,8 +61,8 @@ kotlin {
                 )
             }
             dependencies {
-                implementation("org.guivista:guivista-core-linuxarm32:${projectSettings.libVer}")
-                implementation("org.guivista:guivista-io-linuxarm32:${projectSettings.libVer}")
+                implementation("org.guivista:guivista-core-linuxarm32:$guiVistaVer")
+                implementation("org.guivista:guivista-io-linuxarm32:$guiVistaVer")
             }
         }
     }
@@ -71,10 +74,10 @@ kotlin {
         val commonMain by getting {
             languageSettings.useExperimentalAnnotation(unsignedTypes)
             dependencies {
-                val kotlinVer = "1.4.0"
+                val kotlinVer = "1.4.21"
                 implementation(kotlin("stdlib-common", kotlinVer))
-                implementation("org.guivista:guivista-core:${projectSettings.libVer}")
-                implementation("org.guivista:guivista-io:${projectSettings.libVer}")
+                implementation("org.guivista:guivista-core:$guiVistaVer")
+                implementation("org.guivista:guivista-io:$guiVistaVer")
             }
         }
 

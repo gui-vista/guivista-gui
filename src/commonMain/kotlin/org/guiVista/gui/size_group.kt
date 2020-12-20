@@ -5,11 +5,11 @@ import org.guiVista.core.dataType.SinglyLinkedList
 import org.guiVista.gui.widget.WidgetBase
 
 /** Grouping widgets so they request the same size. */
-expect class SizeGroup : ObjectBase {
+public expect class SizeGroup : ObjectBase {
     /**
      * The list of widgets associated with [SizeGroup]. The list is owned by GTK and should **NOT** be modified!
      */
-    val widgets: SinglyLinkedList
+    public val widgets: SinglyLinkedList
 
     /**
      * Adds a [widget] to a [SizeGroup]. In the future the requisition of the [widget] will be determined as the
@@ -20,25 +20,25 @@ expect class SizeGroup : ObjectBase {
      * to mode property.
      * @param widget The widget to add.
      */
-    infix fun addWidget(widget: WidgetBase)
+    public infix fun addWidget(widget: WidgetBase)
 
     /**
      * Removes a widget from a GtkSizeGroup.
      * @param widget The widget to remove.
      * @see removeWidget
      */
-    operator fun minusAssign(widget: WidgetBase)
+    public operator fun minusAssign(widget: WidgetBase)
 
     /**
      * Adds a [widget] to a [SizeGroup].
      * @param widget The widget to add.
      * @see addWidget
      */
-    operator fun plusAssign(widget: WidgetBase)
+    public operator fun plusAssign(widget: WidgetBase)
 
     /**
      * Removes a widget from a GtkSizeGroup.
      * @param widget The widget to remove.
      */
-    infix fun removeWidget(widget: WidgetBase)
+    public infix fun removeWidget(widget: WidgetBase)
 }

@@ -15,11 +15,11 @@ private const val SHOW_SIGNAL = "show"
 private const val HIDE_SIGNAL = "hide"
 
 /** Base interface for all widget's (controls). */
-actual interface WidgetBase : ObjectBase {
-    val gtkWidgetPtr: CPointer<GtkWidget>?
+public actual interface WidgetBase : ObjectBase {
+    public val gtkWidgetPtr: CPointer<GtkWidget>?
 
     /** If set to *true* then the widget can accept the input focus. Default value is *false*. */
-    var canFocus: Boolean
+    public var canFocus: Boolean
         set(value) = gtk_widget_set_can_focus(gtkWidgetPtr, if (value) TRUE else FALSE)
         get() = gtk_widget_get_can_focus(gtkWidgetPtr) == TRUE
 
@@ -32,7 +32,7 @@ actual interface WidgetBase : ObjectBase {
      *
      * Default value is *false*.
      */
-    var hasTooltip: Boolean
+    public var hasTooltip: Boolean
         set(value) = gtk_widget_set_has_tooltip(gtkWidgetPtr, if (value) TRUE else FALSE)
         get() = gtk_widget_get_has_tooltip(gtkWidgetPtr) == TRUE
 
@@ -41,12 +41,12 @@ actual interface WidgetBase : ObjectBase {
      * there will be taken care of “query-tooltip” in the default signal handler. Note that if both “tooltip-text” and
      * “tooltip-markup” are set, the last one wins. Default value is *""* (an empty String).
      */
-    var tooltipText: String
+    public var tooltipText: String
         set(value) = gtk_widget_set_tooltip_text(gtkWidgetPtr, value)
         get() = gtk_widget_get_tooltip_text(gtkWidgetPtr)?.toKString() ?: ""
 
     /** If set to *true* then the widget is visible. Default value is *false*. **/
-    var visible: Boolean
+    public var visible: Boolean
         set(value) = gtk_widget_set_visible(gtkWidgetPtr, if (value) TRUE else FALSE)
         get() = gtk_widget_get_visible(gtkWidgetPtr) == TRUE
 
@@ -55,7 +55,7 @@ actual interface WidgetBase : ObjectBase {
      * margin will be added in addition to the size from `gtk_widget_set_size_request()` for example. Default value is
      * *0*.
      */
-    var marginBottom: Int
+    public var marginBottom: Int
         set(value) {
             if (value in marginRange) gtk_widget_set_margin_bottom(gtkWidgetPtr, value)
         }
@@ -66,7 +66,7 @@ actual interface WidgetBase : ObjectBase {
      * This property adds margin outside of the widget's normal size request, the margin will be added in addition to
      * the size from `gtk_widget_set_size_request()` for example. Default value is *0*.
      */
-    var marginEnd: Int
+    public var marginEnd: Int
         set(value) {
             if (value in marginRange) gtk_widget_set_margin_end(gtkWidgetPtr, value)
         }
@@ -77,7 +77,7 @@ actual interface WidgetBase : ObjectBase {
      * This property adds margin outside of the widget's normal size request, the margin will be added in addition to
      * the size from `gtk_widget_set_size_request()` for example. Default value is *0*.
      */
-    var marginStart: Int
+    public var marginStart: Int
         set(value) {
             if (value in marginRange) gtk_widget_set_margin_start(gtkWidgetPtr, value)
         }
@@ -87,19 +87,19 @@ actual interface WidgetBase : ObjectBase {
      * Margin on top side of widget. This property adds margin outside of the widget's normal size request, the margin
      * will be added in addition to the size from `gtk_widget_set_size_request()` for example. Default value is *0*.
      */
-    var marginTop: Int
+    public var marginTop: Int
         set(value) {
             if (value in marginRange) gtk_widget_set_margin_top(gtkWidgetPtr, value)
         }
         get() = gtk_widget_get_margin_top(gtkWidgetPtr)
 
     /** Whether the application will paint directly on the widget. Default value is *false*. */
-    var appPaintable: Boolean
+    public var appPaintable: Boolean
         get() = gtk_widget_get_app_paintable(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_app_paintable(gtkWidgetPtr, if (value) TRUE else FALSE)
 
     /** Whether the widget can be the default widget. Default value is *false*. */
-    var canDefault: Boolean
+    public var canDefault: Boolean
         get() = gtk_widget_get_can_default(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_can_default(gtkWidgetPtr, if (value) TRUE else FALSE)
 
@@ -110,67 +110,67 @@ actual interface WidgetBase : ObjectBase {
      *
      * Default value is *true*.
      */
-    var focusOnClick: Boolean
+    public var focusOnClick: Boolean
         get() = gtk_widget_get_focus_on_click(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_focus_on_click(gtkWidgetPtr, if (value) TRUE else FALSE)
 
     /** How to distribute horizontal space if widget gets extra space. */
-    var hAlign: GtkAlign
+    public var hAlign: GtkAlign
         get() = gtk_widget_get_halign(gtkWidgetPtr)
         set(value) = gtk_widget_set_halign(gtkWidgetPtr, value)
 
     /** Whether the widget is the default widget. Default value is *false*. */
-    val hasDefault: Boolean
+    public val hasDefault: Boolean
         get() = gtk_widget_has_default(gtkWidgetPtr) == TRUE
 
     /** Whether the widget has the input focus. Default value is *false*. */
-    val hasFocus: Boolean
+    public val hasFocus: Boolean
         get() = gtk_widget_has_focus(gtkWidgetPtr) == TRUE
 
     /** Whether to expand horizontally. Default value is *false*. */
-    var hExpand: Boolean
+    public var hExpand: Boolean
         get() = gtk_widget_get_hexpand(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_hexpand(gtkWidgetPtr, if (value) TRUE else FALSE)
 
     /** Whether to use the [hExpand] property. Default value is *false*. */
-    var hExpandSet: Boolean
+    public var hExpandSet: Boolean
         get() = gtk_widget_get_hexpand_set(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_hexpand_set(gtkWidgetPtr, if (value) TRUE else FALSE)
 
     /** Whether the widget is the focus widget within the top level. Default value is *false*. */
-    val isFocus: Boolean
+    public val isFocus: Boolean
         get() = gtk_widget_is_focus(gtkWidgetPtr) == TRUE
 
     /** The name of the widget. Default value is *""* (an empty String). */
-    var name: String
+    public var name: String
         get() = gtk_widget_get_name(gtkWidgetPtr)?.toKString() ?: ""
         set(value) = gtk_widget_set_name(gtkWidgetPtr, value)
 
     /** Whether the [showAll] function should not affect this widget. Default value is *false*. */
-    var noShowAll: Boolean
+    public var noShowAll: Boolean
         get() = gtk_widget_get_no_show_all(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_no_show_all(gtkWidgetPtr, if (value) TRUE else FALSE)
 
     /**
      * The requested opacity of the widget. Before 3.8 this was only available in GtkWindow. Default value is *1.0*.
      */
-    var opacity: Double
+    public var opacity: Double
         get() = gtk_widget_get_opacity(gtkWidgetPtr)
         set(value) {
             if (value in (0.0..1.0)) gtk_widget_set_opacity(gtkWidgetPtr, value)
         }
 
     /** If *true* then the widget will receive the default action when it is focused. Default value is *false*. */
-    var receivesDefault: Boolean
+    public var receivesDefault: Boolean
         get() = gtk_widget_get_receives_default(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_receives_default(gtkWidgetPtr, if (value) TRUE else FALSE)
 
     /** The scale factor of the widget. */
-    val scaleFactor: Int
+    public val scaleFactor: Int
         get() = gtk_widget_get_scale_factor(gtkWidgetPtr)
 
     /** Whether the widget responds to input. */
-    var sensitive: Boolean
+    public var sensitive: Boolean
         get() = gtk_widget_get_sensitive(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_sensitive(gtkWidgetPtr, if (value) TRUE else FALSE)
 
@@ -183,31 +183,31 @@ actual interface WidgetBase : ObjectBase {
      *
      * Default value is *""* (an empty String).
      */
-    var tooltipMarkup: String
+    public var tooltipMarkup: String
         get() = gtk_widget_get_tooltip_markup(gtkWidgetPtr)?.toKString() ?: ""
         set(value) = gtk_widget_set_tooltip_markup(gtkWidgetPtr, value)
 
     /** How to distribute vertical space if widget gets extra space. Default value is *GtkAlign.GTK_ALIGN_FILL*. */
-    var vAlign: GtkAlign
+    public var vAlign: GtkAlign
         get() = gtk_widget_get_valign(gtkWidgetPtr)
         set(value) = gtk_widget_set_valign(gtkWidgetPtr, value)
 
     /** Whether to expand vertically. Default value is *false*. */
-    var vExpand: Boolean
+    public var vExpand: Boolean
         get() = gtk_widget_get_vexpand(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_vexpand(gtkWidgetPtr, if (value) TRUE else FALSE)
 
     /** Whether to use the [vExpand] property. Default value is *false*. */
-    var vExpandSet: Boolean
+    public var vExpandSet: Boolean
         get() = gtk_widget_get_vexpand_set(gtkWidgetPtr) == TRUE
         set(value) = gtk_widget_set_vexpand_set(gtkWidgetPtr, if (value) TRUE else FALSE)
 
-    companion object {
+    private companion object {
         private val marginRange = 0..32767
     }
 
     /** Changes all margins for the widget. */
-    fun changeMargins(bottom: Int, end: Int, start: Int, top: Int) {
+    public fun changeMargins(bottom: Int, end: Int, start: Int, top: Int) {
         marginBottom = bottom
         marginEnd = end
         marginStart = start
@@ -215,7 +215,7 @@ actual interface WidgetBase : ObjectBase {
     }
 
     /** Changes all margins for the widget using a single value. */
-    fun changeAllMargins(value: Int) {
+    public fun changeAllMargins(value: Int) {
         marginBottom = value
         marginEnd = value
         marginStart = value
@@ -223,7 +223,7 @@ actual interface WidgetBase : ObjectBase {
     }
 
     /** Clears all the widget's margins (bottom, end, start, and top). */
-    fun clearMargins() {
+    public fun clearMargins() {
         marginBottom = 0
         marginEnd = 0
         marginStart = 0
@@ -238,7 +238,7 @@ actual interface WidgetBase : ObjectBase {
      * The widget also needs to be realized and mapped. This is indicated by the related signals. Grabbing the focus
      * immediately after creating the widget will likely fail and cause critical warnings.
      */
-    fun grabFocus() {
+    public fun grabFocus() {
         gtk_widget_grab_focus(gtkWidgetPtr)
     }
 
@@ -248,7 +248,7 @@ actual interface WidgetBase : ObjectBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectGrabFocusSignal(slot: CPointer<GrabFocusSlot>, userData: gpointer): UInt =
+    public fun connectGrabFocusSignal(slot: CPointer<GrabFocusSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkWidgetPtr, signal = GRAB_FOCUS_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -256,7 +256,7 @@ actual interface WidgetBase : ObjectBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectShowSignal(slot: CPointer<ShowSlot>, userData: gpointer): UInt =
+    public fun connectShowSignal(slot: CPointer<ShowSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkWidgetPtr, signal = SHOW_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -264,14 +264,14 @@ actual interface WidgetBase : ObjectBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectHideSignal(slot: CPointer<HideSlot>, userData: gpointer): UInt =
+    public fun connectHideSignal(slot: CPointer<HideSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkWidgetPtr, signal = HIDE_SIGNAL, slot = slot, data = userData)
 
     /**
      * Recursively shows a widget, and any child widgets (if the [widget][WidgetBase] is a
      * [container][org.guiVista.gui.layout.Container]).
      */
-    fun showAll() {
+    public fun showAll() {
         gtk_widget_show_all(gtkWidgetPtr)
     }
 
@@ -285,18 +285,18 @@ actual interface WidgetBase : ObjectBase {
  * 1. widget: CPointer<GtkWidget>
  * 2. userData: gpointer
  */
-typealias GrabFocusSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
+public typealias GrabFocusSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *show* signal. Arguments:
  * 1. widget: CPointer<GtkWidget>
  * 2. userData: gpointer
  */
-typealias ShowSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
+public typealias ShowSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *hide* signal. Arguments:
  * 1. widget: CPointer<GtkWidget>
  * 2. userData: gpointer
  */
-typealias HideSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
+public typealias HideSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>

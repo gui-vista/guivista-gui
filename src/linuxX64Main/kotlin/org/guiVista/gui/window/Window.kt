@@ -18,9 +18,9 @@ import kotlinx.cinterop.reinterpret
  * GTK_WINDOW_POPUP. All top level windows are stored in an internal top-level window list. This list can be obtained
  * from `gtk_window_list_toplevels()`. To delete a GtkWindow call `gtk_widget_destroy()`.
  */
-actual abstract class Window(
+public actual abstract class Window(
     windowPtr: CPointer<GtkWindow>? = null,
-    val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPLEVEL
+    public val winType: GtkWindowType = GtkWindowType.GTK_WINDOW_TOPLEVEL
 ) : WindowBase {
     private var _gtkWidgetPtr: CPointer<GtkWidget>? = windowPtr?.reinterpret()
     override val gtkWidgetPtr: CPointer<GtkWidget>?

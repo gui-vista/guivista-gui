@@ -17,20 +17,20 @@ import org.guiVista.gui.widget.WidgetBase
 private const val CLICKED_SIGNAL = "clicked"
 private const val ACTIVATE_SIGNAL = "activate"
 
-actual interface ButtonBase : Container {
-    val gtkButtonPtr: CPointer<GtkButton>?
+public actual interface ButtonBase : Container {
+    public val gtkButtonPtr: CPointer<GtkButton>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /**
      * Text of the label widget inside the button, if the button contains a label widget. Default value is *""* (an
      * empty String).
      */
-    var label: String
+    public var label: String
         set(value) = gtk_button_set_label(gtkButtonPtr, value)
         get() = gtk_button_get_label(gtkButtonPtr)?.toKString() ?: ""
 
     /** The border relief style. Default value is *GtkReliefStyle.GTK_RELIEF_NORMAL*. */
-    var relief: GtkReliefStyle
+    public var relief: GtkReliefStyle
         get() = gtk_button_get_relief(gtkButtonPtr)
         set(value) = gtk_button_set_relief(gtkButtonPtr, value)
 
@@ -38,12 +38,12 @@ actual interface ButtonBase : Container {
      * If *true* the button will ignore the “gtk-button-images” setting, and always show the image if available. Use
      * this property if the button would be useless, or hard to use without the image. Default value is *false*.
      */
-    var alwaysShowImage: Boolean
+    public var alwaysShowImage: Boolean
         get() = gtk_button_get_always_show_image(gtkButtonPtr) == TRUE
         set(value) = gtk_button_set_always_show_image(gtkButtonPtr, if (value) TRUE else FALSE)
 
     /** The child widget to appear next to the button text. */
-    var image: WidgetBase?
+    public var image: WidgetBase?
         set(value) = gtk_button_set_image(gtkButtonPtr, value?.gtkWidgetPtr)
         get() {
             val tmp = gtk_button_get_image(gtkButtonPtr)
@@ -54,7 +54,7 @@ actual interface ButtonBase : Container {
      * The position of the image relative to the text inside the button. Default value is
      * *GtkPositionType.GTK_POS_LEFT*.
      */
-    var imagePosition: GtkPositionType
+    public var imagePosition: GtkPositionType
         get() = gtk_button_get_image_position(gtkButtonPtr)
         set(value) = gtk_button_set_image_position(gtkButtonPtr, value)
 
@@ -62,7 +62,7 @@ actual interface ButtonBase : Container {
      * If set an underline in the text indicates the next character should be used for the mnemonic accelerator key.
      * Default value is *false*.
      */
-    var useUnderline: Boolean
+    public var useUnderline: Boolean
         get() = gtk_button_get_use_underline(gtkButtonPtr) == TRUE
         set(value) = gtk_button_set_use_underline(gtkButtonPtr, if (value) TRUE else FALSE)
 
@@ -71,7 +71,7 @@ actual interface ButtonBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): UInt =
+    public fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -81,7 +81,7 @@ actual interface ButtonBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): UInt =
+    public fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkButtonPtr, signal = ACTIVATE_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -95,11 +95,11 @@ actual interface ButtonBase : Container {
  * 1. widget: CPointer<GtkButton>
  * 2. userData: gpointer
  */
-typealias ActivateSlot = CFunction<(widget: CPointer<GtkButton>?, userData: gpointer) -> Unit>
+public typealias ActivateSlot = CFunction<(widget: CPointer<GtkButton>?, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *clicked* signal. Arguments:
  * 1. button: CPointer<GtkButton>
  * 2. userData: gpointer
  */
-typealias ClickedSlot = CFunction<(button: CPointer<GtkButton>?, userData: gpointer) -> Unit>
+public typealias ClickedSlot = CFunction<(button: CPointer<GtkButton>?, userData: gpointer) -> Unit>

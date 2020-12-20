@@ -6,20 +6,20 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
-actual class SeparatorToolItem(separatorToolItemPtr: CPointer<GtkSeparatorToolItem>? = null) : ToolItemBase {
+public actual class SeparatorToolItem(separatorToolItemPtr: CPointer<GtkSeparatorToolItem>? = null) : ToolItemBase {
     override val gtkToolItemPtr: CPointer<GtkToolItem>? =
         separatorToolItemPtr?.reinterpret() ?: gtk_separator_tool_item_new()
-    val gtkSeparatorToolItemPtr: CPointer<GtkSeparatorToolItem>?
+    public val gtkSeparatorToolItemPtr: CPointer<GtkSeparatorToolItem>?
         get() = gtkToolItemPtr?.reinterpret()
 
     /** Whether the separator is drawn, or just blank. */
-    var draw: Boolean
+    public var draw: Boolean
         get() = gtk_separator_tool_item_get_draw(gtkSeparatorToolItemPtr) == TRUE
         set(value) = gtk_separator_tool_item_set_draw(gtkSeparatorToolItemPtr, if (value) TRUE else FALSE)
 }
 
-fun separatorToolItemWidget(separatorToolItemPtr: CPointer<GtkSeparatorToolItem>? = null,
-                            init: SeparatorToolItem.() -> Unit): SeparatorToolItem {
+public fun separatorToolItemWidget(separatorToolItemPtr: CPointer<GtkSeparatorToolItem>? = null,
+                                   init: SeparatorToolItem.() -> Unit): SeparatorToolItem {
     val toolItem = SeparatorToolItem(separatorToolItemPtr)
     toolItem.init()
     return toolItem

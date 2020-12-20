@@ -4,7 +4,7 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
-actual class ToggleButton(
+public actual class ToggleButton(
     toggleButtonPtr: CPointer<GtkToggleButton>? = null,
     label: String = "",
     mnemonic: Boolean = false
@@ -17,7 +17,7 @@ actual class ToggleButton(
         else gtk_toggle_button_new()
 }
 
-fun toggleButtonWidget(
+public fun toggleButtonWidget(
     toggleButtonPtr: CPointer<GtkToggleButton>? = null,
     label: String = "",
     mnemonic: Boolean = false,

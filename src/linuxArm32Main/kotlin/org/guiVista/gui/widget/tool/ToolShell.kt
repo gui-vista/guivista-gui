@@ -5,15 +5,15 @@ import kotlinx.cinterop.CPointer
 import org.guiVista.core.ObjectBase
 import org.guiVista.gui.SizeGroup
 
-actual interface ToolShell : ObjectBase {
-    val gtkToolShellPtr: CPointer<GtkToolShell>?
+public actual interface ToolShell : ObjectBase {
+    public val gtkToolShellPtr: CPointer<GtkToolShell>?
 
     /**
      * Retrieves the icon size for the [ToolShell]. Tool items must not call this function directly, but rely on
      * [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]
      * [iconSize][org.guiVista.gui.widget.tool.item.ToolItem.iconSize] property instead.
      */
-    val iconSize: GtkIconSize
+    public val iconSize: GtkIconSize
         get() = gtk_tool_shell_get_icon_size(gtkToolShellPtr)
 
     /**
@@ -21,7 +21,7 @@ actual interface ToolShell : ObjectBase {
      * on [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]
      * [orientation][org.guiVista.gui.widget.tool.item.ToolItem.orientation] property instead.
      */
-    val orientation: GtkOrientation
+    public val orientation: GtkOrientation
         get() = gtk_tool_shell_get_orientation(gtkToolShellPtr)
 
     /**
@@ -29,7 +29,7 @@ actual interface ToolShell : ObjectBase {
      * [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]
      * [reliefStyle][org.guiVista.gui.widget.tool.item.ToolItem.reliefStyle] property instead.
      */
-    val reliefStyle: GtkReliefStyle
+    public val reliefStyle: GtkReliefStyle
         get() = gtk_tool_shell_get_relief_style(gtkToolShellPtr)
 
     /**
@@ -37,7 +37,7 @@ actual interface ToolShell : ObjectBase {
      * rely on [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]
      * [toolbarStyle][org.guiVista.gui.widget.tool.item.ToolItem.toolBarStyle] property instead.
      */
-    val style: GtkToolbarStyle
+    public val style: GtkToolbarStyle
         get() = gtk_tool_shell_get_style(gtkToolShellPtr)
 
     /**
@@ -45,7 +45,7 @@ actual interface ToolShell : ObjectBase {
      * rely on [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]
      * [textAlignment][org.guiVista.gui.widget.tool.item.ToolItem.textAlignment] property instead.
      */
-    val textAlignment: Float
+    public val textAlignment: Float
         get() = gtk_tool_shell_get_text_alignment(gtkToolShellPtr)
 
     /**
@@ -53,7 +53,7 @@ actual interface ToolShell : ObjectBase {
      * rely on [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]
      * [textOrientation][org.guiVista.gui.widget.tool.item.ToolItem.textOrientation] property instead.
      */
-    val textOrientation: GtkOrientation
+    public val textOrientation: GtkOrientation
         get() = gtk_tool_shell_get_text_orientation(gtkToolShellPtr)
 
     /**
@@ -61,7 +61,7 @@ actual interface ToolShell : ObjectBase {
      * rely on [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]
      * [textSizeGroup][org.guiVista.gui.widget.tool.item.ToolItem.textSizeGroup] property instead.
      */
-    val textSizeGroup: SizeGroup
+    public val textSizeGroup: SizeGroup
         get() = SizeGroup(gtk_tool_shell_get_text_size_group(gtkToolShellPtr))
 
     /**
@@ -71,7 +71,7 @@ actual interface ToolShell : ObjectBase {
      * [ToolItem's][org.guiVista.gui.widget.tool.item.ToolItem]
      * [rebuildMenu][org.guiVista.gui.widget.tool.item.ToolItem.rebuildMenu] function instead.
      */
-    fun rebuildMenu() {
+    public fun rebuildMenu() {
         gtk_tool_shell_rebuild_menu(gtkToolShellPtr)
     }
 }

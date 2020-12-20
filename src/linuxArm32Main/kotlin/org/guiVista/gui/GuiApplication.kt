@@ -11,16 +11,16 @@ import org.guiVista.core.disposeEmptyDataRef
 import org.guiVista.io.application.ApplicationBase
 import kotlin.system.exitProcess
 
-actual class GuiApplication(
+public actual class GuiApplication(
     appPtr: CPointer<GApplication>? = null,
     id: String = "org.example.gui-app"
 ) : ApplicationBase {
-    val gtkApplicationPtr: CPointer<GtkApplication>? = appPtr?.reinterpret() ?: createGtkApplicationPtr(id)
+    public val gtkApplicationPtr: CPointer<GtkApplication>? = appPtr?.reinterpret() ?: createGtkApplicationPtr(id)
     override val gApplicationPtr: CPointer<GApplication>?
         get() = gtkApplicationPtr?.reinterpret()
 
     @Suppress("unused")
-    actual fun use(init: GuiApplication.() -> Unit) {
+    public actual fun use(init: GuiApplication.() -> Unit) {
         this.init()
         close()
     }

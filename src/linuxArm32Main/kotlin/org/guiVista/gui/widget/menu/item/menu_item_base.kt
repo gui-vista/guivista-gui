@@ -13,17 +13,17 @@ import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.WidgetBase
 
-actual interface MenuItemBase : Container {
-    val gtkMenuItemPtr: CPointer<GtkMenuItem>?
+public actual interface MenuItemBase : Container {
+    public val gtkMenuItemPtr: CPointer<GtkMenuItem>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /** The text for the child label. Default value is *""* (an empty String). */
-    var label: String
+    public var label: String
         get() = gtk_menu_item_get_label(gtkMenuItemPtr)?.toKString() ?: ""
         set(value) = gtk_menu_item_set_label(gtkMenuItemPtr, value)
 
     /** When *true* the text is underlined to indicate mnemonics. Default value is *false*. */
-    var useUnderline: Boolean
+    public var useUnderline: Boolean
         get() = gtk_menu_item_get_use_underline(gtkMenuItemPtr) == TRUE
         set(value) = gtk_menu_item_set_use_underline(gtkMenuItemPtr, if (value) TRUE else FALSE)
 
@@ -31,7 +31,7 @@ actual interface MenuItemBase : Container {
      * Sets the accelerator path of the menu item, through which runtime changes of the menu item's accelerator caused
      * by the user can be identified and saved to persistent storage. Default value is *""* (an empty String).
      */
-    var accelPath: String
+    public var accelPath: String
         get() = gtk_menu_item_get_accel_path(gtkMenuItemPtr)?.toKString() ?: ""
         set(value) = gtk_menu_item_set_accel_path(gtkMenuItemPtr, value)
 
@@ -39,7 +39,7 @@ actual interface MenuItemBase : Container {
      * Sets or replaces the menu item’s submenu, or removes it when a *null* submenu is passed.
      * @param submenu The submenu to use or *null*.
      */
-    fun changeSubmenu(submenu: WidgetBase?) {
+    public fun changeSubmenu(submenu: WidgetBase?) {
         gtk_menu_item_set_submenu(gtkMenuItemPtr, submenu?.gtkWidgetPtr)
     }
 
@@ -48,14 +48,14 @@ actual interface MenuItemBase : Container {
      * @return Submenu for this menu item, or *null* if none.
      * @see gtk_menu_item_set_submenu
      */
-    fun fetchSubmenu(): CPointer<GtkWidget>? = gtk_menu_item_get_submenu(gtkMenuItemPtr)
+    public fun fetchSubmenu(): CPointer<GtkWidget>? = gtk_menu_item_get_submenu(gtkMenuItemPtr)
 
     /**
      * Connects the *activate* signal to a [slot] on a menu item. This signal is used when the item is activated.
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): UInt =
+    public fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuItemPtr, signal = "activate", slot = slot, data = userData)
 
     /**
@@ -64,7 +64,7 @@ actual interface MenuItemBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectActivateItemSignal(slot: CPointer<ActivateItemSlot>, userData: gpointer): UInt =
+    public fun connectActivateItemSignal(slot: CPointer<ActivateItemSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuItemPtr, signal = "activate-item", slot = slot, data = userData)
 
     /**
@@ -72,7 +72,7 @@ actual interface MenuItemBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectDeselectSignal(slot: CPointer<DeselectSlot>, userData: gpointer): UInt =
+    public fun connectDeselectSignal(slot: CPointer<DeselectSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuItemPtr, signal = "deselect", slot = slot, data = userData)
 
     /**
@@ -80,7 +80,7 @@ actual interface MenuItemBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectSelectSignal(slot: CPointer<SelectSlot>, userData: gpointer): UInt =
+    public fun connectSelectSignal(slot: CPointer<SelectSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkMenuItemPtr, signal = "select", slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -94,25 +94,25 @@ actual interface MenuItemBase : Container {
  * 1. menuItem: CPointer<GtkMenuItem>
  * 2. userData: gpointer
  */
-typealias ActivateSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>
+public typealias ActivateSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *activate-item* signal. Arguments:
  * 1. menuItem: CPointer<GtkMenuItem>
  * 2. userData: gpointer
  */
-typealias ActivateItemSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>
+public typealias ActivateItemSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *deselect* signal. Arguments:
  * 1. menuItem: CPointer<GtkMenuItem>
  * 2. userData: gpointer
  */
-typealias DeselectSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>
+public typealias DeselectSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *select* signal. Arguments:
  * 1. menuItem: CPointer<GtkMenuItem>
  * 2. userData: gpointer
  */
-typealias SelectSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>
+public typealias SelectSlot = CFunction<(menuItem: CPointer<GtkMenuItem>, userData: gpointer) -> Unit>

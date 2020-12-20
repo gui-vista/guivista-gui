@@ -7,43 +7,43 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guiVista.gui.widget.WidgetBase
 
-actual class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
+public actual class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = gridPtr?.reinterpret() ?: gtk_grid_new()
-    val gtkGridPtr: CPointer<GtkGrid>?
+    public val gtkGridPtr: CPointer<GtkGrid>?
         get() = gtkWidgetPtr?.reinterpret()
-    actual var baselineRow: Int
+    public actual var baselineRow: Int
         set(value) = gtk_grid_set_baseline_row(gtkGridPtr, value)
         get() = gtk_grid_get_baseline_row(gtkGridPtr)
-    actual var columnHomogeneous: Boolean
+    public actual var columnHomogeneous: Boolean
         set(value) = gtk_grid_set_column_homogeneous(gtkGridPtr, if (value) TRUE else FALSE)
         get() = gtk_grid_get_column_homogeneous(gtkGridPtr) == TRUE
-    actual var rowHomogeneous: Boolean
+    public actual var rowHomogeneous: Boolean
         set(value) = gtk_grid_set_row_homogeneous(gtkGridPtr, if (value) TRUE else FALSE)
         get() = gtk_grid_get_row_homogeneous(gtkGridPtr) == TRUE
-    actual var columnSpacing: UInt
+    public actual var columnSpacing: UInt
         set(value) = gtk_grid_set_column_spacing(gtkGridPtr, value)
         get() = gtk_grid_get_column_spacing(gtkGridPtr)
-    actual var rowSpacing: UInt
+    public actual var rowSpacing: UInt
         set(value) = gtk_grid_set_row_spacing(gtkGridPtr, value)
         get() = gtk_grid_get_row_spacing(gtkGridPtr)
 
-    actual infix fun insertRow(pos: Int) {
+    public actual infix fun insertRow(pos: Int) {
         gtk_grid_insert_row(gtkGridPtr, pos)
     }
 
-    actual infix fun insertColumn(pos: Int) {
+    public actual infix fun insertColumn(pos: Int) {
         gtk_grid_insert_column(gtkGridPtr, pos)
     }
 
-    actual infix fun removeRow(pos: Int) {
+    public actual infix fun removeRow(pos: Int) {
         gtk_grid_remove_row(gtkGridPtr, pos)
     }
 
-    actual infix fun removeColumn(pos: Int) {
+    public actual infix fun removeColumn(pos: Int) {
         gtk_grid_remove_column(gtkGridPtr, pos)
     }
 
-    actual fun attachChild(child: WidgetBase, left: Int, top: Int, width: Int, height: Int) {
+    public actual fun attachChild(child: WidgetBase, left: Int, top: Int, width: Int, height: Int) {
         gtk_grid_attach(grid = gtkGridPtr, child = child.gtkWidgetPtr, left = left, top = top, width = width,
             height = height)
     }
@@ -59,7 +59,13 @@ actual class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * @param width The number of columns that [child] will span.
      * @param height The number of rows that [child] will span.
      */
-    fun attachChildNextTo(child: WidgetBase, sibling: WidgetBase, side: GtkPositionType, width: Int, height: Int) {
+    public fun attachChildNextTo(
+        child: WidgetBase,
+        sibling: WidgetBase,
+        side: GtkPositionType,
+        width: Int,
+        height: Int
+    ) {
         gtk_grid_attach_next_to(
             grid = gtkGridPtr,
             child = child.gtkWidgetPtr,
@@ -77,7 +83,7 @@ actual class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * @param sibling The child of the grid that the new row, or column will be placed next to.
      * @param side The side of [sibling] that the child is positioned next to.
      */
-    fun insertNextTo(sibling: WidgetBase, side: GtkPositionType) {
+    public fun insertNextTo(sibling: WidgetBase, side: GtkPositionType) {
         gtk_grid_insert_next_to(grid = gtkGridPtr, sibling = sibling.gtkWidgetPtr, side = side)
     }
 
@@ -87,7 +93,7 @@ actual class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * @param row The row index.
      * @param pos The baseline position to use.
      */
-    fun changeRowBaselinePosition(row: Int, pos: GtkBaselinePosition) {
+    public fun changeRowBaselinePosition(row: Int, pos: GtkBaselinePosition) {
         gtk_grid_set_row_baseline_position(grid = gtkGridPtr, row = row, pos = pos)
     }
 
@@ -97,10 +103,11 @@ actual class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * @return The baseline position if it is set, otherwise the default value `GTK_BASELINE_POSITION_CENTER` is
      * returned.
      */
-    fun fetchRowBaselinePosition(row: Int): GtkBaselinePosition = gtk_grid_get_row_baseline_position(gtkGridPtr, row)
+    public fun fetchRowBaselinePosition(row: Int): GtkBaselinePosition =
+        gtk_grid_get_row_baseline_position(gtkGridPtr, row)
 }
 
-fun gridLayout(gridPtr: CPointer<GtkGrid>? = null, init: Grid.() -> Unit): Grid {
+public fun gridLayout(gridPtr: CPointer<GtkGrid>? = null, init: Grid.() -> Unit): Grid {
     val grid = Grid(gridPtr)
     grid.init()
     return grid

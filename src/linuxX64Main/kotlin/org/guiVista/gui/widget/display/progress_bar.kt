@@ -8,27 +8,27 @@ import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
 import org.guiVista.gui.widget.WidgetBase
 
-actual class ProgressBar(progressBarPtr: CPointer<GtkProgressBar>? = null) : WidgetBase {
+public actual class ProgressBar(progressBarPtr: CPointer<GtkProgressBar>? = null) : WidgetBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = progressBarPtr?.reinterpret() ?: gtk_progress_bar_new()
-    val gtkProgressBarPtr: CPointer<GtkProgressBar>?
+    public val gtkProgressBarPtr: CPointer<GtkProgressBar>?
         get() = gtkWidgetPtr?.reinterpret()
-    actual var fraction: Double
+    public actual var fraction: Double
         get() = gtk_progress_bar_get_fraction(gtkProgressBarPtr)
         set(value) {
             if (value in (0.0..1.0)) gtk_progress_bar_set_fraction(gtkProgressBarPtr, value)
         }
-    actual var inverted: Boolean
+    public actual var inverted: Boolean
         get() = gtk_progress_bar_get_inverted(gtkProgressBarPtr) == TRUE
         set(value) = gtk_progress_bar_set_inverted(gtkProgressBarPtr, if (value) TRUE else FALSE)
-    actual var pulseStep: Double
+    public actual var pulseStep: Double
         get() = gtk_progress_bar_get_pulse_step(gtkProgressBarPtr)
         set(value) {
             if (value in (0.0..1.0)) gtk_progress_bar_set_pulse_step(gtkProgressBarPtr, value)
         }
-    actual var showText: Boolean
+    public actual var showText: Boolean
         get() = gtk_progress_bar_get_show_text(gtkProgressBarPtr) == TRUE
         set(value) = gtk_progress_bar_set_show_text(gtkProgressBarPtr, if (value) TRUE else FALSE)
-    actual var text: String
+    public actual var text: String
         get() = gtk_progress_bar_get_text(gtkProgressBarPtr)?.toKString() ?: ""
         set(value) = gtk_progress_bar_set_text(gtkProgressBarPtr, value)
 
@@ -40,16 +40,19 @@ actual class ProgressBar(progressBarPtr: CPointer<GtkProgressBar>? = null) : Wid
      *
      * Default value is *PangoEllipsizeMode.PANGO_ELLIPSIZE_NONE*.
      */
-    var ellipsize: PangoEllipsizeMode
+    public var ellipsize: PangoEllipsizeMode
         get() = gtk_progress_bar_get_ellipsize(gtkProgressBarPtr)
         set(value) = gtk_progress_bar_set_ellipsize(gtkProgressBarPtr, value)
 
-    actual fun pulse() {
+    public actual fun pulse() {
         gtk_progress_bar_pulse(gtkProgressBarPtr)
     }
 }
 
-fun progressBarWidget(progressBarPtr: CPointer<GtkProgressBar>? = null, init: ProgressBar.() -> Unit): ProgressBar {
+public fun progressBarWidget(
+    progressBarPtr: CPointer<GtkProgressBar>? = null,
+    init: ProgressBar.() -> Unit
+): ProgressBar {
     val progressBar = ProgressBar(progressBarPtr)
     progressBar.init()
     return progressBar

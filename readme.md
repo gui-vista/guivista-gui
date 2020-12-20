@@ -2,7 +2,7 @@
 
 A Kotlin Native library for developing a GTK application in a Kotlin Native project. This library uses GTK 3, and 
 utilises GTK concepts (Slot, Signal, Widget etc). **Warning** - This library depends on Kotlin Native (requires Kotlin 
-1.4.0) which is currently in beta, and doesn't provide any backwards compatibility guarantees! Currently, GUI Vista GUI 
+1.4.21) which is currently in beta, and doesn't provide any backwards compatibility guarantees! Currently, GUI Vista GUI 
 isn't available in Maven Central or JCenter, but is available in a remote Bintray Maven repository.
 
 
@@ -59,7 +59,7 @@ kotlin {
         // ...
         compilations.getByName("main") {
             dependencies {
-                val guiVistaVer = "0.2.0"
+                val guiVistaVer = "0.3.0"
                 cinterops.create("glib2")
                 cinterops.create("gio2")
                 cinterops.create("gtk3")

@@ -11,7 +11,7 @@ import org.guiVista.core.disconnectGSignal
 
 private const val GROUP_CHANGED_SIGNAL = "group-changed"
 
-actual class RadioButton(
+public actual class RadioButton(
     radioButtonPtr: CPointer<GtkRadioButton>? = null,
     label: String = "",
     mnemonic: Boolean = false
@@ -22,20 +22,20 @@ actual class RadioButton(
         else if (label.isNotEmpty() && mnemonic) gtk_check_button_new_with_mnemonic(label)
         else if (label.isNotEmpty() && !mnemonic) gtk_check_button_new_with_label(label)
         else gtk_check_button_new()
-    val gtkRadioButtonPtr: CPointer<GtkRadioButton>?
+    public val gtkRadioButtonPtr: CPointer<GtkRadioButton>?
         get() = gtkWidgetPtr?.reinterpret()
 
-    actual fun changeGroup(newGroup: SinglyLinkedList?) {
+    public actual fun changeGroup(newGroup: SinglyLinkedList?) {
         gtk_radio_button_set_group(gtkRadioButtonPtr, newGroup?.gSListPtr)
     }
 
-    actual fun fetchGroup(): SinglyLinkedList? {
+    public actual fun fetchGroup(): SinglyLinkedList? {
         val groupPtr = gtk_radio_button_get_group(gtkRadioButtonPtr)
         return if (groupPtr != null) SinglyLinkedList(groupPtr)
         else null
     }
 
-    actual fun joinGroup(groupSource: RadioButton) {
+    public actual fun joinGroup(groupSource: RadioButton) {
         gtk_radio_button_join_group(gtkRadioButtonPtr, groupSource.gtkRadioButtonPtr)
     }
 
@@ -48,7 +48,7 @@ actual class RadioButton(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): UInt =
+    public fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkRadioButtonPtr, signal = GROUP_CHANGED_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -57,7 +57,7 @@ actual class RadioButton(
     }
 }
 
-fun radioButtonWidget(
+public fun radioButtonWidget(
     radioButtonPtr: CPointer<GtkRadioButton>? = null,
     label: String = "",
     mnemonic: Boolean = false,
@@ -73,4 +73,4 @@ fun radioButtonWidget(
  * 1. radioButton: CPointer<GtkRadioButton>
  * 2. userData: gpointer
  */
-typealias GroupChangedSlot = CFunction<(radioButton: CPointer<GtkRadioButton>, userData: gpointer) -> Unit>
+public typealias GroupChangedSlot = CFunction<(radioButton: CPointer<GtkRadioButton>, userData: gpointer) -> Unit>

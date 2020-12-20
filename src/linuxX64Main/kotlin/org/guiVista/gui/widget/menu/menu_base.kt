@@ -11,15 +11,15 @@ import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.WidgetBase
 
-actual interface MenuBase : Container {
-    val gtkMenuPtr: CPointer<GtkMenu>?
+public actual interface MenuBase : Container {
+    public val gtkMenuPtr: CPointer<GtkMenu>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /**
      * An accel path used to conveniently construct accel paths of child items. Default value is *""* (an empty
      * String).
      */
-    var accelPath: String
+    public var accelPath: String
         get() = gtk_menu_get_accel_path(gtkMenuPtr)?.toKString() ?: ""
         set(value) = gtk_menu_set_accel_path(gtkMenuPtr, value)
 
@@ -27,14 +27,14 @@ actual interface MenuBase : Container {
      * Gets the selected menu item from the menu. This is used by the GtkComboBox. Default value is *-1*.
      * @return The index for the selected item, or *-1* if no item is selected.
      */
-    fun fetchActive(): CPointer<GtkWidget>? = gtk_menu_get_active(gtkMenuPtr)
+    public fun fetchActive(): CPointer<GtkWidget>? = gtk_menu_get_active(gtkMenuPtr)
 
     /**
      * Selects the specified menu item within the menu. This is used by the GtkComboBox and should not be used by
      * anyone else.
      * @param index The index of the menu item to select. Index values are from 0 to n-1.
      */
-    fun changeActive(index: UInt) {
+    public fun changeActive(index: UInt) {
         gtk_menu_set_active(gtkMenuPtr, index)
     }
 
@@ -45,8 +45,8 @@ actual interface MenuBase : Container {
      * @param menuAnchor The point on menu to align with the widget's anchor point.
      * @param triggerEvent The GdkEvent that initiated this request, or *null* if it's the current event.
      */
-    fun popupAtWidget(widget: WidgetBase, widgetAnchor: GdkGravity, menuAnchor: GdkGravity,
-                      triggerEvent: CPointer<GdkEvent>?) {
+    public fun popupAtWidget(widget: WidgetBase, widgetAnchor: GdkGravity, menuAnchor: GdkGravity,
+                             triggerEvent: CPointer<GdkEvent>?) {
         gtk_menu_popup_at_widget(
             menu = gtkMenuPtr,
             widget = widget.gtkWidgetPtr,
@@ -64,7 +64,7 @@ actual interface MenuBase : Container {
      * @param menuAnchor The point on menu to align with rect's anchor point.
      * @param triggerEvent The GdkEvent that initiated this request or *null* if it's the current event.
      */
-    fun popupAtRect(
+    public fun popupAtRect(
         rectWindow: CPointer<GdkWindow>?,
         rect: CPointer<GdkRectangle>?,
         rectAnchor: GdkGravity,
@@ -85,12 +85,12 @@ actual interface MenuBase : Container {
      * Displays menu and makes it available for selection.
      * @param triggerEvent The GdkEvent that initiated this request or *null* if it's the current event.
      */
-    fun popupAtPointer(triggerEvent: CPointer<GdkEvent>?) {
+    public fun popupAtPointer(triggerEvent: CPointer<GdkEvent>?) {
         gtk_menu_popup_at_pointer(gtkMenuPtr, triggerEvent)
     }
 
     /** Gets the GtkWidget that the menu is attached to. */
-    fun fetchAttachWidget(): CPointer<GtkWidget>? = gtk_menu_get_attach_widget(gtkMenuPtr)
+    public fun fetchAttachWidget(): CPointer<GtkWidget>? = gtk_menu_get_attach_widget(gtkMenuPtr)
 
     /**
      * Connects the *popped-up* signal to a [slot] on a menu. This signal is used when the position of menu is
@@ -98,7 +98,7 @@ actual interface MenuBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectPoppedUpSignal(slot: CPointer<PoppedUpSlot>, userData: gpointer): ULong =
+    public fun connectPoppedUpSignal(slot: CPointer<PoppedUpSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkMenuPtr, signal = "popped-up", slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -116,7 +116,7 @@ actual interface MenuBase : Container {
  * 5. flippedY: Boolean
  * 6. userData: gpointer
  */
-typealias PoppedUpSlot = CFunction<(
+public typealias PoppedUpSlot = CFunction<(
     menu: CPointer<GtkMenu>,
     flippedRect: gpointer,
     finalRect: gpointer,

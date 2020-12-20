@@ -9,12 +9,12 @@ import kotlinx.cinterop.toKString
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-actual interface LabelBase : WidgetBase {
-    val gtkLabelPtr: CPointer<GtkLabel>?
+public actual interface LabelBase : WidgetBase {
+    public val gtkLabelPtr: CPointer<GtkLabel>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /** The label's string contents. Default value is *""* (an empty String). */
-    var text: String
+    public var text: String
         set(value) = gtk_label_set_text(gtkLabelPtr, value)
         get() = gtk_label_get_text(gtkLabelPtr)?.toKString() ?: ""
 
@@ -23,7 +23,7 @@ actual interface LabelBase : WidgetBase {
      * of the label within its allocation. See `GtkLabel.xalign` for that. Default value is
      * *GtkJustification.GTK_JUSTIFY_LEFT*.
      */
-    var justify: GtkJustification
+    public var justify: GtkJustification
         set(value) = gtk_label_set_justify(gtkLabelPtr, value)
         get() = gtk_label_get_justify(gtkLabelPtr)
 
@@ -32,7 +32,7 @@ actual interface LabelBase : WidgetBase {
      * calculated automatically. See the section on text layout for details of how “width-chars” and “max-width-chars”
      * determine the width of ellipsized and wrapped labels. Default value is *-1*.
      */
-    var maxWidthChars: Int
+    public var maxWidthChars: Int
         set(value) {
             if (value >= -1) gtk_label_set_max_width_chars(gtkLabelPtr, value)
         }
@@ -43,7 +43,7 @@ actual interface LabelBase : WidgetBase {
      * automatically. See the section on text layout for details of how widthChars and [maxWidthChars] determine
      * the width of ellipsized and wrapped labels. Default value is *-1*.
      */
-    var widthChars: Int
+    public var widthChars: Int
         set(value) {
             if (value >= -1) gtk_label_set_width_chars(gtkLabelPtr, value)
         }
@@ -54,7 +54,7 @@ actual interface LabelBase : WidgetBase {
      * angle of 90 reads from from bottom to top, an angle of 270, from top to bottom. Ignored if the label is
      * selectable. Default value is *0.0*.
      */
-    var angle: Double
+    public var angle: Double
         get() = gtk_label_get_angle(gtkLabelPtr)
         set(value) {
             if (value in (0.0..360.0)) gtk_label_set_angle(gtkLabelPtr, value)
@@ -70,7 +70,7 @@ actual interface LabelBase : WidgetBase {
      *
      * Default value is *PangoEllipsizeMode.PANGO_ELLIPSIZE_NONE*.
      */
-    var ellipsize: PangoEllipsizeMode
+    public var ellipsize: PangoEllipsizeMode
         get() = gtk_label_get_ellipsize(gtkLabelPtr)
         set(value) = gtk_label_set_ellipsize(gtkLabelPtr, value)
 
@@ -82,7 +82,7 @@ actual interface LabelBase : WidgetBase {
      * If the string contains underlines acting as mnemonics you will have to set the “use-underline” property to
      * *true* in order for the label to display them. Default value is *""* (an empty String).
      */
-    var label: String
+    public var label: String
         get() = gtk_label_get_label(gtkLabelPtr)?.toKString() ?: ""
         set(value) = gtk_label_set_label(gtkLabelPtr, value)
 
@@ -91,18 +91,18 @@ actual interface LabelBase : WidgetBase {
      * the label is not wrapping or "ellipsized". Set this property to *-1* if you don't want to limit the number of
      * lines. Default value is *-1*.
      */
-    var lines: Int
+    public var lines: Int
         get() = gtk_label_get_lines(gtkLabelPtr)
         set(value) {
             if (value >= -1) gtk_label_set_lines(gtkLabelPtr, value)
         }
 
     /** The mnemonic accelerator key for this label. Default value is *16777215*. */
-    val mnemonicKeyval: UInt
+    public val mnemonicKeyval: UInt
         get() = gtk_label_get_mnemonic_keyval(gtkLabelPtr)
 
     /** The widget to be activated when the label's mnemonic key is pressed. */
-    var mnemonicWidget: WidgetBase?
+    public var mnemonicWidget: WidgetBase?
         get() {
             val tmp = gtk_label_get_mnemonic_widget(gtkLabelPtr)
             return if (tmp != null) Widget(tmp) else null
@@ -110,7 +110,7 @@ actual interface LabelBase : WidgetBase {
         set(value) = gtk_label_set_mnemonic_widget(gtkLabelPtr, value?.gtkWidgetPtr)
 
     /** Whether the label text can be selected with the mouse. Default value is *false*. */
-    var selectable: Boolean
+    public var selectable: Boolean
         get() = gtk_label_get_selectable(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_selectable(gtkLabelPtr, if (value) TRUE else FALSE)
 
@@ -121,7 +121,7 @@ actual interface LabelBase : WidgetBase {
      *
      * Default value is *false*.
      */
-    var singleLineMode: Boolean
+    public var singleLineMode: Boolean
         get() = gtk_label_get_single_line_mode(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_single_line_mode(gtkLabelPtr, if (value) TRUE else FALSE)
 
@@ -129,12 +129,12 @@ actual interface LabelBase : WidgetBase {
      * Set this property to *true* to make the label track which links have been visited. It will then apply the
      * GTK_STATE_FLAG_VISITED when rendering this link in addition to GTK_STATE_FLAG_LINK. Default value is *true*.
      */
-    var trackVisitedLinks: Boolean
+    public var trackVisitedLinks: Boolean
         get() = gtk_label_get_track_visited_links(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_track_visited_links(gtkLabelPtr, if (value) TRUE else FALSE)
 
     /** The text of the label includes XML markup. See pango_parse_markup(). Default value is *false*. */
-    var useMarkup: Boolean
+    public var useMarkup: Boolean
         get() = gtk_label_get_use_markup(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_use_markup(gtkLabelPtr, if (value) TRUE else FALSE)
 
@@ -142,12 +142,12 @@ actual interface LabelBase : WidgetBase {
      * If set an underline in the text indicates the next character should be used for the mnemonic accelerator key.
      * Default value is *false*.
      */
-    var useUnderline: Boolean
+    public var useUnderline: Boolean
         get() = gtk_label_get_use_underline(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_use_underline(gtkLabelPtr, if (value) TRUE else FALSE)
 
     /** If set wrap lines if the text becomes too wide. Default value is *false*. */
-    var lineWrap: Boolean
+    public var lineWrap: Boolean
         get() = gtk_label_get_line_wrap(gtkLabelPtr) == TRUE
         set(value) = gtk_label_set_line_wrap(gtkLabelPtr, if (value) TRUE else FALSE)
 
@@ -155,7 +155,7 @@ actual interface LabelBase : WidgetBase {
      * If line wrapping is on (see the [lineWrap] property) this controls how the line wrapping is done. Default value
      * is *PangoWrapMode.PANGO_WRAP_WORD* (wrap on word boundaries).
      */
-    var lineWrapMode: PangoWrapMode
+    public var lineWrapMode: PangoWrapMode
         get() = gtk_label_get_line_wrap_mode(gtkLabelPtr)
         set(value) = gtk_label_set_line_wrap_mode(gtkLabelPtr, value)
 
@@ -164,7 +164,7 @@ actual interface LabelBase : WidgetBase {
      * this to “halign”, which determines how the labels size allocation is positioned in the space available for the
      * label. Default value is *0.5*.
      */
-    var xAlign: Float
+    public var xAlign: Float
         get() = gtk_label_get_xalign(gtkLabelPtr)
         set(value) {
             if (value in (0.0f..1.0f)) gtk_label_set_xalign(gtkLabelPtr, value)
@@ -175,7 +175,7 @@ actual interface LabelBase : WidgetBase {
      * this to “valign”, which determines how the labels size allocation is positioned in the space available for the
      * label. Default value is *0.5*.
      */
-    var yAlign: Float
+    public var yAlign: Float
         get() = gtk_label_get_yalign(gtkLabelPtr)
         set(value) {
             if (value in (0.0f..1.0f)) gtk_label_set_yalign(gtkLabelPtr, value)

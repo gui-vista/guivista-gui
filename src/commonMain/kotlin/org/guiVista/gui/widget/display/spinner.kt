@@ -3,10 +3,10 @@ package org.guiVista.gui.widget.display
 import org.guiVista.gui.widget.WidgetBase
 
 /** Show a spinner animation. */
-expect class Spinner : WidgetBase {
+public expect class Spinner : WidgetBase {
     /** Starts the animation of the spinner. */
-    fun start()
+    public fun start()
 
     /** Stops the animation of the spinner. */
-    fun stop()
+    public fun stop()
 }

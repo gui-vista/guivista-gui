@@ -13,14 +13,14 @@ import org.guiVista.gui.widget.WidgetBase
 
 private const val STATE_SET_SIGNAL = "state-set"
 
-actual class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase {
+public actual class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = switchPtr?.reinterpret() ?: gtk_switch_new()
-    val gtkSwitchPtr: CPointer<GtkSwitch>?
+    public val gtkSwitchPtr: CPointer<GtkSwitch>?
         get() = gtkWidgetPtr?.reinterpret()
-    actual var active: Boolean
+    public actual var active: Boolean
         get() = gtk_switch_get_active(gtkSwitchPtr) == TRUE
         set(value) = gtk_switch_set_active(gtkSwitchPtr, if (value) TRUE else FALSE)
-    actual var state: Boolean
+    public actual var state: Boolean
         get() = gtk_switch_get_state(gtkSwitchPtr) == TRUE
         set(value) = gtk_switch_set_state(gtkSwitchPtr, if (value) TRUE else FALSE)
 
@@ -36,7 +36,7 @@ actual class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectStateSetSignal(slot: CPointer<StateSetSlot>, userData: gpointer): UInt =
+    public fun connectStateSetSignal(slot: CPointer<StateSetSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSwitchPtr, signal = STATE_SET_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -45,7 +45,7 @@ actual class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase {
     }
 }
 
-fun switchWidget(switchPtr: CPointer<GtkSwitch>? = null, init: Switch.() -> Unit): Switch {
+public fun switchWidget(switchPtr: CPointer<GtkSwitch>? = null, init: Switch.() -> Unit): Switch {
     val switch = Switch(switchPtr)
     switch.init()
     return switch
@@ -57,4 +57,4 @@ fun switchWidget(switchPtr: CPointer<GtkSwitch>? = null, init: Switch.() -> Unit
  * 2. state: Boolean
  * 3. userData: gpointer
  */
-typealias StateSetSlot = CFunction<(switch: CPointer<GtkSwitch>, state: Boolean, userData: gpointer) -> Unit>
+public typealias StateSetSlot = CFunction<(switch: CPointer<GtkSwitch>, state: Boolean, userData: gpointer) -> Unit>

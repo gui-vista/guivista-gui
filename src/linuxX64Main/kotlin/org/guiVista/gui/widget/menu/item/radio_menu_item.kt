@@ -8,8 +8,8 @@ import kotlinx.cinterop.reinterpret
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label: String = "",
-                           mnemonic: Boolean = false) : CheckMenuItemBase {
+public actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label: String = "",
+                                  mnemonic: Boolean = false) : CheckMenuItemBase {
     @Suppress("IfThenToElvis")
     override val gtkWidgetPtr: CPointer<GtkWidget>? = when {
         radioMenuItemPtr != null -> radioMenuItemPtr.reinterpret()
@@ -17,7 +17,7 @@ actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null,
         label.isNotEmpty() && !mnemonic -> gtk_radio_menu_item_new_with_label(null, label)
         else -> gtk_radio_menu_item_new(null)
     }
-    val gtkRadioMenuItemPtr: CPointer<GtkRadioMenuItem>?
+    public val gtkRadioMenuItemPtr: CPointer<GtkRadioMenuItem>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /**
@@ -26,7 +26,7 @@ actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null,
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): ULong =
+    public fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkRadioMenuItemPtr, signal = "group-changed", slot = slot, data = userData)
 
     /**
@@ -34,7 +34,7 @@ actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null,
      * @param groupSource A [RadioMenuItem] whose group we are joining, or *null* to remove the [RadioMenuItem] from
      * its current group.
      */
-    fun joinGroup(groupSource: RadioMenuItem?) {
+    public fun joinGroup(groupSource: RadioMenuItem?) {
         gtk_radio_menu_item_join_group(gtkRadioMenuItemPtr, groupSource?.gtkRadioMenuItemPtr)
     }
 
@@ -44,8 +44,8 @@ actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null,
     }
 }
 
-fun radioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label: String = "", mnemonic: Boolean = false,
-                  init: RadioMenuItem.() -> Unit): RadioMenuItem {
+public fun radioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label: String = "", mnemonic: Boolean = false,
+                         init: RadioMenuItem.() -> Unit): RadioMenuItem {
     val menuItem = RadioMenuItem(radioMenuItemPtr = radioMenuItemPtr, label = label, mnemonic = mnemonic)
     menuItem.init()
     return menuItem
@@ -56,4 +56,4 @@ fun radioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label: S
  * 1. radioMenuItem: CPointer<GtkRadioMenuItem>
  * 2. userData: gpointer
  */
-typealias GroupChangedSlot = CFunction<(radioMenuItem: CPointer<GtkRadioMenuItem>, userData: gpointer) -> Unit>
+public typealias GroupChangedSlot = CFunction<(radioMenuItem: CPointer<GtkRadioMenuItem>, userData: gpointer) -> Unit>

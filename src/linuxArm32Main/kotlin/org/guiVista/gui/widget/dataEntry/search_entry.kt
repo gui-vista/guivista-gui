@@ -14,9 +14,9 @@ private const val PREVIOUS_MATCH_SIGNAL = "previous-match"
 private const val STOP_SEARCH_SIGNAL = "stop-search"
 private const val SEARCH_CHANGED_SIGNAL = "search-changed"
 
-actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : EntryBase {
+public actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : EntryBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = searchEntryPtr?.reinterpret() ?: gtk_search_entry_new()
-    val gtkSearchEntryPtr: CPointer<GtkSearchEntry>?
+    public val gtkSearchEntryPtr: CPointer<GtkSearchEntry>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /**
@@ -29,7 +29,7 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
      * @return *GDK_EVENT_STOP* if the key press event resulted in a search beginning or continuing. Otherwise return
      * *GDK_EVENT_PROPAGATE*.
      */
-    fun handleEvent(event: CPointer<GdkEvent>): Boolean =
+    public fun handleEvent(event: CPointer<GdkEvent>): Boolean =
         gtk_search_entry_handle_event(gtkSearchEntryPtr, event) == TRUE
 
     /**
@@ -39,7 +39,7 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectNextMatchSignal(slot: CPointer<NextMatchSlot>, userData: gpointer): UInt =
+    public fun connectNextMatchSignal(slot: CPointer<NextMatchSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSearchEntryPtr, signal = NEXT_MATCH_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -49,7 +49,7 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectPreviousMatchSignal(slot: CPointer<PreviousMatchSlot>, userData: gpointer): UInt =
+    public fun connectPreviousMatchSignal(slot: CPointer<PreviousMatchSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSearchEntryPtr, signal = PREVIOUS_MATCH_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -58,7 +58,7 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectSearchChangedSignal(slot: CPointer<SearchChangedSlot>, userData: gpointer): UInt =
+    public fun connectSearchChangedSignal(slot: CPointer<SearchChangedSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSearchEntryPtr, signal = SEARCH_CHANGED_SIGNAL, slot = slot, data = userData)
 
     /**
@@ -68,7 +68,7 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    fun connectStopSearchSignal(slot: CPointer<StopSearchSlot>, userData: gpointer): UInt =
+    public fun connectStopSearchSignal(slot: CPointer<StopSearchSlot>, userData: gpointer): UInt =
         connectGSignal(obj = gtkSearchEntryPtr, signal = STOP_SEARCH_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -77,7 +77,10 @@ actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : Ent
     }
 }
 
-fun searchEntryWidget(searchEntryPtr: CPointer<GtkSearchEntry>? = null, init: SearchEntry.() -> Unit): SearchEntry {
+public fun searchEntryWidget(
+    searchEntryPtr: CPointer<GtkSearchEntry>? = null,
+    init: SearchEntry.() -> Unit
+): SearchEntry {
     val searchEntry = SearchEntry(searchEntryPtr)
     searchEntry.init()
     return searchEntry
@@ -88,25 +91,25 @@ fun searchEntryWidget(searchEntryPtr: CPointer<GtkSearchEntry>? = null, init: Se
  * 1. entry: CPointer<GtkSearchEntry>
  * 2. userData: gpointer
  */
-typealias NextMatchSlot = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
+public typealias NextMatchSlot = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *previous-match* signal. Arguments:
  * 1. entry: CPointer<GtkSearchEntry>
  * 2. userData: gpointer
  */
-typealias PreviousMatchSlot = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
+public typealias PreviousMatchSlot = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *search-changed* signal. Arguments:
  * 1. entry: CPointer<GtkSearchEntry>
  * 2. userData: gpointer
  */
-typealias SearchChangedSlot = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
+public typealias SearchChangedSlot = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *stop-search* signal. Arguments:
  * 1. entry: CPointer<GtkSearchEntry>
  * 2. userData: gpointer
  */
-typealias StopSearchSlot = CFunction<(app: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
+public typealias StopSearchSlot = CFunction<(app: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
