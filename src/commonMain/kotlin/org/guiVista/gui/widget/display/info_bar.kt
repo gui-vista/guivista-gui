@@ -4,9 +4,6 @@ import org.guiVista.gui.layout.Container
 
 /** Report important messages to the user. */
 public expect class InfoBar : Container {
-    /** Controls whether the action bar shows its contents or not. Default value is *true*. */
-    public var revealed: Boolean
-
     /** Whether to include a standard close button. Default value is *false*. */
     public var showCloseButton: Boolean
 

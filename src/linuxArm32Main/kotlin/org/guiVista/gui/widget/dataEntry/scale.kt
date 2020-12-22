@@ -53,6 +53,14 @@ public actual class Scale(scalePtr: CPointer<GtkScale>? = null,
         super.disconnectSignal(handlerId)
         disconnectGSignal(gtkScalePtr, handlerId.toUInt())
     }
+
+    public fun addMark(value: Double, position: GtkPositionType, markup: String) {
+        gtk_scale_add_mark(scale = gtkScalePtr, value = value, position = position, markup = markup)
+    }
+
+    public actual fun clearMarks() {
+        gtk_scale_clear_marks(gtkScalePtr)
+    }
 }
 
 public fun scaleWidget(scalePtr: CPointer<GtkScale>? = null, init: Scale.() -> Unit): Scale {

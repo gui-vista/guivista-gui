@@ -4,15 +4,18 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guiVista.gui.layout.Container
+import org.guiVista.gui.widget.Widget
+import org.guiVista.gui.widget.WidgetBase
 
 public actual class StatusBar(statusBarPtr: CPointer<GtkStatusbar>? = null) : Container {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = statusBarPtr?.reinterpret() ?: gtk_statusbar_new()
     public val gtkStatusBarPtr: CPointer<GtkStatusbar>?
         get() = gtkWidgetPtr?.reinterpret()
-
-    /** Retrieves the box containing the label widget. */
-    public val messageArea: CPointer<GtkWidget>?
-        get() = gtk_statusbar_get_message_area(gtkStatusBarPtr)
+    public actual val messageArea: WidgetBase?
+        get() {
+            val ptr = gtk_statusbar_get_message_area(gtkStatusBarPtr)
+            return if (ptr != null) Widget(ptr) else null
+        }
 
     public actual infix fun fetchContextId(contextDescription: String): UInt =
         gtk_statusbar_get_context_id(gtkStatusBarPtr, contextDescription)

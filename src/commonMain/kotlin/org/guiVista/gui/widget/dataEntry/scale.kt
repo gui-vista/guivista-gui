@@ -12,4 +12,7 @@ public expect class Scale : Range {
 
     /** Whether the scale has an origin. Default value is *true*. */
     public var hasOrigin: Boolean
+
+    /** Removes any marks that have been added with the addMark function. */
+    public fun clearMarks()
 }

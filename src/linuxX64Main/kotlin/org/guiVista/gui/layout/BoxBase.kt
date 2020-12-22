@@ -5,11 +5,23 @@ import glib2.TRUE
 import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
+import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
 public actual interface BoxBase : Container {
     public val gtkBoxPtr: CPointer<GtkBox>?
         get() = gtkWidgetPtr?.reinterpret()
+
+    /**
+     * A child widget that will be centered with respect to the full width of the box, even if the children at either
+     * side take up different amounts of space.
+     */
+    public var centerWidget: WidgetBase?
+        get() {
+            val ptr = gtk_box_get_center_widget(gtkBoxPtr)
+            return if (ptr != null) Widget(ptr) else null
+        }
+        set(value) = gtk_box_set_center_widget(gtkBoxPtr, value?.gtkWidgetPtr)
 
     /** The amount of space between children. Default value is *0*. */
     public var spacing: Int

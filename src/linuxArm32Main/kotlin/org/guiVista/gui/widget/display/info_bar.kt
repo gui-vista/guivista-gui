@@ -26,9 +26,6 @@ public actual class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Containe
     public var messageType: GtkMessageType
         get() = gtk_info_bar_get_message_type(gtkInfoBarPtr)
         set(value) = gtk_info_bar_set_message_type(gtkInfoBarPtr, value)
-    public actual var revealed: Boolean
-        get() = gtk_info_bar_get_revealed(gtkInfoBarPtr) == TRUE
-        set(value) = gtk_info_bar_set_revealed(gtkInfoBarPtr, if (value) TRUE else FALSE)
     public actual var showCloseButton: Boolean
         get() = gtk_info_bar_get_show_close_button(gtkInfoBarPtr) == TRUE
         set(value) = gtk_info_bar_set_show_close_button(gtkInfoBarPtr, if (value) TRUE else FALSE)

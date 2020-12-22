@@ -1,9 +1,13 @@
 package org.guiVista.gui.widget.display
 
 import org.guiVista.gui.layout.Container
+import org.guiVista.gui.widget.WidgetBase
 
 /** Report messages of minor importance to the user. */
 public expect class StatusBar : Container {
+    /** The box containing the label widget. */
+    public val messageArea: WidgetBase?
+
     /**
      * Gets a new context identifier given a description of the actual context. Note that the description is not shown
      * in the UI.
