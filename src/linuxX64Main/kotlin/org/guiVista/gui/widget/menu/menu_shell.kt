@@ -13,6 +13,11 @@ import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
+private const val CANCEL_SIGNAL = "cancel"
+private const val SELECTION_DONE_SIGNAL = "selection-done"
+private const val ACTIVATE_CURRENT_SIGNAL = "activate-current"
+private const val DEACTIVATE_SIGNAL = "deactivate"
+
 public actual interface MenuShell : Container {
     public val gtkMenuShellPtr: CPointer<GtkMenuShell>?
         get() = gtkWidgetPtr?.reinterpret()
@@ -119,7 +124,7 @@ public actual interface MenuShell : Container {
      * @param userData User data to pass through to the [slot].
      */
     public fun connectCancelSignal(slot: CPointer<CancelSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkMenuShellPtr, signal = "cancel", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuShellPtr, signal = CANCEL_SIGNAL, slot = slot, data = userData)
 
     /**
      * Connects the *selection-done* signal to a [slot] on a [MenuShell]. This signal is used when selection is
@@ -128,7 +133,7 @@ public actual interface MenuShell : Container {
      * @param userData User data to pass through to the [slot].
      */
     public fun connectSelectionDoneSignal(slot: CPointer<SelectionDoneSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkMenuShellPtr, signal = "selection-done", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuShellPtr, signal = SELECTION_DONE_SIGNAL, slot = slot, data = userData)
 
     /**
      * Connects the *activate-current* signal to a [slot] on a [MenuShell]. This signal is used when the current item
@@ -137,7 +142,7 @@ public actual interface MenuShell : Container {
      * @param userData User data to pass through to the [slot].
      */
     public fun connectActivateCurrentSignal(slot: CPointer<ActivateCurrentSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkMenuShellPtr, signal = "activate-current", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuShellPtr, signal = ACTIVATE_CURRENT_SIGNAL, slot = slot, data = userData)
 
     /**
      * Connects the *deactivate* signal to a [slot] on a [MenuShell]. This signal is used when the [MenuShell] is
@@ -146,7 +151,7 @@ public actual interface MenuShell : Container {
      * @param userData User data to pass through to the [slot].
      */
     public fun connectDeactivateSignal(slot: CPointer<DeactivateSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkMenuShellPtr, signal = "deactivate", slot = slot, data = userData)
+        connectGSignal(obj = gtkMenuShellPtr, signal = DEACTIVATE_SIGNAL, slot = slot, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

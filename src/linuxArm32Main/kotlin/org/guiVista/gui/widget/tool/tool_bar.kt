@@ -6,6 +6,7 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guiVista.gui.layout.Container
+import org.guiVista.gui.widget.tool.item.ToolItem
 import org.guiVista.gui.widget.tool.item.ToolItemBase
 
 public actual class ToolBar(toolBarPtr: CPointer<GtkToolbar>? = null) : Container, ToolShell {
@@ -14,6 +15,8 @@ public actual class ToolBar(toolBarPtr: CPointer<GtkToolbar>? = null) : Containe
         get() = gtkWidgetPtr?.reinterpret()
     public val gtkToolBarPtr: CPointer<GtkToolbar>?
         get() = gtkWidgetPtr?.reinterpret()
+    public actual val totalItems: Int
+        get() = gtk_toolbar_get_n_items(gtkToolBarPtr)
 
     /**
      * The size of the icons in a [ToolBar] is normally determined by the [iconSize] setting. When this property is set
@@ -47,9 +50,13 @@ public actual class ToolBar(toolBarPtr: CPointer<GtkToolbar>? = null) : Containe
     /**
      * Fetches the item by [position][pos] on the [ToolBar], or *null* if the [ToolBar] doesn't contain the item.
      * @param pos The position on the [ToolBar].
-     * @return The item on the [ToolBar], or *null* if the item doesn't exist at the [position][pos] on the [ToolBar].
+     * @return The [item][ToolItem] on the [ToolBar], or *null* if the item doesn't exist at the [position][pos] on
+     * the [ToolBar].
      */
-    public fun fetchItemAtPosition(pos: Int): CPointer<GtkToolItem>? = gtk_toolbar_get_nth_item(gtkToolBarPtr, pos)
+    public fun fetchItemAtPosition(pos: Int): ToolItem? {
+        val toolItemPtr = gtk_toolbar_get_nth_item(gtkToolBarPtr, pos)
+        return if (toolItemPtr != null) ToolItem(toolItemPtr) else null
+    }
 
     public actual fun fetchDropIndex(x: Int, y: Int): Int =
         gtk_toolbar_get_drop_index(toolbar = gtkToolBarPtr, x = x, y = y)

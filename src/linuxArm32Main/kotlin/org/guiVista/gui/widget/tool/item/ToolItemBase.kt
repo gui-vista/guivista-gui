@@ -7,6 +7,8 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import org.guiVista.gui.SizeGroup
 import org.guiVista.gui.layout.Container
+import org.guiVista.gui.widget.Widget
+import org.guiVista.gui.widget.WidgetBase
 
 public actual interface ToolItemBase : Container {
     public val gtkToolItemPtr: CPointer<GtkToolItem>?
@@ -134,5 +136,46 @@ public actual interface ToolItemBase : Container {
      */
     public infix fun changeTooltipText(text: String) {
         gtk_tool_item_set_tooltip_text(gtkToolItemPtr, text)
+    }
+
+    /**
+     * Sets the markup text to be displayed as a tooltip on the item.
+     * @param markup The markup text to be used for the tooltip.
+     */
+    public infix fun changeTooltipMarkup(markup: String) {
+        gtk_tool_item_set_tooltip_markup(gtkToolItemPtr, markup)
+    }
+
+    /**
+     * Sets the menu item used in the toolbar overflow menu. The [id] is used to identify the caller of this function,
+     * and should also be used with [fetchProxyMenuItemById].
+     * @param id A string used to identify the menu item.
+     * @param menuItem The menu item to use in the overflow menu.
+     */
+    public fun changeProxyMenuItem(id: String, menuItem: WidgetBase) {
+        gtk_tool_item_set_proxy_menu_item(tool_item = gtkToolItemPtr, menu_item_id = id,
+            menu_item = menuItem.gtkWidgetPtr)
+    }
+
+    /**
+     * If [id] matches the string passed to [changeProxyMenuItem] then return the corresponding menu item.
+     * Custom implementations of [ToolItemBase] should use this function to update their menu item when the
+     * tool item changes. Maps to [gtk_tool_item_get_proxy_menu_item](https://developer.gnome.org/gtk3/3.20/GtkToolItem.html#gtk-tool-item-get-proxy-menu-item).
+     * @param id A String used to identify the menu item.
+     * @return The menu item passed to [changeProxyMenuItem] if the id matches.
+     */
+    public fun fetchProxyMenuItemById(id: String): WidgetBase? {
+        val ptr = gtk_tool_item_get_proxy_menu_item(gtkToolItemPtr, id)
+        return if (ptr != null) Widget(ptr) else null
+    }
+
+    /**
+     * Returns the menu item that was last set by [changeProxyMenuItem], ie. the menu item that is going to appear in
+     * the overflow menu. Maps to [gtk_tool_item_retrieve_proxy_menu_item](https://developer.gnome.org/gtk3/3.20/GtkToolItem.html#gtk-tool-item-retrieve-proxy-menu-item).
+     * @return The menu item that is going to appear in the overflow menu for tool item.
+     */
+    public fun fetchProxyMenuItem(): WidgetBase? {
+        val ptr = gtk_tool_item_retrieve_proxy_menu_item(gtkToolItemPtr)
+        return if (ptr != null) Widget(ptr) else null
     }
 }

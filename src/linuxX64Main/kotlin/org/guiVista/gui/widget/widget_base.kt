@@ -13,6 +13,9 @@ import org.guiVista.core.connectGSignal
 private const val GRAB_FOCUS_SIGNAL = "grab-focus"
 private const val SHOW_SIGNAL = "show"
 private const val HIDE_SIGNAL = "hide"
+private const val CONFIGURE_EVENT_SIGNAL = "configure-event"
+private const val KEY_PRESS_EVENT_SIGNAL = "key-press-event"
+private const val KEY_RELEASE_EVENT_SIGNAL = "key-release-event"
 
 /** Base interface for all widget's (controls). */
 public actual interface WidgetBase : ObjectBase {
@@ -268,6 +271,32 @@ public actual interface WidgetBase : ObjectBase {
         connectGSignal(obj = gtkWidgetPtr, signal = HIDE_SIGNAL, slot = slot, data = userData)
 
     /**
+     * Connects the *configure-event* signal to a [slot] on a [WidgetBase]. This signal is used when the size, position
+     * or stacking of the widget's window has changed. To receive this signal, the GdkWindow associated to the widget
+     * needs to enable the `GDK_STRUCTURE_MASK` mask. GDK will enable this mask automatically for all new windows.
+     */
+    public fun connectConfigureEventSignal(slot: CPointer<ConfigureEventSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = CONFIGURE_EVENT_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *key-press-event* signal to a [slot] on a [WidgetBase]. This signal is used when a key is pressed.
+     * The signal emission will reoccur at the key-repeat rate when the key is kept pressed. To receive this signal the
+     * GdkWindow associated to the widget needs to enable the GDK_KEY_PRESS_MASK mask.
+     *
+     * This signal will be sent to the grab widget if there is one.
+     */
+    public fun connectKeyPressEventSignal(slot: CPointer<KeyPressEventSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = KEY_PRESS_EVENT_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *key-release-event* signal to a [slot] on a [WidgetBase]. This signal is used when a key is
+     * released. To receive this signal the GdkWindow associated to the widget needs to enable the
+     * `GDK_KEY_RELEASE_MASK` mask. This signal will be sent to the grab widget if there is one.
+     */
+    public fun connectKeyReleaseEventSignal(slot: CPointer<KeyReleaseEventSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = KEY_RELEASE_EVENT_SIGNAL, slot = slot, data = userData)
+
+    /**
      * Recursively shows a widget, and any child widgets (if the [widget][WidgetBase] is a
      * [container][org.guiVista.gui.layout.Container]).
      */
@@ -300,3 +329,39 @@ public typealias ShowSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gp
  * 2. userData: gpointer
  */
 public typealias HideSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *configure-event* signal. Arguments:
+ * 1. widget: CPointer<GtkWidget>
+ * 2. event: CPointer<GdkEvent>
+ * 3. userData: gpointer
+ *
+ * Return *true* to stop other handlers from being invoked for the event, otherwise *false* to propagate the event
+ * further.
+ */
+public typealias ConfigureEventSlot =
+    CFunction<(widget: CPointer<GtkWidget>, event: CPointer<GdkEvent>, userData: gpointer) -> Boolean>
+
+/**
+ * The event handler for the *key-press-event* signal. Arguments:
+ * 1. widget: CPointer<GtkWidget>
+ * 2. event: CPointer<GdkEvent>
+ * 3. userData: gpointer
+ *
+ * Return *true* to stop other handlers from being invoked for the event, otherwise *false* to propagate the event
+ * further.
+ */
+public typealias KeyPressEventSlot =
+    CFunction<(widget: CPointer<GtkWidget>, event: CPointer<GdkEvent>, userData: gpointer) -> Boolean>
+
+/**
+ * The event handler for the *key-release-event* signal. Arguments:
+ * 1. widget: CPointer<GtkWidget>
+ * 2. event: CPointer<GdkEvent>
+ * 3. userData: gpointer
+ *
+ * Return *true* to stop other handlers from being invoked for the event, otherwise *false* to propagate the event
+ * further.
+ */
+public typealias KeyReleaseEventSlot =
+    CFunction<(widget: CPointer<GtkWidget>, event: CPointer<GdkEvent>, userData: gpointer) -> Boolean>

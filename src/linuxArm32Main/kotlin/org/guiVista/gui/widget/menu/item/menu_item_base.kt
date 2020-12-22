@@ -11,11 +11,16 @@ import kotlinx.cinterop.toKString
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.layout.Container
-import org.guiVista.gui.widget.WidgetBase
+import org.guiVista.gui.widget.menu.Menu
 
 public actual interface MenuItemBase : Container {
     public val gtkMenuItemPtr: CPointer<GtkMenuItem>?
         get() = gtkWidgetPtr?.reinterpret()
+
+    /** Whether the menu item reserves space for the submenu indicator regardless if it has a submenu or not. */
+    public var reserveIndicator: Boolean
+        get() = gtk_menu_item_get_reserve_indicator(gtkMenuItemPtr) == TRUE
+        set(value) = gtk_menu_item_set_reserve_indicator(gtkMenuItemPtr, if (value) TRUE else FALSE)
 
     /** The text for the child label. Default value is *""* (an empty String). */
     public var label: String
@@ -35,20 +40,18 @@ public actual interface MenuItemBase : Container {
         get() = gtk_menu_item_get_accel_path(gtkMenuItemPtr)?.toKString() ?: ""
         set(value) = gtk_menu_item_set_accel_path(gtkMenuItemPtr, value)
 
-    /**
-     * Sets or replaces the menu item’s submenu, or removes it when a *null* submenu is passed.
-     * @param submenu The submenu to use or *null*.
-     */
-    public fun changeSubmenu(submenu: WidgetBase?) {
-        gtk_menu_item_set_submenu(gtkMenuItemPtr, submenu?.gtkWidgetPtr)
-    }
+    /** Sets whether the menu item appears justified at the right side of a menu bar. Default value is *false*. */
+    public var rightJustified: Boolean
+        get() = gtk_menu_item_get_right_justified(gtkMenuItemPtr) == TRUE
+        set(value) = gtk_menu_item_set_right_justified(gtkMenuItemPtr, if (value) TRUE else FALSE)
 
-    /**
-     * Gets the submenu underneath this menu item, if any.
-     * @return Submenu for this menu item, or *null* if none.
-     * @see gtk_menu_item_set_submenu
-     */
-    public fun fetchSubmenu(): CPointer<GtkWidget>? = gtk_menu_item_get_submenu(gtkMenuItemPtr)
+    /** Sets or replaces the menu item’s submenu, or removes it when a *null* submenu is passed. */
+    public var subMenu: Menu?
+        get() {
+            val ptr = gtk_menu_item_get_submenu(gtkMenuItemPtr)
+            return if (ptr != null) Menu(widgetPtr = ptr) else null
+        }
+        set(value) = gtk_menu_item_set_submenu(gtkMenuItemPtr, value?.gtkWidgetPtr)
 
     /**
      * Connects the *activate* signal to a [slot] on a menu item. This signal is used when the item is activated.

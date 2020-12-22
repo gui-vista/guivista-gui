@@ -1,5 +1,7 @@
 package org.guiVista.gui
 
+import glib2.FALSE
+import glib2.TRUE
 import glib2.g_object_unref
 import gtk3.*
 import kotlinx.cinterop.CPointer
@@ -18,6 +20,9 @@ public actual class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
     public var mode: GtkSizeGroupMode
         get() = gtk_size_group_get_mode(gtkSizeGroupPtr)
         set(value) = gtk_size_group_set_mode(gtkSizeGroupPtr, value)
+    public actual var ignoreHidden: Boolean
+        get() = gtk_size_group_get_ignore_hidden(gtkSizeGroupPtr) == TRUE
+        set(value) = gtk_size_group_set_ignore_hidden(gtkSizeGroupPtr, if (value) TRUE else FALSE)
     public actual val widgets: SinglyLinkedList
         get() = SinglyLinkedList(gtk_size_group_get_widgets(gtkSizeGroupPtr))
 

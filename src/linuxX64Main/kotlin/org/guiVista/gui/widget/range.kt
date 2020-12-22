@@ -144,9 +144,12 @@ public typealias AdjustBoundsSlot = CFunction<(range: CPointer<GtkRange>, value:
  * 2. scroll: GtkScrollType
  * 3. value: double
  * 4. userData: gpointer
+ *
+ * Return *true* to prevent other handlers from being invoked for the signal, otherwise *false* to propagate the
+ * signal further.
  */
 public typealias ChangeValueSlot = CFunction<(range: CPointer<GtkRange>, scroll: GtkScrollType, value: Double,
-                                              userData: gpointer) -> Unit>
+                                              userData: gpointer) -> Boolean>
 
 /**
  * The event handler for the *move-slider* signal. Arguments:

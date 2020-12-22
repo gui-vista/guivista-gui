@@ -29,12 +29,7 @@ public actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? 
     public fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkRadioMenuItemPtr, signal = "group-changed", slot = slot, data = userData)
 
-    /**
-     * Joins a GtkRadioMenuItem object to the group of another GtkRadioMenuItem object.
-     * @param groupSource A [RadioMenuItem] whose group we are joining, or *null* to remove the [RadioMenuItem] from
-     * its current group.
-     */
-    public fun joinGroup(groupSource: RadioMenuItem?) {
+    public actual fun joinGroup(groupSource: RadioMenuItem?) {
         gtk_radio_menu_item_join_group(gtkRadioMenuItemPtr, groupSource?.gtkRadioMenuItemPtr)
     }
 
@@ -44,8 +39,12 @@ public actual class RadioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? 
     }
 }
 
-public fun radioMenuItem(radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null, label: String = "", mnemonic: Boolean = false,
-                         init: RadioMenuItem.() -> Unit): RadioMenuItem {
+public fun radioMenuItem(
+    radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null,
+    label: String = "",
+    mnemonic: Boolean = false,
+    init: RadioMenuItem.() -> Unit
+): RadioMenuItem {
     val menuItem = RadioMenuItem(radioMenuItemPtr = radioMenuItemPtr, label = label, mnemonic = mnemonic)
     menuItem.init()
     return menuItem

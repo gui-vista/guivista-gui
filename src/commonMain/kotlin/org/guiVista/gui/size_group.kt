@@ -12,6 +12,11 @@ public expect class SizeGroup : ObjectBase {
     public val widgets: SinglyLinkedList
 
     /**
+     * Whether unmapped widgets should be ignored when calculating the size.
+     */
+    public var ignoreHidden: Boolean
+
+    /**
      * Adds a [widget] to a [SizeGroup]. In the future the requisition of the [widget] will be determined as the
      * maximum of its requisition, and the requisition of the other widgets in the size group. Whether this applies
      * horizontally, vertically, or in both directions depends on the mode of the [SizeGroup].

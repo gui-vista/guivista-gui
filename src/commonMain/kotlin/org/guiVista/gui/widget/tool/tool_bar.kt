@@ -8,6 +8,9 @@ public expect class ToolBar : Container, ToolShell {
     /** If an arrow should be shown if the toolbar doesn't fit. Default value is *true*. */
     public var showArrow: Boolean
 
+    /** The number of items on the toolbar. */
+    public val totalItems: Int
+
     /**
      * Unsets a toolbar style set with `style` so that user preferences will be used to determine the toolbar style.
      */

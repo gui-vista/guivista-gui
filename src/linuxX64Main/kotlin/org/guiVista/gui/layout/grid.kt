@@ -59,7 +59,13 @@ public actual class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * @param width The number of columns that [child] will span.
      * @param height The number of rows that [child] will span.
      */
-    public fun attachChildNextTo(child: WidgetBase, sibling: WidgetBase, side: GtkPositionType, width: Int, height: Int) {
+    public fun attachChildNextTo(
+        child: WidgetBase,
+        sibling: WidgetBase,
+        side: GtkPositionType,
+        width: Int,
+        height: Int
+    ) {
         gtk_grid_attach_next_to(
             grid = gtkGridPtr,
             child = child.gtkWidgetPtr,
@@ -97,7 +103,8 @@ public actual class Grid(gridPtr: CPointer<GtkGrid>? = null) : Container {
      * @return The baseline position if it is set, otherwise the default value `GTK_BASELINE_POSITION_CENTER` is
      * returned.
      */
-    public fun fetchRowBaselinePosition(row: Int): GtkBaselinePosition = gtk_grid_get_row_baseline_position(gtkGridPtr, row)
+    public fun fetchRowBaselinePosition(row: Int): GtkBaselinePosition =
+        gtk_grid_get_row_baseline_position(gtkGridPtr, row)
 }
 
 public fun gridLayout(gridPtr: CPointer<GtkGrid>? = null, init: Grid.() -> Unit): Grid {
