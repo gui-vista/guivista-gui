@@ -2,11 +2,21 @@ package org.guiVista.gui.widget.dataEntry
 
 import glib2.FALSE
 import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
+import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.widget.WidgetBase
+
+private const val ACTIVATE_SIGNAL = "activate"
+private const val BACKSPACE_SIGNAL = "backspace"
+private const val COPY_CLIPBOARD_SIGNAL = "copy-clipboard"
+private const val CUT_CLIPBOARD_SIGNAL = "cut-clipboard"
+private const val PASTE_CLIPBOARD_SIGNAL = "paste-clipboard"
 
 public actual interface EntryBase : WidgetBase {
     public val gtkEntryPtr: CPointer<GtkEntry>?
@@ -173,4 +183,95 @@ public actual interface EntryBase : WidgetBase {
     public fun grabFocusWithoutSelecting() {
         gtk_entry_grab_focus_without_selecting(gtkEntryPtr)
     }
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkEntryPtr, handlerId.toUInt())
+    }
+
+    /**
+     * Connects the *activate* signal to a [slot] on a [Entry]. This signal is used when the user hits the **Enter**
+     * key. Signal is commonly used by applications to intercept activation of entries. The default bindings for this
+     * signal are all forms of the **Enter** key.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     * @return The handler ID for the [slot].
+     */
+    public fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): UInt =
+        connectGSignal(obj = gtkEntryPtr, signal = ACTIVATE_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *backspace* signal to a [slot] on a [Entry]. This signal is used when when the user asks for it.
+     * The default bindings for this signal are **Backspace** and **Shift-Backspace**.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     * @return The handler ID for the [slot].
+     */
+    public fun connectBackspaceSignal(slot: CPointer<BackspaceSlot>, userData: gpointer): UInt =
+        connectGSignal(obj = gtkEntryPtr, signal = BACKSPACE_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *copy-clipboard* signal to a [slot] on a [Entry]. This signal is used when something is copied to
+     * the clipboard. The default bindings for this signal are **Ctrl-c** and **Ctrl-Insert**.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     * @return The handler ID for the [slot].
+     */
+    public fun connectCopyClipboardSignal(slot: CPointer<CopyClipboardSlot>, userData: gpointer): UInt =
+        connectGSignal(obj = gtkEntryPtr, signal = COPY_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *cut-clipboard* signal to a [slot] on a [Entry]. This signal is used when something is cut from
+     * the clipboard. The default bindings for this signal are **Ctrl-x** and **Shift-Delete**.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     * @return The handler ID for the [slot].
+     */
+    public fun connectCutClipboardSignal(slot: CPointer<CutClipboardSlot>, userData: gpointer): UInt =
+        connectGSignal(obj = gtkEntryPtr, signal = CUT_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *paste-clipboard* signal to a [slot] on a [Entry]. This signal is used when pasting the contents of
+     * the clipboard into the text view. The default bindings for this signal are **Ctrl-v** and **Shift-Insert**.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     * @return The handler ID for the [slot].
+     */
+    public fun connectPasteClipboardSignal(slot: CPointer<PasteClipboardSlot>, userData: gpointer): UInt =
+        connectGSignal(obj = gtkEntryPtr, signal = PASTE_CLIPBOARD_SIGNAL, slot = slot, data = userData)
 }
+
+/**
+ * The event handler for the *activate* signal. Arguments:
+ * 1. entry: CPointer<GtkEntry>
+ * 2. userData: gpointer
+ */
+public typealias ActivateSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *backspace* signal. Arguments:
+ * 1. entry: CPointer<GtkEntry>
+ * 2. userData: gpointer
+ */
+public typealias BackspaceSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *copy-clipboard* signal. Arguments:
+ * 1. entry: CPointer<GtkEntry>
+ * 2. userData: gpointer
+ */
+public typealias CopyClipboardSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *cut-clipboard* signal. Arguments:
+ * 1. entry: CPointer<GtkEntry>
+ * 2. userData: gpointer
+ */
+public typealias CutClipboardSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *paste-clipboard* signal. Arguments:
+ * 1. entry: CPointer<GtkEntry>
+ * 2. userData: gpointer
+ */
+public typealias PasteClipboardSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
