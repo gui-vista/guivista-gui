@@ -12,37 +12,37 @@ public expect class TextBufferIterator : ObjectBase {
      * The character offset of an iterator. Each character in the [buffer] has an offset, starting with 0 for the first
      * character in the buffer. Use `gtk_text_buffer_get_iter_at_offset()` to convert an offset back into an iterator.
      */
-    public val offest: Int
+    public var offest: Int
 
     /**
      * The line number containing the iterator. Lines in the [buffer] are numbered beginning with 0 for the first line
      * in the buffer.
      */
-    public val line: Int
+    public var line: Int
 
     /**
      * The character offset of the iterator, counting from the start of a newline terminated line. The first character
      * on the line has offset 0.
      */
-    public val lineOffset: Int
+    public var lineOffset: Int
 
     /**
      * The byte index of the iterator, counting from the start of a newline terminated line. Remember that [TextBuffer]
      * encodes text in UTF-8, and that characters can require a variable number of bytes to represent.
      */
-    public val lineIndex: Int
+    public var lineIndex: Int
 
     /**
      * The number of bytes from the start of the line to the given iterator, not counting bytes that are invisible due
      * to tags with the **invisible** flag toggled on.
      */
-    public val visibleLineIndex: Int
+    public var visibleLineIndex: Int
 
     /**
      * The offset in characters from the start of the line to the given iterator, not counting characters that are
      * invisible due to tags with the **invisible** flag toggled on.
      */
-    public val visibleLineOffset: Int
+    public var visibleLineOffset: Int
 
     /**
      * The Unicode character at this iterator is returned. If the element at this iterator is a non-character element,
@@ -207,22 +207,6 @@ public expect class TextBufferIterator : ObjectBase {
     public fun canInsert(defaultEditability: Boolean): Boolean
 
     /**
-     * Moves iter forward by one character offset. Note that images embedded in the [buffer] occupy 1 character slot,
-     * so this function may actually move onto an image instead of a character, if you have images in your [buffer]. If
-     * this iterator is the end iterator or one character before it, then this iterator will now point at the end
-     * iterator, and this function returns *false* for convenience when writing loops.
-     * @return A value of *true* if this iterator moved, and is dereferenceable.
-     */
-    public fun forwardChar(): Boolean
-
-    /**
-     * Moves backward by one character offset. Returns *true* if movement was possible; if this iterator was the first
-     * in the [buffer] (character offset 0), then this function returns *false* for convenience when writing loops.
-     * @return A value of *true* if movement was possible.
-     */
-    public fun backwardChar(): Boolean
-
-    /**
      * Moves [count] characters if possible (if [count] would move past the start or end of the [buffer], moves to the
      * start or end of the buffer). The return value indicates whether the new position of this iterator is different
      * from its original position, and dereferenceable (the last iterator in the [buffer] is not dereferenceable). If
@@ -232,7 +216,7 @@ public expect class TextBufferIterator : ObjectBase {
      * @param count Number of characters to move, which may be negative.
      * @return A value of *true* if this iterator moved, and is dereferenceable.
      */
-    public fun forwardMultipleChars(count: Int): Boolean
+    public fun forwardCharacters(count: Int = 1): Boolean
 
     /**
      * Moves [count] characters backward, if possible (if [count] would move past the start or end of the [buffer],
@@ -244,5 +228,108 @@ public expect class TextBufferIterator : ObjectBase {
      * @param count Number of characters to move.
      * @return A value of *true* if this iterator moved, and is dereferenceable.
      */
-    public fun backwardMultipleChars(count: Int): Boolean
+    public fun backwardCharacters(count: Int = 1): Boolean
+
+    /**
+     * Moves [count] lines forward, if possible (if [count] would move past the start or end of the [buffer], moves to
+     * the start or end of the [buffer]). The return value indicates whether this iterator moved onto a
+     * dereferenceable position; if this iterator didn’t move, or moved onto the end iterator, then *false* is
+     * returned. If [count] is *0* then this function does nothing and returns *false*. If [count] is negative, moves
+     * backward by 0 - count lines.
+     *
+     * Maps to [gtk_text_iter_forward_lines][https://developer.gnome.org/gtk3/stable/GtkTextIter.html#gtk-text-iter-forward-lines] function.
+     * @param count Number of lines to move forward.
+     * @return A value of *true* if this iterator moved, and is dereferencable.
+     */
+    public fun forwardLines(count: Int = 1): Boolean
+
+    /**
+     * Moves [count] lines backward, if possible (if [count] would move past the start or end of the [buffer], moves
+     * to the start or end of the [buffer]). The return value indicates whether this iterator moved onto a
+     * dereferenceable position; if this iterator didn’t move, or moved onto the end iterator, then *false* is
+     * returned. If [count] is *0* then this function does nothing and returns *false*. If [count] is negative, moves
+     * forward by 0 - count lines.
+     *
+     * Maps to [gtk_text_iter_backward_lines][https://developer.gnome.org/gtk3/stable/GtkTextIter.html#gtk-text-iter-backward-lines] function.
+     * @param count Number of lines to move backward.
+     * @return A value of *true* if this iterator moved, and is dereferencable.
+     */
+    public fun backwardLines(count: Int = 1): Boolean
+
+    /**
+     * Moves this iterator forward by a single cursor position. Cursor positions are (unsurprisingly) positions where
+     * the cursor can appear. Perhaps surprisingly there may not be a cursor position between all characters. The most
+     * common example for European languages would be a carriage return/newline sequence. For some Unicode characters
+     * the equivalent of say the letter “a” with an accent mark will be represented as two characters, first the
+     * letter then a "combining mark" that causes the accent to be rendered; so the cursor can’t go between those two
+     * characters. See also the PangoLogAttr and `pango_break()` function.
+     * @return A value of *true* if we moved, and the new position is dereferenceable.
+     */
+    public fun forwardCursorPositions(count: Int = 1): Boolean
+
+    /**
+     * Like [forwardCursorPositions] but moves backward.
+     * @return A value of *true* if moved.
+     */
+    public fun backwardCursorPositions(count: Int = 1): Boolean
+
+    /**
+     * Moves backward to the previous sentence start; if iter is already at the start of a sentence, moves backward to
+     * the next one. Sentence boundaries are determined by Pango and should be correct for nearly any language (if not
+     * then the correct fix would be with the Pango text boundary algorithms).
+     * @param count Number of sentences to move.
+     * @return A value of *true* if this iter moved and is not the end iterator.
+     */
+    public fun backwardSentenceStarts(count: Int = 1): Boolean
+
+    /**
+     * Moves forward to the next sentence end. (If this iterator is at the end of a sentence, moves to the next end of
+     * sentence.) Sentence boundaries are determined by Pango, and should be correct for nearly any language (if not
+     * then the correct fix would be with the Pango text boundary algorithms).
+     * @param count Number of sentences to move.
+     * @return A value of *true* if this iterator moved, and is not the end iterator.
+     */
+    public fun forwardSentenceEnds(count: Int = 1): Boolean
+
+    /**
+     * Moves forward to the next visible word end one or more times.
+     * @param count Number of times to move.
+     * @return A value of *true* if this iterator moved, and is not the end iterator.
+     */
+    public fun forwardVisibleWordEnds(count: Int = 1): Boolean
+
+    /**
+     * Moves backward to the previous visible word start one or more times.
+     * @param count Number of times to move.
+     * @return A value of *true* if this iterator moved, and is not the end iterator.
+     */
+    public fun backwardVisibleWordStarts(count: Int = 1): Boolean
+
+    /**
+     * Moves up to count visible cursor positions.
+     * @param count Number of positions to move.
+     * @return A value of *true* if this iterator moved, and the new position is dereferenceable.
+     */
+    public fun forwardVisibleCursorPositions(count: Int = 1): Boolean
+
+    /**
+     * Moves up to count visible cursor positions.
+     * @param count Number of positions to move.
+     * @return A value of *true* if this iterator moved, and the new position is dereferenceable.
+     */
+    public fun backwardVisibleCursorPositions(count: Int = 1): Boolean
+
+    /**
+     * Moves count visible lines forward.
+     * @param count Number of lines to move forward.
+     * @return A value of *true* if this iterator moved, and is dereferenceable.
+     */
+    public fun forwardVisibleLines(count: Int = 1): Boolean
+
+    /**
+     * Moves count visible lines backward.
+     * @param count Number of lines to move backward.
+     * @return A value of *true* if this iterator moved, and is dereferenceable.
+     */
+    public fun backwardVisibleLines(count: Int = 1): Boolean
 }

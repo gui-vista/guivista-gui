@@ -16,23 +16,29 @@ public actual class TextBufferIterator : ObjectBase {
     public actual val buffer: TextBuffer
         get() = TextBuffer(gtk_text_iter_get_buffer(gtkTextIterPtr))
 
-    public actual val offest: Int
+    public actual var offest: Int
         get() = gtk_text_iter_get_offset(gtkTextIterPtr)
+        set(value) = gtk_text_iter_set_offset(gtkTextIterPtr, value)
 
-    public actual val line: Int
+    public actual var line: Int
         get() = gtk_text_iter_get_line(gtkTextIterPtr)
+        set(value) = gtk_text_iter_set_line(gtkTextIterPtr, value)
 
-    public actual val lineOffset: Int
+    public actual var lineOffset: Int
         get() = gtk_text_iter_get_line_offset(gtkTextIterPtr)
+        set(value) = gtk_text_iter_set_line_offset(gtkTextIterPtr, value)
 
-    public actual val lineIndex: Int
+    public actual var lineIndex: Int
         get() = gtk_text_iter_get_line_index(gtkTextIterPtr)
+        set(value) = gtk_text_iter_set_line_index(gtkTextIterPtr, value)
 
-    public actual val visibleLineIndex: Int
+    public actual var visibleLineIndex: Int
         get() = gtk_text_iter_get_visible_line_index(gtkTextIterPtr)
+        set(value) = gtk_text_iter_set_visible_line_index(gtkTextIterPtr, value)
 
-    public actual val visibleLineOffset: Int
+    public actual var visibleLineOffset: Int
         get() = gtk_text_iter_get_visible_line_offset(gtkTextIterPtr)
+        set(value) = gtk_text_iter_set_visible_line_offset(gtkTextIterPtr, value)
 
     public actual val char: UInt
         get() = gtk_text_iter_get_char(gtkTextIterPtr)
@@ -104,13 +110,59 @@ public actual class TextBufferIterator : ObjectBase {
         arena.clear()
     }
 
-    public actual fun forwardChar(): Boolean = gtk_text_iter_forward_char(gtkTextIterPtr) == TRUE
+    public actual fun forwardCharacters(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_forward_char(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_forward_chars(gtkTextIterPtr, count) == TRUE
 
-    public actual fun backwardChar(): Boolean = gtk_text_iter_backward_char(gtkTextIterPtr) == TRUE
+    public actual fun backwardCharacters(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_backward_char(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_backward_chars(gtkTextIterPtr, count) == TRUE
 
-    public actual fun forwardMultipleChars(count: Int): Boolean =
-        gtk_text_iter_forward_chars(gtkTextIterPtr, count) == TRUE
+    public actual fun forwardCursorPositions(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_forward_cursor_position(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_forward_cursor_positions(gtkTextIterPtr, count) == TRUE
 
-    public actual fun backwardMultipleChars(count: Int): Boolean =
-        gtk_text_iter_backward_chars(gtkTextIterPtr, count) == TRUE
+    public actual fun backwardCursorPositions(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_backward_cursor_position(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_backward_cursor_positions(gtkTextIterPtr, count) == TRUE
+
+    public actual fun forwardLines(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_forward_line(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_forward_lines(gtkTextIterPtr, count) == TRUE
+
+    public actual fun backwardLines(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_backward_line(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_backward_lines(gtkTextIterPtr, count) == TRUE
+
+    public actual fun backwardSentenceStarts(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_backward_sentence_start(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_backward_sentence_starts(gtkTextIterPtr, count) == TRUE
+
+    public actual fun forwardSentenceEnds(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_forward_sentence_end(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_forward_sentence_ends(gtkTextIterPtr, count) == TRUE
+
+    public actual fun forwardVisibleWordEnds(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_forward_visible_word_end(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_forward_visible_word_ends(gtkTextIterPtr, count) == TRUE
+
+    public actual fun backwardVisibleWordStarts(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_backward_visible_word_start(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_backward_visible_word_starts(gtkTextIterPtr, count) == TRUE
+
+    public actual fun forwardVisibleCursorPositions(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_forward_visible_cursor_position(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_forward_visible_cursor_positions(gtkTextIterPtr, count) == TRUE
+
+    public actual fun backwardVisibleCursorPositions(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_backward_visible_cursor_position(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_backward_visible_cursor_positions(gtkTextIterPtr, count) == TRUE
+
+    public actual fun forwardVisibleLines(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_forward_visible_line(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_forward_visible_lines(gtkTextIterPtr, count) == TRUE
+
+    public actual fun backwardVisibleLines(count: Int): Boolean =
+        if (count == 1) gtk_text_iter_backward_visible_line(gtkTextIterPtr) == TRUE
+        else gtk_text_iter_backward_visible_lines(gtkTextIterPtr, count) == TRUE
 }
