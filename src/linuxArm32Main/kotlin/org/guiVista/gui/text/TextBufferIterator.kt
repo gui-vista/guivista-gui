@@ -7,6 +7,7 @@ import kotlinx.cinterop.*
 import org.guiVista.core.ObjectBase
 import org.guiVista.core.dataType.SinglyLinkedList
 
+@Suppress("EqualsOrHashCode")
 public actual class TextBufferIterator : ObjectBase {
     private val arena = Arena()
     private val gtkTextIter = arena.alloc<GtkTextIter>()
@@ -97,6 +98,10 @@ public actual class TextBufferIterator : ObjectBase {
 
         public actual fun fetchVisibleText(start: TextBufferIterator, end: TextBufferIterator): String =
             gtk_text_iter_get_visible_text(start.gtkTextIterPtr, end.gtkTextIterPtr)?.toKString() ?: ""
+
+        public actual fun order(first: TextBufferIterator, second: TextBufferIterator) {
+            gtk_text_iter_order(first.gtkTextIterPtr, second.gtkTextIterPtr)
+        }
     }
 
     public actual fun editable(defaultSetting: Boolean): Boolean =
@@ -165,4 +170,24 @@ public actual class TextBufferIterator : ObjectBase {
     public actual fun backwardVisibleLines(count: Int): Boolean =
         if (count == 1) gtk_text_iter_backward_visible_line(gtkTextIterPtr) == TRUE
         else gtk_text_iter_backward_visible_lines(gtkTextIterPtr, count) == TRUE
+
+    public actual fun forwardToEnd() {
+        gtk_text_iter_forward_to_end(gtkTextIterPtr)
+    }
+
+    public actual fun forwardToLineEnd(): Boolean = gtk_text_iter_forward_to_line_end(gtkTextIterPtr) == TRUE
+
+    public actual fun compare(otherIterator: TextBufferIterator): Int =
+        gtk_text_iter_compare(gtkTextIterPtr, otherIterator.gtkTextIterPtr)
+
+    public actual fun inRange(start: TextBufferIterator, end: TextBufferIterator): Boolean =
+        gtk_text_iter_in_range(iter = gtkTextIterPtr, start = start.gtkTextIterPtr, end = end.gtkTextIterPtr) == TRUE
+
+    external override fun equals(other: Any?): Boolean {
+        return if (other !is TextBufferIterator) {
+            throw IllegalArgumentException("The other parameter must be an instance of TextBufferIterator")
+        } else {
+            gtk_text_iter_equal(gtkTextIterPtr, other.gtkTextIterPtr) == TRUE
+        }
+    }
 }

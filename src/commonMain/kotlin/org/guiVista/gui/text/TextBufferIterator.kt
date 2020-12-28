@@ -179,6 +179,16 @@ public expect class TextBufferIterator : ObjectBase {
          * `GtkTextTag` with the **invisible** attribute turned on has been applied to it.
          */
         public fun fetchVisibleText(start: TextBufferIterator, end: TextBufferIterator): String
+
+        /**
+         * Swaps the value of [first], and [second] if [second] comes before [first] in the [buffer]. That is this
+         * ensures that [first], and [second] are in sequence. Most text buffer functions that take a range call this
+         * automatically on your behalf, so there’s no real reason to call it yourself in those cases. There are some
+         * exceptions, such as [inRange] that expect a pre-sorted range.
+         * @param first The first iterator.
+         * @param second The second iterator.
+         */
+        public fun order(first: TextBufferIterator, second: TextBufferIterator)
     }
 
     /**
@@ -332,4 +342,37 @@ public expect class TextBufferIterator : ObjectBase {
      * @return A value of *true* if this iterator moved, and is dereferenceable.
      */
     public fun backwardVisibleLines(count: Int = 1): Boolean
+
+    /**
+     * Moves this iterator forward to the **end iterator**, which points one past the last valid character in the
+     * [buffer]. The [char] property called on the end iterator returns *0*, which is convenient for writing loops.
+     */
+    public fun forwardToEnd()
+
+    /**
+     * Moves this iterator to point to the paragraph delimiter characters, which will be either a newline, a carriage
+     * return, a carriage return/newline in sequence, or the Unicode paragraph separator character. If this iterator is
+     * already at the paragraph delimiter characters then it moves to the paragraph delimiter characters for the next
+     * line. However If this iterator is on the last line in the [buffer], which does not end in paragraph delimiters
+     * then this iterator moves to the end iterator (end of the last line), and returns *false*.
+     * @return A value of *true* if we moved, and the new location is not the end iterator.
+     */
+    public fun forwardToLineEnd(): Boolean
+
+    /**
+     * A qsort()-style function that returns negative if this iterator is less than the
+     * [other iterator][otherIterator], positive if this iterator is greater than the [other iterator][otherIterator],
+     * and *0* if they’re equal. Ordering is in character offset order, i.e. the first character in the [buffer] is
+     * less than the second character in the [buffer].
+     */
+    public fun compare(otherIterator: TextBufferIterator): Int
+
+    /**
+     * Checks whether this iterator falls in the range [start, end]. Note that [start], and [end] **MUST** be in
+     * ascending order.
+     * @param start Start or range.
+     * @param end End of range.
+     * @return A value of *true* if this iterator is in the range.
+     */
+    public fun inRange(start: TextBufferIterator, end: TextBufferIterator): Boolean
 }
