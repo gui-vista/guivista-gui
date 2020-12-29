@@ -24,7 +24,7 @@ repositories {
 }
 
 kotlin {
-    val guiVistaVer = if (!projectSettings.isDevVer) projectSettings.libVer else "${projectSettings.libVer}-dev"
+    val guiVistaVer = if (!projectSettings.isDevVer) projectSettings.depLibVer else "${projectSettings.depLibVer}-dev"
     explicitApi()
     linuxX64("linuxX64") {
         compilations.getByName("main") {
@@ -132,19 +132,21 @@ fun fetchGitLabSettings(): GitLabSettings {
     return GitLabSettings(token = token, projectId = projectId, publishingEnabled = publishingEnabled)
 }
 
-data class ProjectSettings(val libVer: String, val isDevVer: Boolean)
+data class ProjectSettings(val depLibVer: String, val libVer: String, val isDevVer: Boolean)
 
 fun fetchProjectSettings(): ProjectSettings {
     var libVer = "SNAPSHOT"
     var isDevVer = true
+    var depLibVer = ""
     val properties = Properties()
     file("project.properties").inputStream().use { inputStream ->
         properties.load(inputStream)
         libVer = properties.getProperty("libVer") ?: "SNAPSHOT"
+        depLibVer = properties.getProperty("depLibVer") ?: ""
         @Suppress("RemoveSingleExpressionStringTemplate")
         isDevVer = "${properties.getProperty("isDevVer")}".toBoolean()
     }
-    return ProjectSettings(libVer = libVer, isDevVer = isDevVer)
+    return ProjectSettings(libVer = libVer, isDevVer = isDevVer, depLibVer = depLibVer)
 }
 
 val Boolean.intValue: Int
