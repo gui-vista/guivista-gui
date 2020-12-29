@@ -113,8 +113,8 @@ public actual class TextView(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectBackspaceSignal(slot: CPointer<BackspaceSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkTextViewPtr, signal = BACKSPACE_SIGNAL, slot = slot, data = userData)
+    public fun connectBackspaceSignal(slot: CPointer<BackspaceSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = BACKSPACE_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *copy-clipboard* signal to a [slot] on a [TextView]. This signal occurs when a selection is copied
@@ -122,8 +122,8 @@ public actual class TextView(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectCopyClipboardSignal(slot: CPointer<CopyClipboardSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkTextViewPtr, signal = COPY_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+    public fun connectCopyClipboardSignal(slot: CPointer<CopyClipboardSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = COPY_CLIPBOARD_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *cut-clipboard* signal to a [slot] on a [TextView]. This signal occurs when a selection is cut
@@ -131,8 +131,8 @@ public actual class TextView(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectCutClipboardSignal(slot: CPointer<CutClipboardSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkTextViewPtr, signal = CUT_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+    public fun connectCutClipboardSignal(slot: CPointer<CutClipboardSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = CUT_CLIPBOARD_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *insert-at-cursor* signal to a [slot] on a [TextView]. This signal occurs when the user initiates
@@ -140,8 +140,8 @@ public actual class TextView(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectInsertAtCursorSignal(slot: CPointer<InsertAtCursorSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkTextViewPtr, signal = INSERT_AT_CURSOR_SIGNAL, slot = slot, data = userData)
+    public fun connectInsertAtCursorSignal(slot: CPointer<InsertAtCursorSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = INSERT_AT_CURSOR_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *paste-clipboard* signal to a [slot] on a [TextView]. This signal occurs when a selection is
@@ -149,8 +149,8 @@ public actual class TextView(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectPasteClipboardSignal(slot: CPointer<PasteClipboardSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkTextViewPtr, signal = PASTE_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+    public fun connectPasteClipboardSignal(slot: CPointer<PasteClipboardSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = PASTE_CLIPBOARD_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *populate-popup* signal to a [slot] on a [TextView]. This signal occurs before showing the context
@@ -163,8 +163,8 @@ public actual class TextView(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectPopulatePopupSignal(slot: CPointer<PopuplatePopupSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkTextViewPtr, signal = POPULATE_POPUP_SIGNAL, slot = slot, data = userData)
+    public fun connectPopulatePopupSignal(slot: CPointer<PopuplatePopupSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = POPULATE_POPUP_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *select-all* signal to a [slot] on a [TextView]. This signal occurs when selecting or unselecting
@@ -173,8 +173,8 @@ public actual class TextView(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectSelectAllSignal(slot: CPointer<SelectAllSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkTextViewPtr, signal = SELECT_ALL_SIGNAL, slot = slot, data = userData)
+    public fun connectSelectAllSignal(slot: CPointer<SelectAllSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = SELECT_ALL_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

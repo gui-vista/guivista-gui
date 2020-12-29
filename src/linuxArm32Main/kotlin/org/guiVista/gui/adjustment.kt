@@ -74,8 +74,8 @@ public actual class Adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null) :
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectChangedSignal(slot: CPointer<ChangedSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkAdjustmentPtr, signal = CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectChangedSignal(slot: CPointer<ChangedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkAdjustmentPtr, signal = CHANGED_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *value-changed* signal to a [slot] on a [Adjustment]. This signal is used when the [value] property
@@ -83,8 +83,8 @@ public actual class Adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null) :
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkAdjustmentPtr, signal = VALUE_CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkAdjustmentPtr, signal = VALUE_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

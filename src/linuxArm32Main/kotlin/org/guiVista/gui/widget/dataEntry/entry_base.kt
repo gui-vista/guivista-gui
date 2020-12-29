@@ -197,8 +197,8 @@ public actual interface EntryBase : WidgetBase {
      * @param userData User data to pass through to the [slot].
      * @return The handler ID for the [slot].
      */
-    public fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkEntryPtr, signal = ACTIVATE_SIGNAL, slot = slot, data = userData)
+    public fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = ACTIVATE_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *backspace* signal to a [slot] on a [Entry]. This signal is used when when the user asks for it.
@@ -207,8 +207,8 @@ public actual interface EntryBase : WidgetBase {
      * @param userData User data to pass through to the [slot].
      * @return The handler ID for the [slot].
      */
-    public fun connectBackspaceSignal(slot: CPointer<BackspaceSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkEntryPtr, signal = BACKSPACE_SIGNAL, slot = slot, data = userData)
+    public fun connectBackspaceSignal(slot: CPointer<BackspaceSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = BACKSPACE_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *copy-clipboard* signal to a [slot] on a [Entry]. This signal is used when something is copied to
@@ -217,8 +217,8 @@ public actual interface EntryBase : WidgetBase {
      * @param userData User data to pass through to the [slot].
      * @return The handler ID for the [slot].
      */
-    public fun connectCopyClipboardSignal(slot: CPointer<CopyClipboardSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkEntryPtr, signal = COPY_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+    public fun connectCopyClipboardSignal(slot: CPointer<CopyClipboardSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = COPY_CLIPBOARD_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *cut-clipboard* signal to a [slot] on a [Entry]. This signal is used when something is cut from
@@ -227,8 +227,8 @@ public actual interface EntryBase : WidgetBase {
      * @param userData User data to pass through to the [slot].
      * @return The handler ID for the [slot].
      */
-    public fun connectCutClipboardSignal(slot: CPointer<CutClipboardSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkEntryPtr, signal = CUT_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+    public fun connectCutClipboardSignal(slot: CPointer<CutClipboardSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = CUT_CLIPBOARD_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *paste-clipboard* signal to a [slot] on a [Entry]. This signal is used when pasting the contents of
@@ -237,8 +237,8 @@ public actual interface EntryBase : WidgetBase {
      * @param userData User data to pass through to the [slot].
      * @return The handler ID for the [slot].
      */
-    public fun connectPasteClipboardSignal(slot: CPointer<PasteClipboardSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkEntryPtr, signal = PASTE_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+    public fun connectPasteClipboardSignal(slot: CPointer<PasteClipboardSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = PASTE_CLIPBOARD_SIGNAL, slot = slot, data = userData).toULong()
 }
 
 /**

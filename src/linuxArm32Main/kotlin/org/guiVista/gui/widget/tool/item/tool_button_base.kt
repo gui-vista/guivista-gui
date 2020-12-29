@@ -60,8 +60,8 @@ public actual interface ToolButtonBase : ToolItemBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkToolButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData)
+    public fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkToolButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

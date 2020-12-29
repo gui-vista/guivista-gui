@@ -80,8 +80,8 @@ public actual class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, c
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkSpinButtonPtr, signal = VALUE_CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSpinButtonPtr, signal = VALUE_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *change-value* signal to a [slot] on a [SpinButton]. This signal is used when the user initiates a
@@ -91,8 +91,8 @@ public actual class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, c
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectChangeValueSignal(slot: CPointer<ChangeValueSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkSpinButtonPtr, signal = CHANGE_VALUE_SIGNAL, slot = slot, data = userData)
+    public fun connectChangeValueSignal(slot: CPointer<ChangeValueSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSpinButtonPtr, signal = CHANGE_VALUE_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

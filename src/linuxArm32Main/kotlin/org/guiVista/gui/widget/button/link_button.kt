@@ -45,8 +45,8 @@ public actual class LinkButton(
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectActivateLinkSignal(slot: CPointer<ActivateLinkSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkLinkButtonPtr, signal = ACTIVATE_LINK_SIGNAL, slot = slot, data = userData)
+    public fun connectActivateLinkSignal(slot: CPointer<ActivateLinkSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkLinkButtonPtr, signal = ACTIVATE_LINK_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

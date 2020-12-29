@@ -39,8 +39,8 @@ public actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectNextMatchSignal(slot: CPointer<NextMatchSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkSearchEntryPtr, signal = NEXT_MATCH_SIGNAL, slot = slot, data = userData)
+    public fun connectNextMatchSignal(slot: CPointer<NextMatchSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSearchEntryPtr, signal = NEXT_MATCH_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *previous-match* signal to a [slot] on a [SearchEntry]. This signal is a key binding signal that is
@@ -49,8 +49,8 @@ public actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectPreviousMatchSignal(slot: CPointer<PreviousMatchSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkSearchEntryPtr, signal = PREVIOUS_MATCH_SIGNAL, slot = slot, data = userData)
+    public fun connectPreviousMatchSignal(slot: CPointer<PreviousMatchSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSearchEntryPtr, signal = PREVIOUS_MATCH_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *search-changed* signal to a [slot] on a [SearchEntry]. This signal is emitted with a short delay of
@@ -58,8 +58,8 @@ public actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectSearchChangedSignal(slot: CPointer<SearchChangedSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkSearchEntryPtr, signal = SEARCH_CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectSearchChangedSignal(slot: CPointer<SearchChangedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSearchEntryPtr, signal = SEARCH_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *stop-search* signal to a [slot] on a [SearchEntry]. This signal is a key binding signal that is
@@ -68,8 +68,8 @@ public actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectStopSearchSignal(slot: CPointer<StopSearchSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkSearchEntryPtr, signal = STOP_SEARCH_SIGNAL, slot = slot, data = userData)
+    public fun connectStopSearchSignal(slot: CPointer<StopSearchSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSearchEntryPtr, signal = STOP_SEARCH_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

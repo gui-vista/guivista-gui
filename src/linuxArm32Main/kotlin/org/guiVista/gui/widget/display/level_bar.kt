@@ -56,8 +56,8 @@ public actual class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : Widge
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectOffsetChangedSignal(slot: CPointer<OffsetChangedSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkLevelBarPtr, signal = OFFSET_CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectOffsetChangedSignal(slot: CPointer<OffsetChangedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkLevelBarPtr, signal = OFFSET_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

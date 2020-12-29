@@ -71,8 +71,8 @@ public actual interface ButtonBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData)
+    public fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *activate* signal to a [slot] on a button. This signal is an action signal that causes the button
@@ -81,8 +81,8 @@ public actual interface ButtonBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkButtonPtr, signal = ACTIVATE_SIGNAL, slot = slot, data = userData)
+    public fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkButtonPtr, signal = ACTIVATE_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

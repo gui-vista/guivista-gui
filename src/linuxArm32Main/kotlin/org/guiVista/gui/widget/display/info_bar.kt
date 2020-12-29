@@ -44,8 +44,8 @@ public actual class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Containe
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectCloseSignal(slot: CPointer<CloseSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkInfoBarPtr, signal = CLOSE_SIGNAL, slot = slot, data = userData)
+    public fun connectCloseSignal(slot: CPointer<CloseSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkInfoBarPtr, signal = CLOSE_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *response* signal to a [slot] on a [InfoBar]. This signal is used when an action widget
@@ -54,8 +54,8 @@ public actual class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Containe
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectResponseSignal(slot: CPointer<ResponseSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkInfoBarPtr, signal = RESPONSE_SIGNAL, slot = slot, data = userData)
+    public fun connectResponseSignal(slot: CPointer<ResponseSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkInfoBarPtr, signal = RESPONSE_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

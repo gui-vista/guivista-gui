@@ -335,8 +335,8 @@ public actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectActivateDefaultSignal(slot: CPointer<ActivateDefaultSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWindowPtr, signal = ACTIVATE_DEFAULT_SIGNAL, slot = slot, data = userData)
+    public fun connectActivateDefaultSignal(slot: CPointer<ActivateDefaultSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = ACTIVATE_DEFAULT_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *activate-focus* signal to a [slot] on a [WindowBase]. This signal is used when the user activates
@@ -344,8 +344,8 @@ public actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectActivateFocusSignal(slot: CPointer<ActivateFocusSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWindowPtr, signal = ACTIVATE_FOCUS_SIGNAL, slot = slot, data = userData)
+    public fun connectActivateFocusSignal(slot: CPointer<ActivateFocusSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = ACTIVATE_FOCUS_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *enable-debugging* signal to a [slot] on a [WindowBase]. This signal is used when the user enables
@@ -356,8 +356,8 @@ public actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectEnableDebuggingSignal(slot: CPointer<EnableDebuggingSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWindowPtr, signal = ENABLE_DEBUGGING_SIGNAL, slot = slot, data = userData)
+    public fun connectEnableDebuggingSignal(slot: CPointer<EnableDebuggingSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = ENABLE_DEBUGGING_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *keys-changed* signal to a [slot] on a [WindowBase]. This signal is used when the set of
@@ -365,8 +365,8 @@ public actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectKeysChangedSignal(slot: CPointer<KeysChangedSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWindowPtr, signal = KEYS_CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectKeysChangedSignal(slot: CPointer<KeysChangedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = KEYS_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *set-focus* signal to a [slot] on a [WindowBase]. This signal is used when focus is set on a widget
@@ -374,8 +374,8 @@ public actual interface WindowBase : Container {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectSetFocusSignal(slot: CPointer<SetFocusSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWindowPtr, signal = SET_FOCUS_SIGNAL, slot = slot, data = userData)
+    public fun connectSetFocusSignal(slot: CPointer<SetFocusSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = SET_FOCUS_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

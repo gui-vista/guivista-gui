@@ -9,6 +9,7 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
 import org.guiVista.core.ObjectBase
 import org.guiVista.core.connectGSignal
+import org.guiVista.core.disconnectGSignal
 
 private const val GRAB_FOCUS_SIGNAL = "grab-focus"
 private const val SHOW_SIGNAL = "show"
@@ -251,32 +252,32 @@ public actual interface WidgetBase : ObjectBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectGrabFocusSignal(slot: CPointer<GrabFocusSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWidgetPtr, signal = GRAB_FOCUS_SIGNAL, slot = slot, data = userData)
+    public fun connectGrabFocusSignal(slot: CPointer<GrabFocusSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = GRAB_FOCUS_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *show* signal to a [slot] on a [WidgetBase]. This signal is used when a widget is shown.
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectShowSignal(slot: CPointer<ShowSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWidgetPtr, signal = SHOW_SIGNAL, slot = slot, data = userData)
+    public fun connectShowSignal(slot: CPointer<ShowSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = SHOW_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *hide* signal to a [slot] on a [WidgetBase]. This signal is used when a widget is hidden.
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectHideSignal(slot: CPointer<HideSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWidgetPtr, signal = HIDE_SIGNAL, slot = slot, data = userData)
+    public fun connectHideSignal(slot: CPointer<HideSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = HIDE_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *configure-event* signal to a [slot] on a [WidgetBase]. This signal is used when the size, position
      * or stacking of the widget's window has changed. To receive this signal, the GdkWindow associated to the widget
      * needs to enable the `GDK_STRUCTURE_MASK` mask. GDK will enable this mask automatically for all new windows.
      */
-    public fun connectConfigureEventSignal(slot: CPointer<ConfigureEventSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWidgetPtr, signal = CONFIGURE_EVENT_SIGNAL, slot = slot, data = userData)
+    public fun connectConfigureEventSignal(slot: CPointer<ConfigureEventSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = CONFIGURE_EVENT_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *key-press-event* signal to a [slot] on a [WidgetBase]. This signal is used when a key is pressed.
@@ -285,16 +286,21 @@ public actual interface WidgetBase : ObjectBase {
      *
      * This signal will be sent to the grab widget if there is one.
      */
-    public fun connectKeyPressEventSignal(slot: CPointer<KeyPressEventSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWidgetPtr, signal = KEY_PRESS_EVENT_SIGNAL, slot = slot, data = userData)
+    public fun connectKeyPressEventSignal(slot: CPointer<KeyPressEventSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = KEY_PRESS_EVENT_SIGNAL, slot = slot, data = userData).toULong()
 
     /**
      * Connects the *key-release-event* signal to a [slot] on a [WidgetBase]. This signal is used when a key is
      * released. To receive this signal the GdkWindow associated to the widget needs to enable the
      * `GDK_KEY_RELEASE_MASK` mask. This signal will be sent to the grab widget if there is one.
      */
-    public fun connectKeyReleaseEventSignal(slot: CPointer<KeyReleaseEventSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkWidgetPtr, signal = KEY_RELEASE_EVENT_SIGNAL, slot = slot, data = userData)
+    public fun connectKeyReleaseEventSignal(slot: CPointer<KeyReleaseEventSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = KEY_RELEASE_EVENT_SIGNAL, slot = slot, data = userData).toULong()
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkWidgetPtr, handlerId.toUInt())
+    }
 
     /**
      * Recursively shows a widget, and any child widgets (if the [widget][WidgetBase] is a

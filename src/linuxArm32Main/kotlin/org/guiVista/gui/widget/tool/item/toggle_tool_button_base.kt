@@ -25,8 +25,8 @@ public actual interface ToggleToolButtonBase : ToolButtonBase {
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectToggledSignal(slot: CPointer<ToggledSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkToggleToolButtonPtr, signal = TOGGLED_SIGNAL, slot = slot, data = userData)
+    public fun connectToggledSignal(slot: CPointer<ToggledSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkToggleToolButtonPtr, signal = TOGGLED_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)

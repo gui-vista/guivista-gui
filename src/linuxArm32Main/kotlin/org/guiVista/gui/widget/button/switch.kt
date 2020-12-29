@@ -36,8 +36,8 @@ public actual class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase 
      * @param slot The event handler for the signal.
      * @param userData User data to pass through to the [slot].
      */
-    public fun connectStateSetSignal(slot: CPointer<StateSetSlot>, userData: gpointer): UInt =
-        connectGSignal(obj = gtkSwitchPtr, signal = STATE_SET_SIGNAL, slot = slot, data = userData)
+    public fun connectStateSetSignal(slot: CPointer<StateSetSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSwitchPtr, signal = STATE_SET_SIGNAL, slot = slot, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
