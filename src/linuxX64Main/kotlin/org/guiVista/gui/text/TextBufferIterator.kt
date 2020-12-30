@@ -183,7 +183,7 @@ public actual class TextBufferIterator : ObjectBase {
     public actual fun inRange(start: TextBufferIterator, end: TextBufferIterator): Boolean =
         gtk_text_iter_in_range(iter = gtkTextIterPtr, start = start.gtkTextIterPtr, end = end.gtkTextIterPtr) == TRUE
 
-    external override fun equals(other: Any?): Boolean {
+    override fun equals(other: Any?): Boolean {
         return if (other !is TextBufferIterator) {
             throw IllegalArgumentException("The other parameter must be an instance of TextBufferIterator")
         } else {
