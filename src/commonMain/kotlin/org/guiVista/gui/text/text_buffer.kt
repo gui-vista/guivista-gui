@@ -43,6 +43,18 @@ public expect class TextBuffer : ObjectBase {
     public fun changeText(text: String)
 
     /**
+     * Returns the text in the range [start, end. Excludes undisplayed text (text marked with tags that set the
+     * invisibility attribute) if [includeHiddenChars] is *false*. Does not include characters representing embedded
+     * images, so byte and character indexes into the returned string do not correspond to byte, and character indexes
+     * into the buffer. Contrast with [fetchSlice].
+     * @param start Start of a range.
+     * @param end End of a range.
+     * @param includeHiddenChars Whether to include invisible text.
+     * @return An allocated UTF-8 string.
+     */
+    public fun fetchText(start: TextBufferIterator, end: TextBufferIterator, includeHiddenChars: Boolean): String
+
+    /**
      * Deletes the range between the **insert**, and **selection_bound** marks. That is the currently selected text.
      * If interactive is *true* then the editability of the selection will be considered (users can’t delete
      * uneditable text).

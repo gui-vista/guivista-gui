@@ -50,6 +50,18 @@ public actual class TextBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null) :
         gtk_text_buffer_set_text(buffer = gtkTextBufferPtr, text = text, len = -1)
     }
 
+    public actual fun fetchText(
+        start: TextBufferIterator,
+        end: TextBufferIterator,
+        includeHiddenChars: Boolean
+    ): String =
+        gtk_text_buffer_get_text(
+            buffer = gtkTextBufferPtr,
+            start = start.gtkTextIterPtr,
+            end = end.gtkTextIterPtr,
+            include_hidden_chars = if (includeHiddenChars) TRUE else FALSE
+        )?.toKString() ?: ""
+
     public actual fun deleteSelection(interactive: Boolean, defaultEditable: Boolean): Boolean =
         gtk_text_buffer_delete_selection(
             buffer = gtkTextBufferPtr,
