@@ -6,7 +6,9 @@ import glib2.gpointer
 import gtk3.*
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.pointed
 import kotlinx.cinterop.toKString
+import org.guiVista.core.Error
 import org.guiVista.core.ObjectBase
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.dataType.SinglyLinkedList
@@ -15,6 +17,7 @@ import org.guiVista.gui.FileFilter
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 import org.guiVista.gui.widget.dataEntry.Scale
+import org.guiVista.io.File
 
 private const val CONFIRM_OVERWRITE_SIGNAL = "confirm-overwrite"
 private const val CURRENT_FOLDER_CHANGED_SIGNAL = "current-folder-changed"
@@ -24,6 +27,20 @@ private const val UPDATE_PREVIEW_SIGNAL = "update-preview"
 
 public actual interface FileChooser : ObjectBase {
     public val gtkFileChooserPtr: CPointer<GtkFileChooser>?
+
+    /** The current folder of chooser as a [File]. */
+    public val currentFolderFile: File
+        get() = File.fromFilePtr(gtk_file_chooser_get_current_folder_file(gtkFileChooserPtr))
+
+    /**
+     * The [File] that should be previewed in a custom preview Internal function. See [previewUri] property. Returns
+     * *null* if no file is selected, or the [File] for the file to preview. Close with [File.close].
+     */
+    public val previewFile: File?
+        get() {
+            val ptr = gtk_file_chooser_get_preview_file(gtkFileChooserPtr)
+            return if (ptr != null) File.fromFilePtr(ptr) else null
+        }
 
     /** The current name in the file selector. */
     public var currentName: String
@@ -339,6 +356,184 @@ public actual interface FileChooser : ObjectBase {
      */
     public fun fetchCurrentFolderUri(): String =
         gtk_file_chooser_get_current_folder_uri(gtkFileChooserPtr)?.toKString() ?: ""
+
+    /**
+     * Adds [filter] to the list of filters that the user can select between. When a filter is selected, only files that
+     * are passed by that filter are displayed. Note that the chooser takes ownership of the filter, so you have to
+     * ref and sink it if you want to keep a reference.
+     * @param filter A file filter.
+     */
+    public infix fun addFilter(filter: FileFilter) {
+        gtk_file_chooser_add_filter(gtkFileChooserPtr, filter.gtkFileFilterPtr)
+    }
+
+    /**
+     * Removes [filter] from the list of filters that the user can select between.
+     * @param filter A file filter.
+     */
+    public infix fun removeFilter(filter: FileFilter) {
+        gtk_file_chooser_remove_filter(gtkFileChooserPtr, filter.gtkFileFilterPtr)
+    }
+
+    /**
+     * Lists the current set of user selectable filters.
+     * @see addFilter
+     * @see removeFilter
+     * @return A list containing the current set of user selectable filters. The contents of the list are owned by
+     * GTK+, but you must close the list itself with [SinglyLinkedList.close] when you are done with it.
+     */
+    public fun listFilters(): SinglyLinkedList = SinglyLinkedList(gtk_file_chooser_list_filters(gtkFileChooserPtr))
+
+    /**
+     * Adds a folder to be displayed with the shortcut folders in a file chooser. Note that shortcut folders do not get
+     * saved, as they are provided by the application. For example you can use this to add a
+     * “/usr/share/mydrawprogram/Clipart” folder to the volume list.
+     * @param folder The filename of the folder to add.
+     * @param error The location to store error, or *null*.
+     * @return A value of *true* if the folder could be added successfully, *false* otherwise. In the latter case the
+     * error will be set as appropriate.
+     */
+    public fun addShortcutFolder(folder: String, error: Error? = null): Boolean {
+        // TODO: Cover error handling.
+        return gtk_file_chooser_add_shortcut_folder(
+            chooser = gtkFileChooserPtr,
+            folder = folder,
+            error = null
+        ) == TRUE
+    }
+
+    /**
+     * Removes a folder from a file chooser’s list of shortcut folders.
+     * @param folder The filename of the folder to remove.
+     * @param error The location to store error, or *null*.
+     * @return A value of *true* if the operation succeeds, *false* otherwise. In the latter case, the error will be
+     * set as appropriate.
+     * @see addShortcutFolder
+     */
+    public fun removeShortcutFolder(folder: String, error: Error? = null): Boolean {
+        // TODO: Cover error handling.
+        return gtk_file_chooser_remove_shortcut_folder(
+            chooser = gtkFileChooserPtr,
+            folder = folder,
+            error = null
+        ) == TRUE
+    }
+
+    /**
+     * Queries the list of shortcut folders in the file chooser as set by [addShortcutFolder].
+     * @return A list of folder filenames, or *null* if there are no shortcut folders. Close the returned list with
+     * [SinglyLinkedList.close].
+     */
+    public fun listShortcutFolders(): SinglyLinkedList? {
+        val ptr = gtk_file_chooser_list_shortcut_folders(gtkFileChooserPtr)
+        return if (ptr != null) SinglyLinkedList(ptr) else null
+    }
+
+    /**
+     * Adds a folder URI to be displayed with the shortcut folders in a file chooser. Note that shortcut folders do not
+     * get saved, as they are provided by the application. For example you can use this to add a
+     * “file:///usr/share/mydrawprogram/Clipart” folder to the volume list.
+     * @param uri URI of the folder to add.
+     * @param error The location to store error, or *null*.
+     * @return A value of *true* if the folder could be added successfully, *false* otherwise. In the latter case the
+     * error will be set as appropriate.
+     */
+    public fun addShortcutFolderUri(uri: String, error: Error? = null): Boolean {
+        // TODO: Cover error handling.
+        return gtk_file_chooser_add_shortcut_folder_uri(chooser = gtkFileChooserPtr, error = null, uri = uri) == TRUE
+    }
+
+    /**
+     * Removes a folder URI from a file chooser’s list of shortcut folders.
+     * @param uri URI of the folder to remove.
+     * @param error The location to store error, or *null*.
+     * @return A value of *true* if the operation succeeds, *false* otherwise. In the latter case the error will be set
+     * as appropriate.
+     * @see addShortcutFolderUri
+     */
+    public fun removeShortcutFolderUri(uri: String, error: Error? = null): Boolean {
+        // TODO: Cover error handling.
+        return gtk_file_chooser_remove_shortcut_folder_uri(chooser = gtkFileChooserPtr, error = null, uri = uri) == TRUE
+    }
+
+    /**
+     * Queries the list of shortcut folders in the file chooser, as set by [addShortcutFolderUri].
+     * @return A list of folder URIs, or *null* if there are no shortcut folders. Close the returned list with
+     * [SinglyLinkedList.close].
+     */
+    public fun listAllShortcutFolderUris(): SinglyLinkedList? {
+        val ptr = gtk_file_chooser_list_shortcut_folder_uris(gtkFileChooserPtr)
+        return if (ptr != null) SinglyLinkedList(ptr) else null
+    }
+
+    /**
+     * Gets the [File] for the currently selected file in the file selector. If multiple files are selected, one of the
+     * files will be returned at random. If the file chooser is in folder mode then this function returns the selected
+     * folder.
+     * @return A selected [File]. You own the returned file; use [File.close] to close it.
+     */
+    public fun fetchFile(): File = File.fromFilePtr(gtk_file_chooser_get_file(gtkFileChooserPtr))
+
+    /**
+     * Lists all the selected files and sub folders in the current folder of chooser as [File]. An internal function,
+     * see `gtk_file_chooser_get_uris()`.
+     */
+    public fun fetchAllFiles(): SinglyLinkedList = SinglyLinkedList(gtk_file_chooser_get_files(gtkFileChooserPtr))
+
+    /**
+     * Selects the file referred to by file. An internal function.
+     * @param file The file to select.
+     * @param error The location to store error, or *null*.
+     * @return A value of *true* if the [file] is selected.
+     * @see selectUri
+     */
+    public fun selectFile(file: File, error: Error? = null): Boolean {
+        // TODO: Cover error handling.
+        return gtk_file_chooser_select_file(chooser = gtkFileChooserPtr, file = file.gFilePtr, error = null) == TRUE
+    }
+
+    /**
+     * Sets the current folder for chooser from a [file]. Internal function.
+     * @param file The file for the new folder
+     * @param error The location to store error, or *null*.
+     * @return A value of *true* if the folder could be changed successfully, *false* otherwise.
+     * @see changeCurrentFolderUri
+     */
+    public fun changeCurrentFolderFile(file: File, error: Error? = null): Boolean {
+        // TODO: Cover error handling.
+        return gtk_file_chooser_set_current_folder_file(
+            chooser = gtkFileChooserPtr,
+            error = null,
+            file = file.gFilePtr
+        ) == TRUE
+    }
+
+    /**
+     * Sets file as the current filename for the file chooser, by changing to the file’s parent folder and actually
+     * selecting the file in the list. If the chooser is in `GTK_FILE_CHOOSER_ACTION_SAVE` mode then the file’s base
+     * name will also appear in the dialog’s file name entry. If the file name isn’t in the current folder of chooser,
+     * then the current folder of chooser will be changed to the folder containing filename. This is equivalent to a
+     * sequence of [unselectAll] followed by [selectFileName].
+     *
+     * Note that the file **MUST** exist, or nothing will be done except for the directory change. If you are
+     * implementing a save dialog, you should use this function if you already have a file name to which the user may
+     * save; for example, when the user opens an existing file and then does *Save As...*.
+     * @param file The file to set as current.
+     * @param error The location to store the error, or *null* to ignore errors.
+     * @return A value of *true* if the file has been set.
+     */
+    public fun changeFile(file: File, error: Error? = null): Boolean {
+        // TODO: Cover error handling.
+        return gtk_file_chooser_set_file(chooser = gtkFileChooserPtr, error = null, file = file.gFilePtr) == TRUE
+    }
+
+    /**
+     * Unselects the file referred to by file. If the file is not in the current directory, does not exist, or is
+     * otherwise not currently selected, does nothing.
+     */
+    public fun unselectFile(file: File) {
+        gtk_file_chooser_unselect_file(gtkFileChooserPtr, file.gFilePtr)
+    }
 }
 
 /**
