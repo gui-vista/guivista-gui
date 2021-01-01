@@ -2,14 +2,40 @@ package org.guiVista.gui.dialog
 
 import glib2.FALSE
 import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
+import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.toKString
+import org.guiVista.core.ObjectBase
+import org.guiVista.core.connectGSignal
+import org.guiVista.core.dataType.SinglyLinkedList
+import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.FileFilter
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-public actual interface FileChooser {
+private const val CONFIRM_OVERWRITE_SIGNAL = "confirm-overwrite"
+private const val CURRENT_FOLDER_CHANGED_SIGNAL = "current-folder-changed"
+private const val FILE_ACTIVATED_SIGNAL = "file-activated"
+private const val SELECTION_CHANGED_SIGNAL = "selection-changed"
+private const val UPDATE_PREVIEW_SIGNAL = "update-preview"
+
+public actual interface FileChooser : ObjectBase {
     public val gtkFileChooserPtr: CPointer<GtkFileChooser>?
+
+    /** The current name in the file selector. */
+    public var currentName: String
+        get() = gtk_file_chooser_get_current_name(gtkFileChooserPtr)?.toKString() ?: ""
+        set(value) = gtk_file_chooser_set_current_name(gtkFileChooserPtr, value)
+
+    /** The filename to preview. Will return *""* if no file was selected. */
+    public val previewFileName: String
+        get() = gtk_file_chooser_get_preview_filename(gtkFileChooserPtr)?.toKString() ?: ""
+
+    /** The URI that should be previewed in a custom preview widget. See [previewWidget].  */
+    public val previewUri: String
+        get() = gtk_file_chooser_get_preview_uri(gtkFileChooserPtr)?.toKString() ?: ""
 
     /**
      * The type of operation that the file selector is performing. Default value is *GTK_FILE_CHOOSER_ACTION_OPEN*.
@@ -79,7 +105,274 @@ public actual interface FileChooser {
         set(value) = gtk_file_chooser_set_show_hidden(gtkFileChooserPtr, if (value) TRUE else FALSE)
 
     /** Whether to display a stock label with the name of the previewed file. Default value is *true*. */
-    public var userPreviewLabel: Boolean
+    public var usePreviewLabel: Boolean
         get() = gtk_file_chooser_get_use_preview_label(gtkFileChooserPtr) == TRUE
         set(value) = gtk_file_chooser_set_use_preview_label(gtkFileChooserPtr, if (value) TRUE else FALSE)
+
+    /**
+     * Gets the filename for the currently selected file in the file selector. The filename is returned as an absolute
+     * path. If multiple files are selected, one of the filenames will be returned at random. If the file chooser is in
+     * folder mode then this function returns the selected folder.
+     * @return The currently selected filename, or *""* if no file is selected, or the selected file can't be
+     * represented with a local filename.
+     */
+    public fun fetchFileName(): String = gtk_file_chooser_get_filename(gtkFileChooserPtr)?.toKString() ?: ""
+
+    /**
+     * Sets filename as the current filename for the file chooser, by changing to the file’s parent folder and actually
+     * selecting the file in list; all other files will be unselected. If the chooser is in
+     * `GTK_FILE_CHOOSER_ACTION_SAVE` mode then the file’s base name will also appear in the dialog’s file name entry.
+     *
+     * Note that the file **MUST** exist or nothing will be done except for the directory change. You should use this
+     * function only when implementing a save dialog for which you already have a file name to which the user may save.
+     * For example when the user opens an existing file, and then does Save As... to save a copy, or a modified version.
+     * @param fileName The filename to set as current.
+     * @return A value of *true* if the filename has been changed.
+     */
+    public fun changeFileName(fileName: String): Boolean =
+        gtk_file_chooser_set_filename(gtkFileChooserPtr, fileName) == TRUE
+
+    /**
+     * Selects a filename. If the file name isn’t in the current folder of chooser, then the current folder of chooser
+     * will be changed to the folder containing the filename.
+     * @param fileName The filename to set.
+     * @return A value of *true* if the filename has been selected.
+     */
+    public fun selectFileName(fileName: String): Boolean =
+        gtk_file_chooser_select_filename(gtkFileChooserPtr, fileName) == TRUE
+
+    /**
+     * Unselects a currently selected filename. If the filename is not in the current directory, does not exist, or is
+     * otherwise not currently selected, does nothing.
+     * @param fileName The filename to unselect.
+     */
+    public fun unselectFileName(fileName: String) {
+        gtk_file_chooser_unselect_filename(gtkFileChooserPtr, fileName)
+    }
+
+    /** Selects all the files in the current folder of a file chooser. */
+    public fun selectAll() {
+        gtk_file_chooser_select_all(gtkFileChooserPtr)
+    }
+
+    /** Unselects all the files in the current folder of a file chooser. */
+    public fun unselectAll() {
+        gtk_file_chooser_unselect_all(gtkFileChooserPtr)
+    }
+
+    /**
+     * Lists all the selected files and sub folders in the current folder of the [FileChooser]. The returned names are
+     * full absolute paths. If files in the current folder cannot be represented as local filenames they will be
+     * ignored. (See gtk_file_chooser_get_uris())
+     */
+    public fun fetchFileNames(): SinglyLinkedList =
+        SinglyLinkedList(gtk_file_chooser_get_filenames(gtkFileChooserPtr))
+
+    /**
+     * Connects the *confirm-overwrite* signal to a [slot] on a [FileChooser]. This signal occurs when it is
+     * appropriate to present a confirmation dialog when the user has selected a file name that already exists. Note
+     * the signal only gets emitted when the file chooser is in `GTK_FILE_CHOOSER_ACTION_SAVE` mode.
+     *
+     * Most applications just need to enable the [doOverwriteConfirmation] property, and they will automatically get a
+     * stock confirmation dialog. Applications which need to customize this behavior should do that, and also connect
+     * to the **confirm-overwrite** signal. A signal handler for this signal **MUST** return a
+     * `GtkFileChooserConfirmation` value, which indicates the action to take. If the handler determines that the user
+     * wants to select a different filename, it should return `GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN`. However if
+     * it determines that the user is satisfied with his choice of file name, it should return
+     * `GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME`. On the other hand, if it determines that the stock confirmation
+     * dialog should be used then it should return GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     */
+    public fun connectConfirmOverwriteSignal(slot: CPointer<ConfirmOverwriteSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = CONFIRM_OVERWRITE_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *current-folder-changed* signal to a [slot] on a [FileChooser]. This signal occurs when the current
+     * folder in a [FileChooser] changes. This can happen due to the user performing some action that changes folders,
+     * such as selecting a bookmark or visiting a folder on the file list. It can also happen as a result of calling a
+     * function to explicitly change the current folder in a file chooser.
+     *
+     * Normally you do not need to connect to this signal, unless you need to keep track of which folder a file chooser
+     * is showing.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     */
+    public fun connectCurrentFolderChangedSignal(slot: CPointer<CurrentFolderChangedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = CURRENT_FOLDER_CHANGED_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *file-activated* signal to a [slot] on a [FileChooser]. This signal occurs when the user
+     * "activates" a file in the file chooser. This can happen by double-clicking on a file in the file list, or by
+     * pressing **Enter**. Normally you do not need to connect to this signal. It is used internally by
+     * [GtkFileChooserDialog] to know when to activate the default button in the dialog.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     */
+    public fun connectFileActivatedSignal(slot: CPointer<FileActivatedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = FILE_ACTIVATED_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *selection-changed* signal to a [slot] on a [FileChooser]. This signal occurs when there is a
+     * change in the set of selected files in a [FileChooser]. This can happen when the user modifies the selection
+     * with the mouse or the keyboard, or when explicitly calling functions to change the selection.
+     *
+     * Normally you do not need to connect to this signal as it is easier to wait for the file chooser to finish
+     * running, and then to get the list of selected files using the functions mentioned below.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     */
+    public fun connectSelectionChangedSignal(slot: CPointer<SelectionChangedSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = SELECTION_CHANGED_SIGNAL, slot = slot, data = userData)
+
+    /**
+     * Connects the *update-preview* signal to a [slot] on a [FileChooser]. This signal occurs when the preview in a
+     * file chooser should be regenerated. For example this can happen when the currently selected file changes. You
+     * should use this signal if you want your file chooser to have a preview widget. Once you have installed a preview
+     * widget with [previewWidget], you should update it when this signal is emitted. You can use the functions
+     * `gtk_file_chooser_get_preview_filename()`, or `gtk_file_chooser_get_preview_uri()` to get the name of the file
+     * to preview. Your widget may not be able to preview all kinds of files; your callback **MUST** set the
+     * [previewWidgetActive] property to inform the file chooser about whether the preview was generated successfully
+     * or not.
+     * @param slot The event handler for the signal.
+     * @param userData User data to pass through to the [slot].
+     */
+    public fun connectUpdatePreviewSignal(slot: CPointer<UpdatePreviewSlot>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = UPDATE_PREVIEW_SIGNAL, slot = slot, data = userData)
+
+    override fun disconnectSignal(handlerId: ULong) {
+        super.disconnectSignal(handlerId)
+        disconnectGSignal(gtkFileChooserPtr, handlerId)
+    }
+
+    /**
+     * Sets the current folder for chooser from a local filename. The user will be shown the full contents of the
+     * current folder, plus user interface elements for navigating to other folders.
+     * @param fileName The full path of the new current folder.
+     * @return A value of *true* if the current folder has been set.
+     */
+    public fun changeCurrentFolder(fileName: String): Boolean =
+        gtk_file_chooser_set_current_folder(gtkFileChooserPtr, fileName) == TRUE
+
+    /**
+     * Gets the current folder of chooser as a local filename. Note that this is the folder that the file chooser is
+     * currently displaying (e.g. "/home/username/Documents"), which is not the same as the currently selected folder
+     * if the chooser is in `GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER` mode (e.g.
+     * /home/username/Documents/selected-folder/". To get the currently selected folder in that mode, use
+     * `gtk_file_chooser_get_uri()` as the usual way to get the selection.
+     * @return The full path of the current folder, or *""* if the current path cannot be represented as a local
+     * filename. This function will also return *""* if the file chooser was unable to load the last folder that was
+     * requested from it; for example, as would be for calling [changeCurrentFolder] on a nonexistent folder.
+     * @see changeCurrentFolder
+     */
+    public fun fetchCurrentFolder(): String = gtk_file_chooser_get_current_folder(gtkFileChooserPtr)?.toKString() ?: ""
+
+    /**
+     * Gets the URI for the currently selected file in the file selector. If multiple files are selected, one of the
+     * filenames will be returned at random. If the file chooser is in folder mode then this function returns the
+     * selected folder.
+     * @return The currently selected URI, or *""* if no file is selected. If `gtk_file_chooser_set_local_only()` is
+     * set to TRUE (the default) a local URI will be returned for any FUSE locations.
+     */
+    public fun fetchUri(): String = gtk_file_chooser_get_uri(gtkFileChooserPtr)?.toKString() ?: ""
+
+    /**
+     * Sets the file referred to by uri as the current file for the file chooser by changing to the URI’s parent
+     * folder, and actually selecting the URI in the list. If the chooser is `GTK_FILE_CHOOSER_ACTION_SAVE` mode then
+     * the URI’s base name will also appear in the dialog’s file name entry. Note that the URI **MUST** exist, or
+     * nothing will be done except for the directory change.
+     *
+     * You should use this function only when implementing a save dialog for which you already have a file name to
+     * which the user may save. For example when the user opens an existing file, and then does Save As... to save a
+     * copy or a modified version.
+     * @param uri The uri to set as current.
+     * @return A value of *true* if the uri has been set.
+     */
+    public fun changeUri(uri: String): Boolean = gtk_file_chooser_set_uri(gtkFileChooserPtr, uri) == TRUE
+
+    /**
+     * Selects the file to by uri. If the URI doesn’t refer to a file in the current folder of chooser, then the
+     * current folder of chooser will be changed to the folder containing filename.
+     * @param uri The uri to select.
+     * @return A value of *true* if the uri has been selected.
+     */
+    public fun selectUri(uri: String): Boolean = gtk_file_chooser_select_uri(gtkFileChooserPtr, uri) == TRUE
+
+    /**
+     * Unselects the file referred to by uri. If the file is not in the current directory, does not exist, or is
+     * otherwise not currently selected, does nothing.
+     * @param uri The uri to unselect.
+     */
+    public fun unselectUri(uri: String) {
+        gtk_file_chooser_unselect_uri(gtkFileChooserPtr, uri)
+    }
+
+    /**
+     * Lists all the selected files and sub folders in the current folder of chooser. The returned names are full
+     * absolute URIs.
+     * @return A list containing the URIs of all selected files, and sub folders in the current folder. Remember to
+     * [close the list][SinglyLinkedList.close] afterwards.
+     */
+    public fun fetchMultipleUris(): SinglyLinkedList =
+        SinglyLinkedList(gtk_file_chooser_get_uris(gtkFileChooserPtr))
+
+    /**
+     * Sets the current folder for chooser from an URI. The user will be shown the full contents of the current folder,
+     * plus user interface elements for navigating to other folders.
+     * @param uri The URI for the new current folder.
+     * @return A value of *true* if the folder could be changed successfully.
+     */
+    public fun changeCurrentFolderUri(uri: String): Boolean =
+        gtk_file_chooser_set_current_folder_uri(gtkFileChooserPtr, uri) == TRUE
+
+    /**
+     * Gets the current folder of chooser as an URI. Note that this is the folder that the file chooser is currently
+     * displaying (e.g. "file:///home/username/Documents"), which is not the same as the currently-selected folder if
+     * the chooser is in `GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER` mode (e.g.
+     * "file:///home/username/Documents/selected-folder/". To get the currently selected folder in that mode, use
+     * [fetchUri] as the usual way to get the selection.
+     * @see changeCurrentFolderUri
+     */
+    public fun fetchCurrentFolderUri(): String =
+        gtk_file_chooser_get_current_folder_uri(gtkFileChooserPtr)?.toKString() ?: ""
 }
+
+/**
+ * The event handler for the *confirm-overwrite* signal. Arguments:
+ * 1. chooser: CPointer<GtkFileChooser>
+ * 2. userData: gpointer
+ *
+ * Returns GtkFileChooserConfirmation.
+ */
+public typealias ConfirmOverwriteSlot = CFunction<(
+    chooser: CPointer<GtkFileChooser>,
+    userData: gpointer
+) -> GtkFileChooserConfirmation>
+
+/**
+ * The event handler for the *file-activated* signal. Arguments:
+ * 1. chooser: CPointer<GtkFileChooser>
+ * 2. userData: gpointer
+ */
+public typealias FileActivatedSlot = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *selection-changed* signal. Arguments:
+ * 1. chooser: CPointer<GtkFileChooser>
+ * 2. userData: gpointer
+ */
+public typealias SelectionChangedSlot = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *current-folder-changed* signal. Arguments:
+ * 1. chooser: CPointer<GtkFileChooser>
+ * 2. userData: gpointer
+ */
+public typealias CurrentFolderChangedSlot = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
+
+/**
+ * The event handler for the *update-preview* signal. Arguments:
+ * 1. chooser: CPointer<GtkFileChooser>
+ * 2. userData: gpointer
+ */
+public typealias UpdatePreviewSlot = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
