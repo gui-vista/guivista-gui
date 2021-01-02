@@ -25,7 +25,7 @@ private const val FILE_ACTIVATED_SIGNAL = "file-activated"
 private const val SELECTION_CHANGED_SIGNAL = "selection-changed"
 private const val UPDATE_PREVIEW_SIGNAL = "update-preview"
 
-public actual interface FileChooser : ObjectBase {
+public actual interface FileChooser {
     public val gtkFileChooserPtr: CPointer<GtkFileChooser>?
 
     /** The current folder of chooser as a [File]. */
@@ -260,11 +260,6 @@ public actual interface FileChooser : ObjectBase {
      */
     public fun connectUpdatePreviewSignal(slot: CPointer<UpdatePreviewSlot>, userData: gpointer): ULong =
         connectGSignal(obj = gtkFileChooserPtr, signal = UPDATE_PREVIEW_SIGNAL, slot = slot, data = userData).toULong()
-
-    override fun disconnectSignal(handlerId: ULong) {
-        super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkFileChooserPtr, handlerId.toUInt())
-    }
 
     /**
      * Sets the current folder for chooser from a local filename. The user will be shown the full contents of the
