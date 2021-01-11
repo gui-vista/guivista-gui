@@ -10,6 +10,7 @@ import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
+import org.guiVista.gui.text.EntryBuffer
 import org.guiVista.gui.widget.WidgetBase
 
 private const val ACTIVATE_SIGNAL = "activate"
@@ -21,6 +22,11 @@ private const val PASTE_CLIPBOARD_SIGNAL = "paste-clipboard"
 public actual interface EntryBase : WidgetBase {
     public val gtkEntryPtr: CPointer<GtkEntry>?
         get() = gtkWidgetPtr?.reinterpret()
+
+    /** The buffer that holds the text. */
+    public var buffer: EntryBuffer
+        get() = EntryBuffer.fromPointer(gtk_entry_get_buffer(gtkEntryPtr))
+        set(value) = gtk_entry_set_buffer(gtkEntryPtr, value.gtkEntryBufferPtr)
 
     /**
      * Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed. Default

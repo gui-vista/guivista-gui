@@ -10,6 +10,7 @@ import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
+import org.guiVista.gui.keyboard.AcceleratorGroup
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
@@ -40,6 +41,43 @@ public actual interface MenuBase : Container {
     public var accelPath: String
         get() = gtk_menu_get_accel_path(gtkMenuPtr)?.toKString() ?: ""
         set(value) = gtk_menu_set_accel_path(gtkMenuPtr, value)
+
+    /** The accelerator group that holds global accelerators for this menu. */
+    public var accelGroup: AcceleratorGroup
+        get() = AcceleratorGroup(gtk_menu_get_accel_group(gtkMenuPtr))
+        set(value) = gtk_menu_set_accel_group(gtkMenuPtr, value.gtkAcceleratorGroupPtr)
+
+    /**
+     * Moves child to a new [position][pos] in the list of menu children.
+     * @param child The menu item to move.
+     * @param pos The new position to place the [child]. Positions are numbered from 0 to n - 1.
+     */
+    public fun reorderChild(child: WidgetBase, pos: Int) {
+        gtk_menu_reorder_child(menu = gtkMenuPtr, child = child.gtkWidgetPtr, position = pos)
+    }
+
+    /**
+     * Adds a new menu item to a (table) menu. The number of **cells** that an item will occupy is specified by
+     * [leftAttach], [rightAttach], [topAttach], and [bottomAttach]. Each of these represent the leftmost, rightmost,
+     * uppermost, and lower column and row numbers of the table. (Columns and rows are indexed from zero).
+     *
+     * Note that this function isn't related to [detach].
+     * @param child The menu item to attach.
+     * @param leftAttach The column number to attach the left side of the item to.
+     * @param rightAttach The column number to attach the right side of the item to.
+     * @param topAttach The row number to attach the top of the item to.
+     * @param bottomAttach The row number to attach the bottom of the item to.
+     */
+    public fun attach(child: WidgetBase, leftAttach: UInt, rightAttach: UInt, topAttach: UInt, bottomAttach: UInt) {
+        gtk_menu_attach(
+            menu = gtkMenuPtr,
+            child = child.gtkWidgetPtr,
+            left_attach = leftAttach,
+            right_attach = rightAttach,
+            top_attach = topAttach,
+            bottom_attach = bottomAttach
+        )
+    }
 
     /**
      * Gets the selected menu item from the menu. This is used by the GtkComboBox.
