@@ -9,6 +9,11 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
 import org.guiVista.core.ObjectBase
 import org.guiVista.core.connectGSignal
+import org.guiVista.core.dataType.DoublyLinkedList
+import org.guiVista.gui.keyboard.AcceleratorGroup
+import org.guiVista.gui.keyboard.AcceleratorMap
+import org.guiVista.gui.widget.menu.item.MenuItemBase
+import org.guiVista.gui.window.WindowBase
 
 private const val GRAB_FOCUS_SIGNAL = "grab-focus"
 private const val SHOW_SIGNAL = "show"
@@ -17,7 +22,6 @@ private const val CONFIGURE_EVENT_SIGNAL = "configure-event"
 private const val KEY_PRESS_EVENT_SIGNAL = "key-press-event"
 private const val KEY_RELEASE_EVENT_SIGNAL = "key-release-event"
 
-/** Base interface for all widget's (controls). */
 public actual interface WidgetBase : ObjectBase {
     public val gtkWidgetPtr: CPointer<GtkWidget>?
 
@@ -208,6 +212,86 @@ public actual interface WidgetBase : ObjectBase {
     private companion object {
         private val marginRange = 0..32767
     }
+
+    /**
+     * Installs an accelerator for this widget in [accelGroup] that causes [accelSignal] to be emitted if the
+     * accelerator is activated. The [accelGroup] needs to be added to the widget’s top level via
+     * [WindowBase.addAccelGroup], and the signal must be of type `G_SIGNAL_ACTION`. Accelerators added through this
+     * function are **NOT** user changeable during runtime. If you want to support accelerators that can be changed by
+     * the user then use [AcceleratorMap.addEntry], and [changeAccelPath], or [MenuItemBase.accelPath] instead.
+     * @param accelSignal The widget signal to emit on accelerator activation.
+     * @param accelGroup The accelerator group for this widget, added to its top level.
+     * @param accelKey GDK key val of the accelerator.
+     * @param accelMods Modifier key combination of the accelerator.
+     * @param accelFlags Flag accelerators, e.g. `GTK_ACCEL_VISIBLE`.
+     */
+    public fun addAccelerator(accelSignal: String, accelGroup: AcceleratorGroup, accelKey: UInt, accelMods: UInt,
+                              accelFlags: UInt) {
+        gtk_widget_add_accelerator(
+            widget = gtkWidgetPtr,
+            accel_signal = accelSignal,
+            accel_group = accelGroup.gtkAcceleratorGroupPtr,
+            accel_key = accelKey,
+            accel_mods = accelMods,
+            accel_flags = accelFlags
+        )
+    }
+
+    /**
+     * Removes an accelerator from the widget, previously installed with [addAccelerator].
+     * @param accelGroup The accelerator group for this widget.
+     * @param accelKey GDK key val of the accelerator.
+     * @param accelMods Modifier key combination of the accelerator.
+     * @return Whether an accelerator was installed, and could be removed.
+     */
+    public fun removeAccelerator(accelGroup: AcceleratorGroup, accelKey: UInt, accelMods: UInt): Boolean =
+        gtk_widget_remove_accelerator(
+            widget = gtkWidgetPtr,
+            accel_group = accelGroup.gtkAcceleratorGroupPtr,
+            accel_key = accelKey,
+            accel_mods = accelMods
+        ) == TRUE
+
+    /**
+     * Given an [accelerator group][accelGroup], and an [accelerator path][accelPath], sets up an accelerator in
+     * [accelGroup] so whenever the key binding that is defined for [accelPath] is pressed the widget will be
+     * activated. This removes any accelerators (for any accelerator group) installed by previous calls to
+     * [changeAccelPath]. Associating accelerators with paths allows them to be modified by the user, and the
+     * modifications to be saved for future use. (See gtk_accel_map_save().)
+     *
+     * This function is a low level function that would most likely be used by a menu creation system like
+     * `GtkUIManager`. If you use `GtkUIManager` then setting up accelerator paths will be done automatically. Even
+     * when you you aren’t using `GtkUIManager`, if you only want to set up accelerators on menu items
+     * then `gtk_menu_item_set_accel_path()` provides a somewhat more convenient interface.
+     *
+     * Note that [accelPath] will be stored in a `GQuark`. Therefore if you pass a static String, you can save some
+     * memory by interning it first with `g_intern_static_string()`.
+     * @param accelPath The path used to look up the accelerator.
+     * @param accelGroup An accelerator group.
+     */
+    public fun changeAccelPath(accelPath: String, accelGroup: AcceleratorGroup) {
+        gtk_widget_set_accel_path(widget = gtkWidgetPtr, accel_path = accelPath,
+            accel_group = accelGroup.gtkAcceleratorGroupPtr)
+    }
+
+    /**
+     * Lists the closures used by the widget for accelerator group connections with
+     * `gtk_accel_group_connect_by_path()`, or `gtk_accel_group_connect()`. The closures can be used to monitor
+     * accelerator changes on the widget, by connecting to the GtkAccelGroup ::accel-changed signal of the
+     * [AcceleratorGroup] of a closure which can be found out with `gtk_accel_group_from_accel_closure()`.
+     */
+    public fun listAccelClosures(): DoublyLinkedList = DoublyLinkedList(gtk_widget_list_accel_closures(gtkWidgetPtr))
+
+    /**
+     * Determines whether an accelerator that activates the signal identified by [signalId] can currently be activated.
+     * This is done by emitting the **can-activate-accel** signal on the widget; if the signal isn’t overridden by a
+     * handler or in a derived widget then the default check is that the widget must be sensitive, and the widget and
+     * all its ancestors mapped.
+     * @param signalId The ID of a signal installed on the widget.
+     * @return A value of *true* if the accelerator can be activated.
+     */
+    public infix fun canActivateAccel(signalId: UInt): Boolean =
+        gtk_widget_can_activate_accel(gtkWidgetPtr, signalId) == TRUE
 
     /** Changes all margins for the widget. */
     public fun changeMargins(bottom: Int, end: Int, start: Int, top: Int) {

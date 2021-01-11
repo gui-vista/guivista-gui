@@ -5,6 +5,7 @@ import gtk3.*
 import kotlinx.cinterop.*
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
+import org.guiVista.gui.keyboard.AcceleratorGroup
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
@@ -160,6 +161,24 @@ public actual interface WindowBase : Container {
             return if (tmp != null) Widget(tmp) else null
         }
         set(value) = gtk_window_set_focus(gtkWindowPtr, value?.gtkWidgetPtr)
+
+    /**
+     * Associate [accelGroup] with the window, such that calling `AcceleratorGroup.update` on the window will activate
+     * accelerators in [accelGroup].
+     * @param accelGroup The acceleration group to add.
+     */
+    public fun addAccelGroup(accelGroup: AcceleratorGroup) {
+        gtk_window_add_accel_group(gtkWindowPtr, accelGroup.gtkAcceleratorGroupPtr)
+    }
+
+    /**
+     * Removes [accelGroup] from the window if it exists.
+     * @param accelGroup The accelerator group to remove.
+     * @see addAccelGroup
+     */
+    public fun removeAccelGroup(accelGroup: AcceleratorGroup) {
+        gtk_window_remove_accel_group(gtkWindowPtr, accelGroup.gtkAcceleratorGroupPtr)
+    }
 
     /**
      * This function returns the position you need to pass to [move] to keep window in its current position. This means
