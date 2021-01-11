@@ -419,10 +419,10 @@ public typealias ActivateFocusSlot = CFunction<(window: CPointer<GtkWindow>, use
 /**
  * The event handler for the *enable-debugging* signal. Arguments:
  * 1. window: CPointer<GtkWindow>
- * 2. toggle: Boolean
+ * 2. toggle: Int
  * 3. userData: gpointer
  */
-public typealias EnableDebuggingSlot = CFunction<(window: CPointer<GtkWindow>, toggle: Boolean, userData: gpointer) -> Unit>
+public typealias EnableDebuggingSlot = CFunction<(window: CPointer<GtkWindow>, toggle: Int, userData: gpointer) -> Unit>
 
 /**
  * The event handler for the *keys-changed* signal. Arguments:
