@@ -17,8 +17,10 @@ public actual class SeparatorToolItem(separatorToolItemPtr: CPointer<GtkSeparato
         set(value) = gtk_separator_tool_item_set_draw(gtkSeparatorToolItemPtr, if (value) TRUE else FALSE)
 }
 
-public fun separatorToolItemWidget(separatorToolItemPtr: CPointer<GtkSeparatorToolItem>? = null,
-                                   init: SeparatorToolItem.() -> Unit): SeparatorToolItem {
+public fun separatorToolItemWidget(
+    separatorToolItemPtr: CPointer<GtkSeparatorToolItem>? = null,
+    init: SeparatorToolItem.() -> Unit = {}
+): SeparatorToolItem {
     val toolItem = SeparatorToolItem(separatorToolItemPtr)
     toolItem.init()
     return toolItem

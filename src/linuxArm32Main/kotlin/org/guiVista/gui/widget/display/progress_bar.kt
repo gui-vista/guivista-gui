@@ -51,7 +51,7 @@ public actual class ProgressBar(progressBarPtr: CPointer<GtkProgressBar>? = null
 
 public fun progressBarWidget(
     progressBarPtr: CPointer<GtkProgressBar>? = null,
-    init: ProgressBar.() -> Unit
+    init: ProgressBar.() -> Unit = {}
 ): ProgressBar {
     val progressBar = ProgressBar(progressBarPtr)
     progressBar.init()

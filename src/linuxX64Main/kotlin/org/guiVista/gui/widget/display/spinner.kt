@@ -19,7 +19,7 @@ public actual class Spinner(spinnerPtr: CPointer<GtkSpinner>? = null) : WidgetBa
     }
 }
 
-public fun spinnerWidget(spinnerPtr: CPointer<GtkSpinner>? = null, init: Spinner.() -> Unit): Spinner {
+public fun spinnerWidget(spinnerPtr: CPointer<GtkSpinner>? = null, init: Spinner.() -> Unit = {}): Spinner {
     val spinner = Spinner(spinnerPtr)
     spinner.init()
     return spinner

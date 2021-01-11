@@ -12,8 +12,12 @@ public actual class ToolButton(toolButtonPtr: CPointer<GtkToolButton>? = null, i
         get() = gtkToolItemPtr?.reinterpret()
 }
 
-public fun toolButtonWidget(toolButtonPtr: CPointer<GtkToolButton>? = null, iconWidget: CPointer<GtkWidget>?, label: String,
-                            init: ToolButton.() -> Unit): ToolButton {
+public fun toolButtonWidget(
+    toolButtonPtr: CPointer<GtkToolButton>? = null,
+    iconWidget: CPointer<GtkWidget>?,
+    label: String,
+    init: ToolButton.() -> Unit = {}
+): ToolButton {
     val toolButton = ToolButton(toolButtonPtr = toolButtonPtr, iconWidget = iconWidget, label = label)
     toolButton.init()
     return toolButton

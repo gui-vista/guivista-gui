@@ -43,7 +43,7 @@ public fun radioMenuItem(
     radioMenuItemPtr: CPointer<GtkRadioMenuItem>? = null,
     label: String = "",
     mnemonic: Boolean = false,
-    init: RadioMenuItem.() -> Unit
+    init: RadioMenuItem.() -> Unit = {}
 ): RadioMenuItem {
     val menuItem = RadioMenuItem(radioMenuItemPtr = radioMenuItemPtr, label = label, mnemonic = mnemonic)
     menuItem.init()

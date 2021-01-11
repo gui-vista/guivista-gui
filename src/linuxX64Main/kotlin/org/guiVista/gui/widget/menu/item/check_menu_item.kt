@@ -18,8 +18,12 @@ public actual class CheckMenuItem(checkMenuItemPtr: CPointer<GtkCheckMenuItem>? 
     }
 }
 
-public fun checkMenuItem(checkMenuItemPtr: CPointer<GtkCheckMenuItem>? = null, label: String = "", mnemonic: Boolean = false,
-                         init: CheckMenuItem.() -> Unit): CheckMenuItem {
+public fun checkMenuItem(
+    checkMenuItemPtr: CPointer<GtkCheckMenuItem>? = null,
+    label: String = "",
+    mnemonic: Boolean = false,
+    init: CheckMenuItem.() -> Unit = {}
+): CheckMenuItem {
     val menuItem = CheckMenuItem(checkMenuItemPtr = checkMenuItemPtr, label = label, mnemonic = mnemonic)
     menuItem.init()
     return menuItem

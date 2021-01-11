@@ -30,7 +30,7 @@ public actual class RadioToolButton(radioToolButtonPtr: CPointer<GtkRadioToolBut
 public fun radioToolButtonWidget(
     radioToolButtonPtr: CPointer<GtkRadioToolButton>? = null,
     group: RadioToolButton? = null,
-    init: RadioToolButton.() -> Unit
+    init: RadioToolButton.() -> Unit = {}
 ): RadioToolButton {
     val button = RadioToolButton(radioToolButtonPtr, group)
     button.init()

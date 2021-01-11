@@ -10,7 +10,7 @@ public actual class MenuItem(menuItemPtr: CPointer<GtkMenuItem>? = null) : MenuI
     override val gtkWidgetPtr: CPointer<GtkWidget>? = menuItemPtr?.reinterpret() ?: gtk_menu_item_new()
 }
 
-public fun menuItem(menuItemPtr: CPointer<GtkMenuItem>? = null, init: MenuItem.() -> Unit): MenuItem {
+public fun menuItem(menuItemPtr: CPointer<GtkMenuItem>? = null, init: MenuItem.() -> Unit = {}): MenuItem {
     val menuItem = MenuItem(menuItemPtr)
     menuItem.init()
     return menuItem

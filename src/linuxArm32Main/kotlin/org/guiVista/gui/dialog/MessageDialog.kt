@@ -17,6 +17,8 @@ public actual class MessageDialog private constructor(
     useMarkup: Boolean = false
 ) : DialogBase {
     public companion object {
+        public fun fromPointer(ptr: CPointer<GtkMessageDialog>?): MessageDialog = MessageDialog(ptr)
+
         public fun create(
             parent: WindowBase,
             type: GtkMessageType,
@@ -79,4 +81,28 @@ public actual class MessageDialog private constructor(
     public actual infix fun changeMarkup(str: String) {
         gtk_message_dialog_set_markup(gtkMessageDialogPtr, str)
     }
+}
+
+public fun messageDialog(
+    ptr: CPointer<GtkMessageDialog>? = null,
+    parent: WindowBase,
+    type: GtkMessageType,
+    flags: UInt = GTK_DIALOG_MODAL,
+    buttons: GtkButtonsType = GtkButtonsType.GTK_BUTTONS_CLOSE,
+    messageFormat: String? = null,
+    useMarkup: Boolean = false,
+    init: MessageDialog.() -> Unit = {}
+): MessageDialog {
+    val dialog =
+        if (useMarkup) {
+            MessageDialog.createWithMarkup(parent = parent, type = type, flags = flags, buttons = buttons,
+                messageFormat = messageFormat)
+        } else if (!useMarkup) {
+            MessageDialog.create(parent = parent, type = type, flags = flags, buttons = buttons,
+                messageFormat = messageFormat)
+        } else {
+            MessageDialog.fromPointer(ptr)
+        }
+    dialog.init()
+    return dialog
 }

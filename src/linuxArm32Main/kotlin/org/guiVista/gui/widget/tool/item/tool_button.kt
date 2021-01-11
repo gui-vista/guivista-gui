@@ -16,7 +16,7 @@ public fun toolButtonWidget(
     toolButtonPtr: CPointer<GtkToolButton>? = null,
     iconWidget: CPointer<GtkWidget>?,
     label: String,
-    init: ToolButton.() -> Unit
+    init: ToolButton.() -> Unit = {}
 ): ToolButton {
     val toolButton = ToolButton(toolButtonPtr = toolButtonPtr, iconWidget = iconWidget, label = label)
     toolButton.init()

@@ -13,8 +13,10 @@ public actual class ToggleToolButton(toggleToolButtonPtr: CPointer<GtkToggleTool
         get() = gtkToolItemPtr?.reinterpret()
 }
 
-public fun toggleToolButtonWidget(toggleToolButtonPtr: CPointer<GtkToggleToolButton>? = null,
-                                  init: ToggleToolButton.() -> Unit): ToggleToolButton {
+public fun toggleToolButtonWidget(
+    toggleToolButtonPtr: CPointer<GtkToggleToolButton>? = null,
+    init: ToggleToolButton.() -> Unit = {}
+): ToggleToolButton {
     val button = ToggleToolButton(toggleToolButtonPtr)
     button.init()
     return button

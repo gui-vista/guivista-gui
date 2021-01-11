@@ -8,7 +8,7 @@ public actual class ToolItem(toolItemPtr: CPointer<GtkToolItem>? = null) : ToolI
     override val gtkToolItemPtr: CPointer<GtkToolItem>? = toolItemPtr ?: gtk_tool_item_new()
 }
 
-public fun toolItemWidget(toolItemPtr: CPointer<GtkToolItem>? = null, init: ToolItem.() -> Unit): ToolItem {
+public fun toolItemWidget(toolItemPtr: CPointer<GtkToolItem>? = null, init: ToolItem.() -> Unit = {}): ToolItem {
     val toolItem = ToolItem(toolItemPtr)
     toolItem.init()
     return toolItem

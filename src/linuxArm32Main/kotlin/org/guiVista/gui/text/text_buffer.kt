@@ -300,7 +300,7 @@ public actual class TextBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null) :
         connectGSignal(obj = gtkTextBufferPtr, signal = INSERT_TEXT_SIGNAL, slot = slot, data = userData).toULong()
 }
 
-public fun textBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null, init: TextBuffer.() -> Unit): TextBuffer {
+public fun textBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null, init: TextBuffer.() -> Unit = {}): TextBuffer {
     val textBuffer = TextBuffer(textBufferPtr)
     textBuffer.init()
     return textBuffer

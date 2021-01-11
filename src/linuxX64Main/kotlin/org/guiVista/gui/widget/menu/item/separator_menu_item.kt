@@ -14,7 +14,7 @@ public actual class SeparatorMenuItem(separatorMenuItemPtr: CPointer<GtkSeparato
 }
 
 public fun separatorMenuItem(separatorMenuItemPtr: CPointer<GtkSeparatorMenuItem>? = null,
-                             init: SeparatorMenuItem.() -> Unit): SeparatorMenuItem {
+                             init: SeparatorMenuItem.() -> Unit = {}): SeparatorMenuItem {
     val menuItem = SeparatorMenuItem(separatorMenuItemPtr)
     menuItem.init()
     return menuItem

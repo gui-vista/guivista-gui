@@ -21,7 +21,7 @@ public fun toggleButtonWidget(
     toggleButtonPtr: CPointer<GtkToggleButton>? = null,
     label: String = "",
     mnemonic: Boolean = false,
-    init: ToggleButton.() -> Unit
+    init: ToggleButton.() -> Unit = {}
 ): ToggleButton {
     val toggleButton = ToggleButton(toggleButtonPtr = toggleButtonPtr, label = label, mnemonic = mnemonic)
     toggleButton.init()

@@ -63,7 +63,7 @@ public actual class Scale(scalePtr: CPointer<GtkScale>? = null,
     }
 }
 
-public fun scaleWidget(scalePtr: CPointer<GtkScale>? = null, init: Scale.() -> Unit): Scale {
+public fun scaleWidget(scalePtr: CPointer<GtkScale>? = null, init: Scale.() -> Unit = {}): Scale {
     val scale = Scale(scalePtr)
     scale.init()
     return scale

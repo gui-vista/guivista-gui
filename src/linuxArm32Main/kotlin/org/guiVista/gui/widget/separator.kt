@@ -19,7 +19,7 @@ public actual class Separator(
 public fun separatorWidget(
     ptr: CPointer<GtkSeparator>? = null,
     orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTAL,
-    init: Separator.() -> Unit
+    init: Separator.() -> Unit = {}
 ): Separator {
     val result = Separator(ptr, orientation)
     result.init()

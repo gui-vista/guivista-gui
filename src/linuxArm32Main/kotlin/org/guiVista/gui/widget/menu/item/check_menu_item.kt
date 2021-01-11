@@ -22,7 +22,7 @@ public fun checkMenuItem(
     checkMenuItemPtr: CPointer<GtkCheckMenuItem>? = null,
     label: String = "",
     mnemonic: Boolean = false,
-    init: CheckMenuItem.() -> Unit
+    init: CheckMenuItem.() -> Unit = {}
 ): CheckMenuItem {
     val menuItem = CheckMenuItem(checkMenuItemPtr = checkMenuItemPtr, label = label, mnemonic = mnemonic)
     menuItem.init()

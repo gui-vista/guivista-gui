@@ -65,7 +65,7 @@ public actual class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : Widge
     }
 }
 
-public fun levelBarWidget(levelBarPtr: CPointer<GtkLevelBar>? = null, init: LevelBar.() -> Unit): LevelBar {
+public fun levelBarWidget(levelBarPtr: CPointer<GtkLevelBar>? = null, init: LevelBar.() -> Unit = {}): LevelBar {
     val levelBar = LevelBar(levelBarPtr)
     levelBar.init()
     return levelBar

@@ -59,15 +59,21 @@ public actual class FileChooserDialog(
 }
 
 public fun fileChooserDialog(
+    ptr: CPointer<GtkFileChooserDialog>? = null,
     title: String,
     parent: WindowBase,
     action: GtkFileChooserAction = GtkFileChooserAction.GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
     firstButtonText: String = "Ok",
     firstButtonResponseId: Int = GTK_RESPONSE_OK,
-    init: FileChooserDialog.() -> Unit
+    init: FileChooserDialog.() -> Unit = {}
 ): FileChooserDialog {
-    val dialog = FileChooserDialog(parent = parent, title = title, action = action, firstButtonText = firstButtonText,
-        firstButtonResponseId = firstButtonResponseId)
+    val dialog =
+        if (ptr != null) {
+            FileChooserDialog(ptr)
+        } else {
+            FileChooserDialog(parent = parent, title = title, action = action, firstButtonText = firstButtonText,
+                firstButtonResponseId = firstButtonResponseId)
+        }
     dialog.init()
     return dialog
 }

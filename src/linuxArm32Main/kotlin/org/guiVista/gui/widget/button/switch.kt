@@ -45,7 +45,7 @@ public actual class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase 
     }
 }
 
-public fun switchWidget(switchPtr: CPointer<GtkSwitch>? = null, init: Switch.() -> Unit): Switch {
+public fun switchWidget(switchPtr: CPointer<GtkSwitch>? = null, init: Switch.() -> Unit = {}): Switch {
     val switch = Switch(switchPtr)
     switch.init()
     return switch

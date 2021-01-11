@@ -175,7 +175,7 @@ public typealias PrevMonthSlot = CFunction<(calendar: CPointer<GtkCalendar>, use
  */
 public typealias PrevYearSlot = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
 
-public fun calendarWidget(ptr: CPointer<GtkCalendar>? = null, init: Calendar.() -> Unit): Calendar {
+public fun calendarWidget(ptr: CPointer<GtkCalendar>? = null, init: Calendar.() -> Unit = {}): Calendar {
     val result = Calendar(ptr)
     result.init()
     return result

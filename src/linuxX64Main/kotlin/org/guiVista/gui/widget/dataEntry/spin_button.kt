@@ -104,7 +104,7 @@ public fun spinButtonWidget(
     spinButtonPtr: CPointer<GtkSpinButton>? = null,
     climbRate: Double = 1.0,
     digits: UInt = 1u,
-    init: SpinButton.() -> Unit
+    init: SpinButton.() -> Unit = {}
 ): SpinButton {
     val spinButton = SpinButton(spinButtonPtr = spinButtonPtr, climbRate = climbRate, digits = digits)
     spinButton.init()

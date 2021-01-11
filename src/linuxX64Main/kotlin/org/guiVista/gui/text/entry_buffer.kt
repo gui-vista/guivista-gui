@@ -109,7 +109,7 @@ public typealias InsertedTextSlot = CFunction<(
 public fun entryBuffer(
     ptr: CPointer<GtkEntryBuffer>? = null,
     initialText: String = "",
-    init: EntryBuffer.() -> Unit
+    init: EntryBuffer.() -> Unit = {}
 ): EntryBuffer {
     val result = if (ptr != null) EntryBuffer.fromPointer(ptr) else EntryBuffer.create(initialText)
     result.init()

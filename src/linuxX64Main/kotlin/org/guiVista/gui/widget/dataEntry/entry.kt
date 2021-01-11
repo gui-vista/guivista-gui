@@ -10,7 +10,7 @@ public actual class Entry(entryPtr: CPointer<GtkEntry>? = null) : EntryBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = entryPtr?.reinterpret() ?: gtk_entry_new()
 }
 
-public fun entryWidget(entryPtr: CPointer<GtkEntry>? = null, init: Entry.() -> Unit): Entry {
+public fun entryWidget(entryPtr: CPointer<GtkEntry>? = null, init: Entry.() -> Unit = {}): Entry {
     val entry = Entry(entryPtr)
     entry.init()
     return entry

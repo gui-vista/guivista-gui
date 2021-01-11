@@ -61,7 +61,7 @@ public fun radioButtonWidget(
     radioButtonPtr: CPointer<GtkRadioButton>? = null,
     label: String = "",
     mnemonic: Boolean = false,
-    init: RadioButton.() -> Unit
+    init: RadioButton.() -> Unit = {}
 ): RadioButton {
     val radioButton = RadioButton(radioButtonPtr = radioButtonPtr, label = label, mnemonic = mnemonic)
     radioButton.init()

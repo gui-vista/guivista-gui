@@ -186,7 +186,7 @@ public actual class TextView(
 public fun textViewWidget(
     textViewPtr: CPointer<GtkTextView>? = null,
     textBufferPtr: CPointer<GtkTextBuffer>? = null,
-    init: TextView.() -> Unit
+    init: TextView.() -> Unit = {}
 ): TextView {
     val textView = TextView(textViewPtr, textBufferPtr)
     textView.init()

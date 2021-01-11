@@ -22,7 +22,7 @@ public fun checkButtonWidget(
     checkButtonPtr: CPointer<GtkCheckButton>? = null,
     label: String = "",
     mnemonic: Boolean = false,
-    init: CheckButton.() -> Unit
+    init: CheckButton.() -> Unit = {}
 ): CheckButton {
     val checkButton = CheckButton(checkButtonPtr = checkButtonPtr, label = label, mnemonic = mnemonic)
     checkButton.init()

@@ -18,7 +18,7 @@ public fun buttonWidget(
     buttonPtr: CPointer<GtkButton>? = null,
     label: String = "",
     mnemonic: Boolean = false,
-    init: Button.() -> Unit
+    init: Button.() -> Unit = {}
 ): Button {
     val button = Button(buttonPtr = buttonPtr, label = label, mnemonic = mnemonic)
     button.init()

@@ -79,7 +79,7 @@ public actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null
 
 public fun searchEntryWidget(
     searchEntryPtr: CPointer<GtkSearchEntry>? = null,
-    init: SearchEntry.() -> Unit
+    init: SearchEntry.() -> Unit = {}
 ): SearchEntry {
     val searchEntry = SearchEntry(searchEntryPtr)
     searchEntry.init()

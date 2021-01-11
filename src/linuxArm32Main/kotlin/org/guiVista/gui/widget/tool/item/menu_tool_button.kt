@@ -40,8 +40,11 @@ public actual class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: Stri
     }
 }
 
-public fun menuToolButtonWidget(iconWidget: CPointer<GtkWidget>?, label: String,
-                                init: MenuToolButton.() -> Unit): MenuToolButton {
+public fun menuToolButtonWidget(
+    iconWidget: CPointer<GtkWidget>?,
+    label: String,
+    init: MenuToolButton.() -> Unit = {}
+): MenuToolButton {
     val menuToolButton = MenuToolButton(iconWidget, label)
     menuToolButton.init()
     return menuToolButton

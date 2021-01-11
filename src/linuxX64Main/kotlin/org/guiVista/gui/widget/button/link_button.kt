@@ -58,7 +58,7 @@ public fun linkButtonWidget(
     linkButtonPtr: CPointer<GtkLinkButton>? = null,
     label: String = "",
     uri: String = "",
-    init: LinkButton.() -> Unit
+    init: LinkButton.() -> Unit = {}
 ): LinkButton {
     val linkButton = LinkButton(linkButtonPtr = linkButtonPtr, label = label, uri = uri)
     linkButton.init()

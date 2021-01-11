@@ -27,8 +27,11 @@ public actual class RadioToolButton(radioToolButtonPtr: CPointer<GtkRadioToolBut
         set(value) = gtk_radio_tool_button_set_group(gtkRadioToolButtonPtr, value?.gSListPtr)
 }
 
-public fun radioToolButtonWidget(radioToolButtonPtr: CPointer<GtkRadioToolButton>? = null, group: RadioToolButton? = null,
-                                 init: RadioToolButton.() -> Unit): RadioToolButton {
+public fun radioToolButtonWidget(
+    radioToolButtonPtr: CPointer<GtkRadioToolButton>? = null,
+    group: RadioToolButton? = null,
+    init: RadioToolButton.() -> Unit = {}
+): RadioToolButton {
     val button = RadioToolButton(radioToolButtonPtr, group)
     button.init()
     return button

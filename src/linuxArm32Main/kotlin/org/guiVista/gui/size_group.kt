@@ -50,7 +50,7 @@ public actual class SizeGroup(sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
 public fun createSizeGroup(
     sizeGroupPtr: CPointer<GtkSizeGroup>? = null,
     mode: GtkSizeGroupMode = GtkSizeGroupMode.GTK_SIZE_GROUP_NONE,
-    init: SizeGroup.() -> Unit
+    init: SizeGroup.() -> Unit = {}
 ): SizeGroup {
     val sizeGroup = SizeGroup(sizeGroupPtr, mode)
     sizeGroup.init()

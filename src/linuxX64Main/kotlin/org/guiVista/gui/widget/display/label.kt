@@ -10,7 +10,7 @@ public actual class Label(labelPtr: CPointer<GtkLabel>? = null, text: String) : 
     override val gtkWidgetPtr: CPointer<GtkWidget>? = labelPtr?.reinterpret() ?: gtk_label_new(text)
 }
 
-public fun labelWidget(labelPtr: CPointer<GtkLabel>? = null, text: String, init: Label.() -> Unit): Label {
+public fun labelWidget(labelPtr: CPointer<GtkLabel>? = null, text: String, init: Label.() -> Unit = {}): Label {
     val lbl = Label(labelPtr, text)
     lbl.init()
     return lbl

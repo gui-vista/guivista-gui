@@ -22,3 +22,9 @@ public actual class FileFilter(fileFilterPtr: CPointer<GtkFileFilter>? = null) {
         gtk_file_filter_add_pixbuf_formats(gtkFileFilterPtr)
     }
 }
+
+public fun fileFilter(ptr: CPointer<GtkFileFilter>? = null, init: FileFilter.() -> Unit): FileFilter {
+    val filter = FileFilter(ptr)
+    filter.init()
+    return filter
+}
