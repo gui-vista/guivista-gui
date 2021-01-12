@@ -38,7 +38,7 @@ public expect class Calendar : WidgetBase {
      * @param day The day number between *1*, and *31*.
      * @return Whether the day is marked.
      */
-    public fun isMarked(day: UInt): Boolean
+    public fun fetchDayIsMarked(day: UInt): Boolean
 
     /**
      * Obtains the selected date from a [Calendar].

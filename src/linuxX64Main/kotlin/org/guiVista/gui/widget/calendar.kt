@@ -45,7 +45,7 @@ public actual class Calendar(ptr: CPointer<GtkCalendar>? = null) : WidgetBase {
         gtk_calendar_unmark_day(gtkCalendarPtr, day)
     }
 
-    public actual fun isMarked(day: UInt): Boolean = gtk_calendar_get_day_is_marked(gtkCalendarPtr, day) == TRUE
+    public actual fun fetchDayIsMarked(day: UInt): Boolean = gtk_calendar_get_day_is_marked(gtkCalendarPtr, day) == TRUE
 
     public actual fun fetchDate(): Triple<UInt, UInt, UInt> = memScoped {
         val year = alloc<UIntVar>()
