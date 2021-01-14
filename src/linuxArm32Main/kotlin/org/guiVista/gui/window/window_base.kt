@@ -4,6 +4,7 @@ import glib2.*
 import gtk3.*
 import kotlinx.cinterop.*
 import org.guiVista.core.connectGSignal
+import org.guiVista.core.dataType.DoublyLinkedList
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.keyboard.AcceleratorGroup
 import org.guiVista.gui.layout.Container
@@ -348,6 +349,9 @@ public actual interface WindowBase : Container {
      */
     public fun createUi(init: WindowBase.() -> Unit)
 
+    /** Sets up window level events. */
+    public fun setupEvents() {}
+
     /**
      * Connects the *activate-default* signal to a [slot] on a [WindowBase]. This signal is used when the user
      * activates the window's default widget.
@@ -401,6 +405,8 @@ public actual interface WindowBase : Container {
         disconnectGSignal(gtkWindowPtr, handlerId.toUInt())
     }
 }
+
+public actual fun listTopLevelWindows(): DoublyLinkedList = DoublyLinkedList(gtk_window_list_toplevels())
 
 /**
  * The event handler for the *activate-default* signal. Arguments:

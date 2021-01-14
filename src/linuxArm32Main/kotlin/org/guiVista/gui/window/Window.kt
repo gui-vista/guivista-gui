@@ -33,6 +33,7 @@ public actual abstract class Window(
 
     override fun createUi(init: WindowBase.() -> Unit) {
         _gtkWidgetPtr = gtk_window_new(winType)
+        setupEvents()
         init()
         val mainLayout = createMainLayout()
         if (mainLayout != null) this += mainLayout
