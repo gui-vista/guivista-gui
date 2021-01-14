@@ -2,13 +2,10 @@ package org.guiVista.gui.widget.menu
 
 import glib2.FALSE
 import glib2.TRUE
-import glib2.gpointer
 import gtk3.*
-import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
-import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.keyboard.AcceleratorGroup
 import org.guiVista.gui.layout.Container
@@ -45,7 +42,7 @@ public actual interface MenuBase : Container {
     /** The accelerator group that holds global accelerators for this menu. */
     public var accelGroup: AcceleratorGroup
         get() = AcceleratorGroup(gtk_menu_get_accel_group(gtkMenuPtr))
-        set(value) = gtk_menu_set_accel_group(gtkMenuPtr, value.gtkAcceleratorGroupPtr)
+        set(value) = gtk_menu_set_accel_group(gtkMenuPtr, value.gtkAccelGroupPtr)
 
     /**
      * Moves child to a new [position][pos] in the list of menu children.

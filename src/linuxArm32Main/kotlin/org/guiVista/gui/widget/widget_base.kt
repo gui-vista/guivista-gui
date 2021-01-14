@@ -231,7 +231,7 @@ public actual interface WidgetBase : ObjectBase {
         gtk_widget_add_accelerator(
             widget = gtkWidgetPtr,
             accel_signal = accelSignal,
-            accel_group = accelGroup.gtkAcceleratorGroupPtr,
+            accel_group = accelGroup.gtkAccelGroupPtr,
             accel_key = accelKey,
             accel_mods = accelMods,
             accel_flags = accelFlags
@@ -248,7 +248,7 @@ public actual interface WidgetBase : ObjectBase {
     public fun removeAccelerator(accelGroup: AcceleratorGroup, accelKey: UInt, accelMods: UInt): Boolean =
         gtk_widget_remove_accelerator(
             widget = gtkWidgetPtr,
-            accel_group = accelGroup.gtkAcceleratorGroupPtr,
+            accel_group = accelGroup.gtkAccelGroupPtr,
             accel_key = accelKey,
             accel_mods = accelMods
         ) == TRUE
@@ -272,7 +272,7 @@ public actual interface WidgetBase : ObjectBase {
      */
     public fun changeAccelPath(accelPath: String, accelGroup: AcceleratorGroup) {
         gtk_widget_set_accel_path(widget = gtkWidgetPtr, accel_path = accelPath,
-            accel_group = accelGroup.gtkAcceleratorGroupPtr)
+            accel_group = accelGroup.gtkAccelGroupPtr)
     }
 
     /**

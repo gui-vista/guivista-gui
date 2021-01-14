@@ -10,26 +10,58 @@ import org.guiVista.core.disconnectGSignal
 private const val ACCEL_ACTIVATE_SIGNAL = "accel-activate"
 private const val ACCEL_CHANGED_SIGNAL = "accel-changed"
 
-public actual class AcceleratorGroup(acceleratorGroupPtr: CPointer<GtkAccelGroup>? = null) : ObjectBase {
-    public val gtkAcceleratorGroupPtr: CPointer<GtkAccelGroup>? = acceleratorGroupPtr ?: gtk_accel_group_new()
+public actual class AcceleratorGroup(accelGroupPtr: CPointer<GtkAccelGroup>? = null) : ObjectBase {
+    public val gtkAccelGroupPtr: CPointer<GtkAccelGroup>? = accelGroupPtr ?: gtk_accel_group_new()
 
     public actual val isLocked: Boolean
-        get() = gtk_accel_group_get_is_locked(gtkAcceleratorGroupPtr) == TRUE
+        get() = gtk_accel_group_get_is_locked(gtkAccelGroupPtr) == TRUE
 
     /** The modifier mask for this accel group. */
     public val modifierMask: GdkModifierType
-        get() = gtk_accel_group_get_modifier_mask(gtkAcceleratorGroupPtr)
+        get() = gtk_accel_group_get_modifier_mask(gtkAccelGroupPtr)
 
     override fun close() {
-        g_object_unref(gtkAcceleratorGroupPtr)
+        g_object_unref(gtkAccelGroupPtr)
     }
 
     public actual fun lock() {
-        gtk_accel_group_lock(gtkAcceleratorGroupPtr)
+        gtk_accel_group_lock(gtkAccelGroupPtr)
     }
 
     public actual fun unlock() {
-        gtk_accel_group_unlock(gtkAcceleratorGroupPtr)
+        gtk_accel_group_unlock(gtkAccelGroupPtr)
+    }
+
+    /**
+     * Adds a keyboard shortcut (accelerator).
+     * @param accelMod The accelerator modifier in UInt form (eg Ctrl).
+     * @param accelKey The accelerator key (eg *s*).
+     * @param accelFlags The accelerator flags.
+     * @param eventHandler Event handler to use when the accelerator is invoked by the user.
+     */
+    public fun addShortcut(
+        accelMod: UInt,
+        accelKey: Char,
+        accelFlags: UInt = 0u,
+        eventHandler: CPointer<CFunction<(COpaquePointer) -> Unit>>
+    ) {
+        gtk_accel_group_connect(
+            accel_group = gtkAccelGroupPtr,
+            accel_mods = accelMod,
+            accel_key = accelKey.toInt().toUInt(),
+            accel_flags = accelFlags,
+            closure = g_cclosure_new(callback_func = eventHandler.reinterpret(), user_data = null, destroy_data = null)
+        )
+    }
+
+    /**
+     * Removes a keyboard shortcut (accelerator).
+     * @param accelMod The accelerator modifier in UInt form (eg Ctrl)
+     * @param accelKey The accelerator key (eg *s*).
+     */
+    public fun removeShortcut(accelMod: UInt, accelKey: Char) {
+        gtk_accel_group_disconnect_key(accel_group = gtkAccelGroupPtr, accel_mods = accelMod,
+            accel_key = accelKey.toInt().toUInt())
     }
 
     /**
@@ -39,7 +71,7 @@ public actual class AcceleratorGroup(acceleratorGroupPtr: CPointer<GtkAccelGroup
      * @param userData User data to pass through to the [slot].
      */
     public fun connectAccelActivateSignal(slot: CPointer<AccelActivateSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkAcceleratorGroupPtr, signal = ACCEL_ACTIVATE_SIGNAL, slot = slot, data = userData)
+        connectGSignal(obj = gtkAccelGroupPtr, signal = ACCEL_ACTIVATE_SIGNAL, slot = slot, data = userData)
             .toULong()
 
     /**
@@ -51,12 +83,12 @@ public actual class AcceleratorGroup(acceleratorGroupPtr: CPointer<GtkAccelGroup
      * @param userData User data to pass through to the [slot].
      */
     public fun connectAccelChangedSignal(slot: CPointer<AccelChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkAcceleratorGroupPtr, signal = ACCEL_CHANGED_SIGNAL, slot = slot, data = userData)
+        connectGSignal(obj = gtkAccelGroupPtr, signal = ACCEL_CHANGED_SIGNAL, slot = slot, data = userData)
             .toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
-        disconnectGSignal(gtkAcceleratorGroupPtr, handlerId.toUInt())
+        disconnectGSignal(gtkAccelGroupPtr, handlerId.toUInt())
     }
 }
 

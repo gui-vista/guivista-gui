@@ -169,7 +169,7 @@ public actual interface WindowBase : Container {
      * @param accelGroup The acceleration group to add.
      */
     public fun addAccelGroup(accelGroup: AcceleratorGroup) {
-        gtk_window_add_accel_group(gtkWindowPtr, accelGroup.gtkAcceleratorGroupPtr)
+        gtk_window_add_accel_group(gtkWindowPtr, accelGroup.gtkAccelGroupPtr)
     }
 
     /**
@@ -178,7 +178,7 @@ public actual interface WindowBase : Container {
      * @see addAccelGroup
      */
     public fun removeAccelGroup(accelGroup: AcceleratorGroup) {
-        gtk_window_remove_accel_group(gtkWindowPtr, accelGroup.gtkAcceleratorGroupPtr)
+        gtk_window_remove_accel_group(gtkWindowPtr, accelGroup.gtkAccelGroupPtr)
     }
 
     /**
