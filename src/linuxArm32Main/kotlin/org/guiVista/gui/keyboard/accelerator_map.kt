@@ -11,8 +11,6 @@ import org.guiVista.core.ObjectBase
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val CHANGED_SIGNAL = "changed"
-
 public actual object AcceleratorMap : ObjectBase {
     public actual fun load(fileName: String) {
         gtk_accel_map_load(fileName)
@@ -80,14 +78,14 @@ public actual object AcceleratorMap : ObjectBase {
     }
 
     /**
-     * Connects the *changed* signal to a [slot] on an [AcceleratorMap]. The *changed* signal is used to of a change in
-     * the global accelerator map. The path is also used as the detail for the signal, so it is possible to connect to
+     * Connects the *changed* event to a [handler] on an [AcceleratorMap]. The *changed* event is used to of a change in
+     * the global accelerator map. The path is also used as the detail for the event, so it is possible to connect to
      * `changed::accel_path`.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectChangedSignal(slot: CPointer<ChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtk_accel_map_get(), signal = CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectChangedEvent(handler: CPointer<ChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtk_accel_map_get(), signal = AcceleratorMapEvent.changed, slot = handler, data = userData)
             .toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
@@ -97,14 +95,14 @@ public actual object AcceleratorMap : ObjectBase {
 }
 
 /**
- * The event handler for the *changed* signal. Arguments:
+ * The event handler for the *changed* event. Arguments:
  * 1. obj: CPointer<GtkAccelMap>
  * 2. accelPath: CPointer<ByteVar>
  * 3. modifier: GdkModifierType
  * 4. accelClosure: CPointer<GClosure>
  * 5. userData: gpointer
  */
-public typealias ChangedSlot = CFunction<(
+public typealias ChangedHandler = CFunction<(
     obj: CPointer<GtkAccelMap>,
     accelPath: CPointer<ByteVar>,
     accelKey: UInt,

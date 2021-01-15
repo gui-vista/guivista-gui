@@ -9,9 +9,6 @@ import org.guiVista.core.ObjectBase
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val CHANGED_SIGNAL = "changed"
-private const val VALUE_CHANGED_SIGNAL = "value-changed"
-
 public actual class Adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null) : ObjectBase {
     public val gtkAdjustmentPtr: CPointer<GtkAdjustment>? = adjustmentPtr ?: createAdjustment()
     public actual var lower: Double
@@ -69,22 +66,24 @@ public actual class Adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null) :
     }
 
     /**
-     * Connects the *changed* signal to a [slot] on a [Adjustment]. This signal is used when one or more of the
-     * [Adjustment] properties have been changed, other than the “value” property.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *changed* event to a [handler] on a [Adjustment]. This event is used when one or more of the
+     * [Adjustment] properties have been changed, other than the [value] property.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectChangedSignal(slot: CPointer<ChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkAdjustmentPtr, signal = CHANGED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectChangedEvent(handler: CPointer<ChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkAdjustmentPtr, signal = AdjustmentEvent.changed, slot = handler, data = userData)
+            .toULong()
 
     /**
-     * Connects the *value-changed* signal to a [slot] on a [Adjustment]. This signal is used when the [value] property
+     * Connects the *value-changed* event to a [handler] on a [Adjustment]. This event is used when the [value] property
      * has been changed.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkAdjustmentPtr, signal = VALUE_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectValueChangedEvent(handler: CPointer<ValueChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkAdjustmentPtr, signal = AdjustmentEvent.valueChanged, slot = handler, data = userData)
+            .toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -103,15 +102,15 @@ public fun adjustment(adjustmentPtr: CPointer<GtkAdjustment>? = null, init: Adju
 }
 
 /**
- * The event handler for the *changed* signal. Arguments:
+ * The event handler for the *changed* event. Arguments:
  * 1. adjustment: CPointer<GtkAdjustment>
  * 2. userData: gpointer
  */
-public typealias ChangedSlot = CFunction<(button: CPointer<GtkAdjustment>?, userData: gpointer) -> Unit>
+public typealias ChangedHandler = CFunction<(button: CPointer<GtkAdjustment>?, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *value-changed* signal. Arguments:
+ * The event handler for the *value-changed* event. Arguments:
  * 1. adjustment: CPointer<GtkAdjustment>
  * 2. userData: gpointer
  */
-public typealias ValueChangedSlot = CFunction<(button: CPointer<GtkButton>?, userData: gpointer) -> Unit>
+public typealias ValueChangedHandler = CFunction<(button: CPointer<GtkButton>?, userData: gpointer) -> Unit>

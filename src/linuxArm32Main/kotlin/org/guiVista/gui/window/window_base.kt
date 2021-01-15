@@ -11,12 +11,6 @@ import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-private const val ACTIVATE_DEFAULT_SIGNAL = "activate-default"
-private const val ACTIVATE_FOCUS_SIGNAL = "activate-focus"
-private const val ENABLE_DEBUGGING_SIGNAL = "enable-debugging"
-private const val KEYS_CHANGED_SIGNAL = "keys-changed"
-private const val SET_FOCUS_SIGNAL = "set-focus"
-
 public actual interface WindowBase : Container {
     public val gtkWindowPtr: CPointer<GtkWindow>?
 
@@ -297,7 +291,7 @@ public actual interface WindowBase : Container {
      * that crashes if not.
      *
      * It’s permitted to call this function before showing a window, in which case the window will be maximized when it
-     * appears onscreen initially. You can track maximization via the “window-state-event” signal on GtkWidget, or by
+     * appears onscreen initially. You can track maximization via the “window-state-event” event on GtkWidget, or by
      * listening to notifications on the “is-maximized” property.
      */
     public fun maximize() {
@@ -308,7 +302,7 @@ public actual interface WindowBase : Container {
      * Asks to unmaximize window . Note that you shouldn’t assume the window is definitely unmaximized afterward
      * because other entities (e.g. the user or window manager) could maximize it again, and not all window managers
      * honor requests to unmaximize. But normally the window will end up unmaximized. Just don’t write code that
-     * crashes if not. You can track maximization via the “window-state-event” signal on GtkWidget.
+     * crashes if not. You can track maximization via the “window-state-event” event on GtkWidget.
      */
     public fun unmaximize() {
         gtk_window_unmaximize(gtkWindowPtr)
@@ -353,52 +347,56 @@ public actual interface WindowBase : Container {
     public fun setupEvents() {}
 
     /**
-     * Connects the *activate-default* signal to a [slot] on a [WindowBase]. This signal is used when the user
+     * Connects the *activate-default* event to a [handler] on a [WindowBase]. This event is used when the user
      * activates the window's default widget.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectActivateDefaultSignal(slot: CPointer<ActivateDefaultSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWindowPtr, signal = ACTIVATE_DEFAULT_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectActivateDefaultEvent(handler: CPointer<ActivateDefaultHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = WindowBaseEvent.activateDefault, slot = handler, data = userData)
+            .toULong()
 
     /**
-     * Connects the *activate-focus* signal to a [slot] on a [WindowBase]. This signal is used when the user activates
+     * Connects the *activate-focus* event to a [handler] on a [WindowBase]. This event is used when the user activates
      * the currently focused widget of window.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectActivateFocusSignal(slot: CPointer<ActivateFocusSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWindowPtr, signal = ACTIVATE_FOCUS_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectActivateFocusEvent(handler: CPointer<ActivateFocusHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = WindowBaseEvent.activateFocus, slot = handler, data = userData)
+            .toULong()
 
     /**
-     * Connects the *enable-debugging* signal to a [slot] on a [WindowBase]. This signal is used when the user enables
+     * Connects the *enable-debugging* event to a [handler] on a [WindowBase]. This event is used when the user enables
      * or disables interactive debugging. If toggle is *true* then interactive debugging is toggled on/off. However if
      * toggle is *false* then the debugger will be pointed at the widget under the pointer.
      *
-     * The default bindings for this signal are **Ctrl+Shift+I** and **Ctrl+Shift+D**.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * The default bindings for this event are **Ctrl+Shift+I** and **Ctrl+Shift+D**.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectEnableDebuggingSignal(slot: CPointer<EnableDebuggingSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWindowPtr, signal = ENABLE_DEBUGGING_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectEnableDebuggingEvent(handler: CPointer<EnableDebuggingHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = WindowBaseEvent.enabledDebugging, slot = handler, data = userData)
+            .toULong()
 
     /**
-     * Connects the *keys-changed* signal to a [slot] on a [WindowBase]. This signal is used when the set of
+     * Connects the *keys-changed* event to a [handler] on a [WindowBase]. This event is used when the set of
      * accelerators, or mnemonics that are associated with the window changes.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectKeysChangedSignal(slot: CPointer<KeysChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWindowPtr, signal = KEYS_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectKeysChangedEvent(handler: CPointer<KeysChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = WindowBaseEvent.keysChanged, slot = handler, data = userData)
+            .toULong()
 
     /**
-     * Connects the *set-focus* signal to a [slot] on a [WindowBase]. This signal is used when focus is set on a widget
+     * Connects the *set-focus* event to a [handler] on a [WindowBase]. This event is used when focus is set on a widget
      * in a window.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectSetFocusSignal(slot: CPointer<SetFocusSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWindowPtr, signal = SET_FOCUS_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectSetFocusEvent(handler: CPointer<SetFocusHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWindowPtr, signal = WindowBaseEvent.setFocus, slot = handler, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -409,40 +407,40 @@ public actual interface WindowBase : Container {
 public actual fun listTopLevelWindows(): DoublyLinkedList = DoublyLinkedList(gtk_window_list_toplevels())
 
 /**
- * The event handler for the *activate-default* signal. Arguments:
+ * The event handler for the *activate-default* event. Arguments:
  * 1. window: CPointer<GtkWindow>
  * 2. userData: gpointer
  */
-public typealias ActivateDefaultSlot = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
+public typealias ActivateDefaultHandler = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *activate-focus* signal. Arguments:
+ * The event handler for the *activate-focus* event. Arguments:
  * 1. window: CPointer<GtkWindow>
  * 2. userData: gpointer
  */
-public typealias ActivateFocusSlot = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
+public typealias ActivateFocusHandler = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *enable-debugging* signal. Arguments:
+ * The event handler for the *enable-debugging* event. Arguments:
  * 1. window: CPointer<GtkWindow>
  * 2. toggle: Int
  * 3. userData: gpointer
  */
-public typealias EnableDebuggingSlot =
+public typealias EnableDebuggingHandler =
     CFunction<(window: CPointer<GtkWindow>, toggle: Int, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *keys-changed* signal. Arguments:
+ * The event handler for the *keys-changed* event. Arguments:
  * 1. window: CPointer<GtkWindow>
  * 2. userData: gpointer
  */
-public typealias KeysChangedSlot = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
+public typealias KeysChangedHandler = CFunction<(window: CPointer<GtkWindow>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *set-focus* signal. Arguments:
+ * The event handler for the *set-focus* event. Arguments:
  * 1. window: CPointer<GtkWindow>
  * 2. widget: CPointer<GtkWidget>
  * 3. userData: gpointer
  */
-public typealias SetFocusSlot =
+public typealias SetFocusHandler =
     CFunction<(window: CPointer<GtkWindow>, widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>

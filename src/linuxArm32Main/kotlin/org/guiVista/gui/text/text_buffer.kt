@@ -9,13 +9,6 @@ import org.guiVista.core.ObjectBase
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val BEGIN_USER_ACTION_SIGNAL = "begin-user-action"
-private const val END_USER_ACTION_SIGNAL = "end-user-action"
-private const val CHANGED_SIGNAL = "changed"
-private const val DELETE_RANGE_SIGNAL = "delete-range"
-private const val INSERT_TEXT_SIGNAL = "insert-text"
-private const val MODIFIED_CHANGED_SIGNAL = "modified-changed"
-
 public actual class TextBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null) : ObjectBase {
     public val gtkTextBufferPtr: CPointer<GtkTextBuffer>? = textBufferPtr ?: gtk_text_buffer_new(null)
 
@@ -223,10 +216,10 @@ public actual class TextBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null) :
     }
 
     /**
-     * Connects the *begin-user-action* signal to a [slot] on a [TextBuffer]. This signal is triggered when the
+     * Connects the *begin-user-action* event to a [handler] on a [TextBuffer]. This event is triggered when the
      * beginning of a single user-visible operation has occurred on a [TextBuffer].
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      * @see beginUserAction
      * @see insertInteractive
      * @see insertRangeInteractive
@@ -234,15 +227,15 @@ public actual class TextBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null) :
      * @see backspace
      * @see deleteSelection
      */
-    public fun connectBeginUserActionSignal(slot: CPointer<BEGIN_USER_ACTION_SLOT>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextBufferPtr, signal = BEGIN_USER_ACTION_SIGNAL, slot = slot, data = userData)
+    public fun connectBeginUserActionEvent(handler: CPointer<BeginUserActionHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextBufferPtr, signal = TextBufferEvent.beginUserAction, slot = handler, data = userData)
             .toULong()
 
     /**
-     * Connects the *end-user-action* signal to a [slot] on a [TextBuffer]. This signal is triggered when the
+     * Connects the *end-user-action* event to a [handler] on a [TextBuffer]. This event is triggered when the
      * end of a single user-visible operation has occurred on a [TextBuffer].
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      * @see endUserAction
      * @see insertInteractive
      * @see insertRangeInteractive
@@ -251,53 +244,57 @@ public actual class TextBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null) :
      * @see deleteSelection
      * @see backspace
      */
-    public fun connectEndUserActionSignal(slot: CPointer<END_USER_ACTION_SLOT>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextBufferPtr, signal = END_USER_ACTION_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectEndUserActionEvent(handler: CPointer<EndUserActionHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextBufferPtr, signal = TextBufferEvent.endUserAction, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *changed* signal to a [slot] on a [TextBuffer]. This signal is triggered when the content of a
+     * Connects the *changed* event to a [handler] on a [TextBuffer]. This event is triggered when the content of a
      * [TextBuffer] has changed.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectChangedSignal(slot: CPointer<CHANGED_SLOT>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextBufferPtr, signal = CHANGED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectChangedEvent(handler: CPointer<ChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextBufferPtr, signal = TextBufferEvent.changed, slot = handler, data = userData).toULong()
 
     /**
-     * Connects the *modified-changed* signal to a [slot] on a [TextBuffer]. This signal is triggered when the modified
+     * Connects the *modified-changed* event to a [handler] on a [TextBuffer]. This event is triggered when the modified
      * bit of a [TextBuffer] flips.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      * @see modified
      */
-    public fun connectModifiedChangedSignal(slot: CPointer<MODIFIED_CHANGED_SLOT>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextBufferPtr, signal = MODIFIED_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectModifiedChangedEvent(handler: CPointer<ModifiedChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextBufferPtr, signal = TextBufferEvent.modifiedChanged, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *delete-range* signal to a [slot] on a [TextBuffer]. This signal is triggered when a ranged is
+     * Connects the *delete-range* event to a [handler] on a [TextBuffer]. This event is triggered when a ranged is
      * deleted from a [TextBuffer]. Note that if your handler runs before the default handler it must **NOT**
-     * invalidate the start and end iterators (or has to revalidate them). The default signal handler revalidates the
+     * invalidate the start and end iterators (or has to revalidate them). The default event handler revalidates the
      * start, and end iterators to both point to the location where text was deleted. Handlers which run after the
      * default handler (see `g_signal_connect_after()`) do not have access to the deleted text.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      * @see delete
      */
-    public fun connectDeleteRangeSignal(slot: CPointer<DELETE_RANGE_SLOT>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextBufferPtr, signal = DELETE_RANGE_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectDeleteRangeEvent(handler: CPointer<DeleteRangeHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextBufferPtr, signal = TextBufferEvent.deleteRange, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *insert-text* signal to a [slot] on a [TextBuffer]. This signal is triggered when inserting text in
+     * Connects the *insert-text* event to a [handler] on a [TextBuffer]. This event is triggered when inserting text in
      * a [TextBuffer]. Insertion actually occurs in the default handler. Note that if your handler runs before the
-     * default handler it must **NOT** invalidate the location iterator (or has to revalidate it). The default signal
+     * default handler it must **NOT** invalidate the location iterator (or has to revalidate it). The default event
      * handler revalidates it to point to the end of the inserted text.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      * @see insert
      * @see insertRange
      */
-    public fun connectInsertTextSignal(slot: CPointer<INSERT_TEXT_SLOT>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextBufferPtr, signal = INSERT_TEXT_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectInsertTextEvent(handler: CPointer<InsertTextHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextBufferPtr, signal = TextBufferEvent.insertText, slot = handler,
+            data = userData).toULong()
 }
 
 public fun textBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null, init: TextBuffer.() -> Unit = {}): TextBuffer {
@@ -307,41 +304,41 @@ public fun textBuffer(textBufferPtr: CPointer<GtkTextBuffer>? = null, init: Text
 }
 
 /**
- * The event handler for the *begin-user-action* signal. Arguments:
+ * The event handler for the *begin-user-action* event. Arguments:
  * 1. textBuffer: CPointer<GtkTextBuffer>
  * 2. userData: gpointer
  */
-public typealias BEGIN_USER_ACTION_SLOT = CFunction<(textBuffer: CPointer<GtkTextBuffer>, userData: gpointer) -> Unit>
+public typealias BeginUserActionHandler = CFunction<(textBuffer: CPointer<GtkTextBuffer>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *end-user-action* signal. Arguments:
+ * The event handler for the *end-user-action* event. Arguments:
  * 1. textBuffer: CPointer<GtkTextBuffer>
  * 2. userData: gpointer
  */
-public typealias END_USER_ACTION_SLOT = CFunction<(textBuffer: CPointer<GtkTextBuffer>, userData: gpointer) -> Unit>
+public typealias EndUserActionHandler = CFunction<(textBuffer: CPointer<GtkTextBuffer>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *changed* signal. Arguments:
+ * The event handler for the *changed* event. Arguments:
  * 1. textBuffer: CPointer<GtkTextBuffer>
  * 2. userData: gpointer
  */
-public typealias CHANGED_SLOT = CFunction<(textBuffer: CPointer<GtkTextBuffer>, userData: gpointer) -> Unit>
+public typealias ChangedHandler = CFunction<(textBuffer: CPointer<GtkTextBuffer>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *modified-changed* signal. Arguments:
+ * The event handler for the *modified-changed* event. Arguments:
  * 1. textBuffer: CPointer<GtkTextBuffer>
  * 2. userData: gpointer
  */
-public typealias MODIFIED_CHANGED_SLOT = CFunction<(textBuffer: CPointer<GtkTextBuffer>, userData: gpointer) -> Unit>
+public typealias ModifiedChangedHandler = CFunction<(textBuffer: CPointer<GtkTextBuffer>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *delete-range* signal. Arguments:
+ * The event handler for the *delete-range* event. Arguments:
  * 1. textBuffer: CPointer<GtkTextBuffer>
  * 2. start: CPointer<GtkTextIter>
  * 3. end: CPointer<GtkTextIter>
  * 4. userData: gpointer
  */
-public typealias DELETE_RANGE_SLOT = CFunction<(
+public typealias DeleteRangeHandler = CFunction<(
     textBuffer: CPointer<GtkTextBuffer>,
     start: CPointer<GtkTextIter>,
     end: CPointer<GtkTextIter>,
@@ -349,14 +346,14 @@ public typealias DELETE_RANGE_SLOT = CFunction<(
 ) -> Unit>
 
 /**
- * The event handler for the *insert-text* signal. Arguments:
+ * The event handler for the *insert-text* event. Arguments:
  * 1. textBuffer: CPointer<GtkTextBuffer>
  * 2. location: CPointer<GtkTextIter>
  * 2. text: gchar
  * 2. len: Int
  * 2. userData: gpointer
  */
-public typealias INSERT_TEXT_SLOT = CFunction<(
+public typealias InsertTextHandler = CFunction<(
     textBuffer: CPointer<GtkTextBuffer>,
     location: CPointer<GtkTextIter>,
     text: gchar,

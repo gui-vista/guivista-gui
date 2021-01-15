@@ -12,11 +12,6 @@ import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-private const val EDGE_OVERSHOT_SIGNAL = "edge-overshot"
-private const val EDGE_REACHED_SIGNAL = "edge-reached"
-private const val MOVE_FOCUS_OUT_SIGNAL = "move-focus-out"
-private const val SCROLL_CHILD_SIGNAL = "scroll-child"
-
 public actual interface ScrolledWindowBase : Container {
     public val gtkScrolledWindowPtr: CPointer<GtkScrolledWindow>?
         get() = gtkWidgetPtr?.reinterpret()
@@ -137,58 +132,58 @@ public actual interface ScrolledWindowBase : Container {
     }
 
     /**
-     * Connects the *edge-overshot* signal to a [slot] on a scrolled window. The signal occurs whenever user initiated
+     * Connects the *edge-overshot* event to a [handler] on a scrolled window. The event occurs whenever user initiated
      * scrolling makes the scrolled window firmly surpass (ie. with some edge resistance) the lower or upper limits
      * defined by the adjustment in that orientation. A similar behavior without edge resistance is provided by the
-     * **edge-reached** signal.
+     * **edge-reached** event.
      *
      * Note the pos argument is LTR/RTL aware, so callers should be aware too if intending to provide behavior on
      * horizontal edges.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the evnet.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectEdgeOvershotSignal(slot: CPointer<EdgeOvershotSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkScrolledWindowPtr, signal = EDGE_OVERSHOT_SIGNAL, slot = slot, data = userData)
-            .toULong()
+    public fun connectEdgeOvershotEvent(handler: CPointer<EdgeOvershotHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkScrolledWindowPtr, signal = ScrolledWindowBaseEvent.edgeOvershot, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *edge-reached* signal to a [slot] on a scrolled window. The signal occurs whenever user-initiated
+     * Connects the *edge-reached* event to a [handler] on a scrolled window. The event occurs whenever user-initiated
      * scrolling makes the scrolled window exactly reaches the lower or upper limits defined by the adjustment in that
-     * orientation. A similar behavior with edge resistance is provided by the **edge-overshot** signal.
+     * orientation. A similar behavior with edge resistance is provided by the **edge-overshot** event.
      *
      * Note the pos argument is LTR/RTL aware, so callers should be aware too if intending to provide behavior on
      * horizontal edges.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectEdgeReachedSignal(slot: CPointer<EdgeReachedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkScrolledWindowPtr, signal = EDGE_REACHED_SIGNAL, slot = slot, data = userData)
-            .toULong()
+    public fun connectEdgeReachedEvent(handler: CPointer<EdgeReachedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkScrolledWindowPtr, signal = ScrolledWindowBaseEvent.edgeReached, slot = handler,
+            data = userData).toULong()
 
 
     /**
-     * Connects the *move-focus-out* signal to a [slot] on a scrolled window. This signal is a keybinding signal which
-     * occurs when focus is moved away from the scrolled window by a keybinding. The **move-focus** signal is emitted
+     * Connects the *move-focus-out* event to a [handler] on a scrolled window. This event is a keybinding event which
+     * occurs when focus is moved away from the scrolled window by a keybinding. The **move-focus** event is emitted
      * with direction_type on this scrolled windows top level parent in the container hierarchy. The default bindings
-     * for this signal are `Tab + Ctrl` and `Tab + Ctrl + Shift`.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * for this event are `Tab + Ctrl` and `Tab + Ctrl + Shift`.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectMoveFocusOutSignal(slot: CPointer<MoveFocusOutSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkScrolledWindowPtr, signal = MOVE_FOCUS_OUT_SIGNAL, slot = slot, data = userData)
-            .toULong()
+    public fun connectMoveFocusOutEvent(handler: CPointer<MoveFocusOutHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkScrolledWindowPtr, signal = ScrolledWindowBaseEvent.moveFocusOut, slot = handler,
+            data = userData).toULong()
 
 
     /**
-     * Connects the *scroll-child* signal to a [slot] on a scrolled window. This signal is a keybinding signal which
+     * Connects the *scroll-child* event to a [handler] on a scrolled window. This event is a keybinding event which
      * occurs when a keybinding that scrolls is pressed. The horizontal or vertical adjustment is updated, which
-     * triggers a signal that the scrolled windows child may listen to and scroll itself.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * triggers a event that the scrolled windows child may listen to and scroll itself.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectScrollChildSignal(slot: CPointer<ScrollChildSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkScrolledWindowPtr, signal = SCROLL_CHILD_SIGNAL, slot = slot, data = userData)
-            .toULong()
+    public fun connectScrollChildEvent(handler: CPointer<ScrollChildHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkScrolledWindowPtr, signal = ScrolledWindowBaseEvent.scrollChild, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -197,49 +192,49 @@ public actual interface ScrolledWindowBase : Container {
 }
 
 /**
- * The event handler for the *edge-overshot* signal. Arguments:
+ * The event handler for the *edge-overshot* event. Arguments:
  * 1. scrolledWin: CPointer<GtkScrolledWin>
  * 2. pos: GtkPositionType
  * 3. userData: gpointer
  */
-public typealias EdgeOvershotSlot = CFunction<(
+public typealias EdgeOvershotHandler = CFunction<(
     scrolledWin: CPointer<GtkScrolledWindow>,
     pos: GtkPositionType,
     userData: gpointer
 ) -> Unit>
 
 /**
- * The event handler for the *edge-reached* signal. Arguments:
+ * The event handler for the *edge-reached* event. Arguments:
  * 1. scrolledWin: CPointer<GtkScrolledWin>
  * 2. pos: GtkPositionType
  * 3. userData: gpointer
  */
-public typealias EdgeReachedSlot = CFunction<(
+public typealias EdgeReachedHandler = CFunction<(
     scrolledWin: CPointer<GtkScrolledWindow>,
     pos: GtkPositionType,
     userData: gpointer
 ) -> Unit>
 
 /**
- * The event handler for the *move-focus-out* signal. Arguments:
+ * The event handler for the *move-focus-out* event. Arguments:
  * 1. scrolledWin: CPointer<GtkScrolledWin>
  * 2. directionType: GtkDirectionType
  * 3. userData: gpointer
  */
-public typealias MoveFocusOutSlot = CFunction<(
+public typealias MoveFocusOutHandler = CFunction<(
     scrolledWin: CPointer<GtkScrolledWindow>,
     directionType: GtkDirectionType,
     userData: gpointer
 ) -> Unit>
 
 /**
- * The event handler for the *scroll-child* signal. Arguments:
+ * The event handler for the *scroll-child* event. Arguments:
  * 1. scrolledWin: CPointer<GtkScrolledWin>
  * 2. scroll: GtkScrollType
  * 3. horizontal: Int (a "fake" Boolean)
  * 4. userData: gpointer
  */
-public typealias ScrollChildSlot = CFunction<(
+public typealias ScrollChildHandler = CFunction<(
     scrolledWin: CPointer<GtkScrolledWindow>,
     scroll: GtkScrollType,
     horizontal: Int,

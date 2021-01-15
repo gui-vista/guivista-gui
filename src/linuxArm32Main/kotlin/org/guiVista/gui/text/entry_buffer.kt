@@ -11,9 +11,6 @@ import org.guiVista.core.ObjectBase
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val DELETED_TEXT_SIGNAL = "deleted-text"
-private const val INSERTED_TEXT_SIGNAL = "inserted-text"
-
 public actual class EntryBuffer private constructor(ptr: CPointer<GtkEntryBuffer>?) : ObjectBase {
     public val gtkEntryBufferPtr: CPointer<GtkEntryBuffer>? = ptr
 
@@ -52,23 +49,25 @@ public actual class EntryBuffer private constructor(ptr: CPointer<GtkEntryBuffer
     }
 
     /**
-     * Connects the *deleted-text* signal to a [slot] on a [EntryBuffer]. This signal occurs after text is deleted from
+     * Connects the *deleted-text* event to a [handler] on a [EntryBuffer]. This event occurs after text is deleted from
      * the buffer.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectDeletedTextSignal(slot: CPointer<DeletedTextSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkEntryBufferPtr, signal = DELETED_TEXT_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectDeletedTextEvent(handler: CPointer<DeletedTextHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryBufferPtr, signal = EntryBufferEvent.deletedText, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *inserted-text* signal to a [slot] on a [EntryBuffer]. This signal occurs after text is inserted
+     * Connects the *inserted-text* event to a [handler] on a [EntryBuffer]. This event occurs after text is inserted
      * into the buffer.
      * the buffer.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectInsertedTextSignal(slot: CPointer<InsertedTextSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkEntryBufferPtr, signal = INSERTED_TEXT_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectInsertedTextEvent(handler: CPointer<InsertedTextHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryBufferPtr, signal = EntryBufferEvent.insertedText, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -77,13 +76,13 @@ public actual class EntryBuffer private constructor(ptr: CPointer<GtkEntryBuffer
 }
 
 /**
- * The event handler for the *deleted-text* signal. Arguments:
+ * The event handler for the *deleted-text* event. Arguments:
  * 1. buffer: CPointer<GtkEntryBuffer>,
  * 2. pos: UInt,
  * 3. totalChars: Int,
  * 4. userData: gpointer
  */
-public typealias DeletedTextSlot = CFunction<(
+public typealias DeletedTextHandler = CFunction<(
     buffer: CPointer<GtkEntryBuffer>,
     pos: UInt,
     totalChars: Int,
@@ -91,14 +90,14 @@ public typealias DeletedTextSlot = CFunction<(
 ) -> Unit>
 
 /**
- * The event handler for the *inserted-text* signal. Arguments:
+ * The event handler for the *inserted-text* event. Arguments:
  * 1. buffer: CPointer<GtkEntryBuffer>
  * 2. pos: UInt
  * 3. text: CPointer<ByteVar>
  * 4. totalChars: Int
  * 5. userData: gpointer
  */
-public typealias InsertedTextSlot = CFunction<(
+public typealias InsertedTextHandler = CFunction<(
     buffer: CPointer<GtkEntryBuffer>,
     pos: UInt,
     text: CPointer<ByteVar>,

@@ -7,9 +7,6 @@ import org.guiVista.core.ObjectBase
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val ACCEL_ACTIVATE_SIGNAL = "accel-activate"
-private const val ACCEL_CHANGED_SIGNAL = "accel-changed"
-
 public actual class AcceleratorGroup(accelGroupPtr: CPointer<GtkAccelGroup>? = null) : ObjectBase {
     public val gtkAccelGroupPtr: CPointer<GtkAccelGroup>? = accelGroupPtr ?: gtk_accel_group_new()
 
@@ -65,26 +62,26 @@ public actual class AcceleratorGroup(accelGroupPtr: CPointer<GtkAccelGroup>? = n
     }
 
     /**
-     * Connects the *accel-activate* signal to a [slot] on an [AcceleratorGroup]. The *accel-activate* signal an
-     * implementation detail, and isn't meant to be used in applications.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *accel-activate* event to a [handler] on an [AcceleratorGroup]. This event is an implementation
+     * detail, and isn't meant to be used in applications.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectAccelActivateSignal(slot: CPointer<AccelActivateSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkAccelGroupPtr, signal = ACCEL_ACTIVATE_SIGNAL, slot = slot, data = userData)
-            .toULong()
+    public fun connectAccelActivateEvent(handler: CPointer<AccelActivateHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkAccelGroupPtr, signal = AcceleratorGroupEvent.accelActivate, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *accel-changed* signal to a [slot] on an [AcceleratorGroup]. The *accel-changed* signal is used
-     * when an entry is added to or removed from the accel group. Widgets like `GtkAccelLabel` which display an
-     * associated accelerator should connect to this signal, and rebuild their visual representation if the accelerator
+     * Connects the *accel-changed* event to a [handler] on an [AcceleratorGroup]. This event is used when an entry is
+     * added to or removed from the accel group. Widgets like `GtkAccelLabel` which display an associated accelerator
+     * should connect to this event, and rebuild their visual representation if the accelerator
      * closure is theirs.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectAccelChangedSignal(slot: CPointer<AccelChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkAccelGroupPtr, signal = ACCEL_CHANGED_SIGNAL, slot = slot, data = userData)
-            .toULong()
+    public fun connectAccelChangedEvent(handler: CPointer<AccelChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkAccelGroupPtr, signal = AcceleratorGroupEvent.accelChanged, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -93,14 +90,14 @@ public actual class AcceleratorGroup(accelGroupPtr: CPointer<GtkAccelGroup>? = n
 }
 
 /**
- * The event handler for the *accel-activate* signal. Arguments:
+ * The event handler for the *accel-activate* event. Arguments:
  * 1. accelGroup: CPointer<GtkAccelGroup>
  * 2. acceleratable: CPointer<GObject>
  * 3. keyVal: UInt
  * 4. modifier: GdkModifierType
  * 5. userData: gpointer
  */
-public typealias AccelActivateSlot = CFunction<(
+public typealias AccelActivateHandler = CFunction<(
     accelGroup: CPointer<GtkAccelGroup>,
     acceleratable: CPointer<GObject>,
     keyVal: UInt,
@@ -109,14 +106,14 @@ public typealias AccelActivateSlot = CFunction<(
 ) -> Unit>
 
 /**
- * The event handler for the *accel-changed* signal. Arguments:
+ * The event handler for the *accel-changed* event. Arguments:
  * 1. accelGroup: CPointer<GtkAccelGroup>
  * 2. keyVal: UInt
  * 3. modifier: GdkModifierType
  * 4. accelClosure: CPointer<GClosure>
  * 5. userData: gpointer
  */
-public typealias AccelChangedSlot = CFunction<(
+public typealias AccelChangedHandler = CFunction<(
     accelGroup: CPointer<GtkAccelGroup>,
     keyVal: UInt,
     modifier: GdkModifierType,

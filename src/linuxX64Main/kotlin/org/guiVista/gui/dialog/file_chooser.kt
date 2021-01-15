@@ -8,20 +8,12 @@ import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
 import org.guiVista.core.Error
-import org.guiVista.core.ObjectBase
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.dataType.SinglyLinkedList
-import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.FileFilter
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 import org.guiVista.io.File
-
-private const val CONFIRM_OVERWRITE_SIGNAL = "confirm-overwrite"
-private const val CURRENT_FOLDER_CHANGED_SIGNAL = "current-folder-changed"
-private const val FILE_ACTIVATED_SIGNAL = "file-activated"
-private const val SELECTION_CHANGED_SIGNAL = "selection-changed"
-private const val UPDATE_PREVIEW_SIGNAL = "update-preview"
 
 public actual interface FileChooser {
     public val gtkFileChooserPtr: CPointer<GtkFileChooser>?
@@ -185,76 +177,76 @@ public actual interface FileChooser {
         SinglyLinkedList(gtk_file_chooser_get_filenames(gtkFileChooserPtr))
 
     /**
-     * Connects the *confirm-overwrite* signal to a [slot] on a [FileChooser]. This signal occurs when it is
+     * Connects the *confirm-overwrite* event to a [handler] on a [FileChooser]. This event occurs when it is
      * appropriate to present a confirmation dialog when the user has selected a file name that already exists. Note
-     * the signal only gets emitted when the file chooser is in `GTK_FILE_CHOOSER_ACTION_SAVE` mode.
+     * the event only gets emitted when the file chooser is in `GTK_FILE_CHOOSER_ACTION_SAVE` mode.
      *
      * Most applications just need to enable the [doOverwriteConfirmation] property, and they will automatically get a
      * stock confirmation dialog. Applications which need to customize this behavior should do that, and also connect
-     * to the **confirm-overwrite** signal. A signal handler for this signal **MUST** return a
+     * to the **confirm-overwrite** event. A event handler for this event **MUST** return a
      * `GtkFileChooserConfirmation` value, which indicates the action to take. If the handler determines that the user
      * wants to select a different filename, it should return `GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN`. However if
      * it determines that the user is satisfied with his choice of file name, it should return
      * `GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME`. On the other hand, if it determines that the stock confirmation
      * dialog should be used then it should return GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectConfirmOverwriteSignal(slot: CPointer<ConfirmOverwriteSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkFileChooserPtr, signal = CONFIRM_OVERWRITE_SIGNAL, slot = slot, data = userData)
+    public fun connectConfirmOverwriteEvent(handler: CPointer<ConfirmOverwriteHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = FileChooserEvent.confirmOverwrite, slot = handler, data = userData)
 
     /**
-     * Connects the *current-folder-changed* signal to a [slot] on a [FileChooser]. This signal occurs when the current
+     * Connects the *current-folder-changed* event to a [handler] on a [FileChooser]. This event occurs when the current
      * folder in a [FileChooser] changes. This can happen due to the user performing some action that changes folders,
      * such as selecting a bookmark or visiting a folder on the file list. It can also happen as a result of calling a
      * function to explicitly change the current folder in a file chooser.
      *
-     * Normally you do not need to connect to this signal, unless you need to keep track of which folder a file chooser
+     * Normally you do not need to connect to this event, unless you need to keep track of which folder a file chooser
      * is showing.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectCurrentFolderChangedSignal(slot: CPointer<CurrentFolderChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkFileChooserPtr, signal = CURRENT_FOLDER_CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectCurrentFolderChangedEvent(handler: CPointer<CurrentFolderChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = FileChooserEvent.currentFolderChanged, slot = handler, data = userData)
 
     /**
-     * Connects the *file-activated* signal to a [slot] on a [FileChooser]. This signal occurs when the user
+     * Connects the *file-activated* event to a [handler] on a [FileChooser]. This event occurs when the user
      * "activates" a file in the file chooser. This can happen by double-clicking on a file in the file list, or by
-     * pressing **Enter**. Normally you do not need to connect to this signal. It is used internally by
+     * pressing **Enter**. Normally you do not need to connect to this event. It is used internally by
      * [GtkFileChooserDialog] to know when to activate the default button in the dialog.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectFileActivatedSignal(slot: CPointer<FileActivatedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkFileChooserPtr, signal = FILE_ACTIVATED_SIGNAL, slot = slot, data = userData)
+    public fun connectFileActivatedEvent(handler: CPointer<FileActivatedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = FileChooserEvent.fileActivated, slot = handler, data = userData)
 
     /**
-     * Connects the *selection-changed* signal to a [slot] on a [FileChooser]. This signal occurs when there is a
+     * Connects the *selection-changed* event to a [handler] on a [FileChooser]. This event occurs when there is a
      * change in the set of selected files in a [FileChooser]. This can happen when the user modifies the selection
      * with the mouse or the keyboard, or when explicitly calling functions to change the selection.
      *
-     * Normally you do not need to connect to this signal as it is easier to wait for the file chooser to finish
+     * Normally you do not need to connect to this event as it is easier to wait for the file chooser to finish
      * running, and then to get the list of selected files using the functions mentioned below.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectSelectionChangedSignal(slot: CPointer<SelectionChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkFileChooserPtr, signal = SELECTION_CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectSelectionChangedEvent(handler: CPointer<SelectionChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = FileChooserEvent.selectionChanged, slot = handler, data = userData)
 
     /**
-     * Connects the *update-preview* signal to a [slot] on a [FileChooser]. This signal occurs when the preview in a
+     * Connects the *update-preview* event to a [handler] on a [FileChooser]. This event occurs when the preview in a
      * file chooser should be regenerated. For example this can happen when the currently selected file changes. You
-     * should use this signal if you want your file chooser to have a preview widget. Once you have installed a preview
-     * widget with [previewWidget], you should update it when this signal is emitted. You can use the functions
+     * should use this event if you want your file chooser to have a preview widget. Once you have installed a preview
+     * widget with [previewWidget], you should update it when this event is emitted. You can use the functions
      * `gtk_file_chooser_get_preview_filename()`, or `gtk_file_chooser_get_preview_uri()` to get the name of the file
      * to preview. Your widget may not be able to preview all kinds of files; your callback **MUST** set the
      * [previewWidgetActive] property to inform the file chooser about whether the preview was generated successfully
      * or not.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectUpdatePreviewSignal(slot: CPointer<UpdatePreviewSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkFileChooserPtr, signal = UPDATE_PREVIEW_SIGNAL, slot = slot, data = userData)
+    public fun connectUpdatePreviewEvent(handler: CPointer<UpdatePreviewHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkFileChooserPtr, signal = FileChooserEvent.updatePreview, slot = handler, data = userData)
 
     /**
      * Sets the current folder for chooser from a local filename. The user will be shown the full contents of the
@@ -527,41 +519,41 @@ public actual interface FileChooser {
 }
 
 /**
- * The event handler for the *confirm-overwrite* signal. Arguments:
+ * The event handler for the *confirm-overwrite* event. Arguments:
  * 1. chooser: CPointer<GtkFileChooser>
  * 2. userData: gpointer
  *
  * Returns GtkFileChooserConfirmation.
  */
-public typealias ConfirmOverwriteSlot = CFunction<(
+public typealias ConfirmOverwriteHandler = CFunction<(
     chooser: CPointer<GtkFileChooser>,
     userData: gpointer
 ) -> GtkFileChooserConfirmation>
 
 /**
- * The event handler for the *file-activated* signal. Arguments:
+ * The event handler for the *file-activated* event. Arguments:
  * 1. chooser: CPointer<GtkFileChooser>
  * 2. userData: gpointer
  */
-public typealias FileActivatedSlot = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
+public typealias FileActivatedHandler = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *selection-changed* signal. Arguments:
+ * The event handler for the *selection-changed* event. Arguments:
  * 1. chooser: CPointer<GtkFileChooser>
  * 2. userData: gpointer
  */
-public typealias SelectionChangedSlot = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
+public typealias SelectionChangedHandler = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *current-folder-changed* signal. Arguments:
+ * The event handler for the *current-folder-changed* event. Arguments:
  * 1. chooser: CPointer<GtkFileChooser>
  * 2. userData: gpointer
  */
-public typealias CurrentFolderChangedSlot = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
+public typealias CurrentFolderChangedHandler = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *update-preview* signal. Arguments:
+ * The event handler for the *update-preview* event. Arguments:
  * 1. chooser: CPointer<GtkFileChooser>
  * 2. userData: gpointer
  */
-public typealias UpdatePreviewSlot = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>
+public typealias UpdatePreviewHandler = CFunction<(chooser: CPointer<GtkFileChooser>, userData: gpointer) -> Unit>

@@ -12,11 +12,6 @@ import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-private const val EDGE_OVERSHOT_SIGNAL = "edge-overshot"
-private const val EDGE_REACHED_SIGNAL = "edge-reached"
-private const val MOVE_FOCUS_OUT_SIGNAL = "move-focus-out"
-private const val SCROLL_CHILD_SIGNAL = "scroll-child"
-
 public actual interface ScrolledWindowBase : Container {
     public val gtkScrolledWindowPtr: CPointer<GtkScrolledWindow>?
         get() = gtkWidgetPtr?.reinterpret()
@@ -148,7 +143,8 @@ public actual interface ScrolledWindowBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     public fun connectEdgeOvershotSignal(slot: CPointer<EdgeOvershotSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkScrolledWindowPtr, signal = EDGE_OVERSHOT_SIGNAL, slot = slot, data = userData)
+        connectGSignal(obj = gtkScrolledWindowPtr, signal = ScrolledWindowBaseEvent.edgeOvershot, slot = slot,
+            data = userData)
 
     /**
      * Connects the *edge-reached* signal to a [slot] on a scrolled window. The signal occurs whenever user-initiated
@@ -161,7 +157,8 @@ public actual interface ScrolledWindowBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     public fun connectEdgeReachedSignal(slot: CPointer<EdgeReachedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkScrolledWindowPtr, signal = EDGE_REACHED_SIGNAL, slot = slot, data = userData)
+        connectGSignal(obj = gtkScrolledWindowPtr, signal = ScrolledWindowBaseEvent.edgeReached, slot = slot,
+            data = userData)
 
 
     /**
@@ -173,7 +170,8 @@ public actual interface ScrolledWindowBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     public fun connectMoveFocusOutSignal(slot: CPointer<MoveFocusOutSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkScrolledWindowPtr, signal = MOVE_FOCUS_OUT_SIGNAL, slot = slot, data = userData)
+        connectGSignal(obj = gtkScrolledWindowPtr, signal = ScrolledWindowBaseEvent.moveFocusOut, slot = slot,
+            data = userData)
 
 
     /**
@@ -184,7 +182,8 @@ public actual interface ScrolledWindowBase : Container {
      * @param userData User data to pass through to the [slot].
      */
     public fun connectScrollChildSignal(slot: CPointer<ScrollChildSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkScrolledWindowPtr, signal = SCROLL_CHILD_SIGNAL, slot = slot, data = userData)
+        connectGSignal(obj = gtkScrolledWindowPtr, signal = ScrolledWindowBaseEvent.scrollChild, slot = slot,
+            data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
