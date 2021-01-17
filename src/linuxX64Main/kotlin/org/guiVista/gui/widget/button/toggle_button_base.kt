@@ -10,8 +10,6 @@ import kotlinx.cinterop.reinterpret
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val TOGGLED_SIGNAL = "toggled"
-
 public actual interface ToggleButtonBase : ButtonBase {
     public val gtkToggleButtonPtr: CPointer<GtkToggleButton>?
         get() = gtkWidgetPtr?.reinterpret()
@@ -39,14 +37,15 @@ public actual interface ToggleButtonBase : ButtonBase {
         set(value) = gtk_toggle_button_set_mode(gtkToggleButtonPtr, if (value) TRUE else FALSE)
 
     /**
-     * Connects the *toggled* signal to a [slot] on a [ToggleButton]. This signal is used when the
+     * Connects the *toggled* event to a [handler] on a [ToggleButton]. This event is used when the
      * [toggle button's][ToggleButton] state has changed.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
-     * @return The handler ID for the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
+     * @return The handler ID for the [handler].
      */
-    public fun connectToggledSignal(slot: CPointer<ToggledSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkToggleButtonPtr, signal = TOGGLED_SIGNAL, slot = slot, data = userData)
+    public fun connectToggledEvent(handler: CPointer<ToggledHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkToggleButtonPtr, signal = ToggleButtonBaseEvent.toggled, slot = handler,
+            data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -55,8 +54,8 @@ public actual interface ToggleButtonBase : ButtonBase {
 }
 
 /**
- * The event handler for the *toggled* signal. Arguments:
+ * The event handler for the *toggled* event. Arguments:
  * 1. toggleButton: CPointer<GtkToggleButton>
  * 2. userData: gpointer
  */
-public typealias ToggledSlot = CFunction<(toggleButton: CPointer<GtkToggleButton>, userData: gpointer) -> Unit>
+public typealias ToggledHandler = CFunction<(toggleButton: CPointer<GtkToggleButton>, userData: gpointer) -> Unit>

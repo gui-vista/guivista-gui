@@ -9,8 +9,6 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.dataType.SinglyLinkedList
 import org.guiVista.core.disconnectGSignal
 
-private const val GROUP_CHANGED_SIGNAL = "group-changed"
-
 public actual class RadioButton(
     radioButtonPtr: CPointer<GtkRadioButton>? = null,
     label: String = "",
@@ -40,16 +38,16 @@ public actual class RadioButton(
     }
 
     /**
-     * Connects the *group-changed* signal to a [slot] on a [RadioButton]. This signal is used when the group of radio
-     * buttons that a [radio button][RadioButton] belongs to changes. Signal is emitted when a
+     * Connects the *group-changed* event to a [handler] on a [RadioButton]. This event is used when the group of radio
+     * buttons that a [radio button][RadioButton] belongs to changes. Event is emitted when a
      * [radio button][RadioButton] switches from being alone to being part of a group of two or more buttons, or
      * vice-versa, and when a button is moved from one group of two or more buttons to a different one, but not when
      * the composition of the group that a button belongs to changes.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectGroupChangedSignal(slot: CPointer<GroupChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkRadioButtonPtr, signal = GROUP_CHANGED_SIGNAL, slot = slot, data = userData)
+    public fun connectGroupChangedEvent(handler: CPointer<GroupChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkRadioButtonPtr, signal = RadioButtonEvent.groupChanged, slot = handler, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -69,8 +67,8 @@ public fun radioButtonWidget(
 }
 
 /**
- * The event handler for the *group-changed* signal. Arguments:
+ * The event handler for the *group-changed* event. Arguments:
  * 1. radioButton: CPointer<GtkRadioButton>
  * 2. userData: gpointer
  */
-public typealias GroupChangedSlot = CFunction<(radioButton: CPointer<GtkRadioButton>, userData: gpointer) -> Unit>
+public typealias GroupChangedHandler = CFunction<(radioButton: CPointer<GtkRadioButton>, userData: gpointer) -> Unit>

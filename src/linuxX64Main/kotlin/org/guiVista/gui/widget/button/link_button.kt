@@ -11,8 +11,6 @@ import kotlinx.cinterop.toKString
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val ACTIVATE_LINK_SIGNAL = "activate-link"
-
 public actual class LinkButton(
     linkButtonPtr: CPointer<GtkLinkButton>? = null,
     uri: String = "",
@@ -38,15 +36,15 @@ public actual class LinkButton(
         else gtk_link_button_new(uri)
 
     /**
-     * Connects the *activate-link* signal to a [slot] on a [LinkButton]. This signal is used when the [LinkButton] has
+     * Connects the *activate-link* event to a [handler] on a [LinkButton]. This event is used when the [LinkButton] has
      * been clicked. The default handler will call `gtk_show_uri_on_window()` with the URI stored inside the
-     * [uri property][uri]. To override the default behavior you can connect to the ::activate-link signal and stop the
-     * propagation of the signal by returning *true* from your handler.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * [uri property][uri]. To override the default behavior you can connect to the ::activate-link event and stop the
+     * propagation of the event by returning *true* from your handler.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectActivateLinkSignal(slot: CPointer<ActivateLinkSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkLinkButtonPtr, signal = ACTIVATE_LINK_SIGNAL, slot = slot, data = userData)
+    public fun connectActivateLinkEvent(handler: CPointer<ActivateLinkHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkLinkButtonPtr, signal = LinkButtonEvent.activateLink, slot = handler, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -66,8 +64,8 @@ public fun linkButtonWidget(
 }
 
 /**
- * The event handler for the *activate-link* signal. Arguments:
+ * The event handler for the *activate-link* event. Arguments:
  * 1. linkButton: CPointer<GtkLinkButton>
  * 2. userData: gpointer
  */
-public typealias ActivateLinkSlot = CFunction<(linkButton: CPointer<GtkLinkButton>, userData: gpointer) -> Unit>
+public typealias ActivateLinkHandler = CFunction<(linkButton: CPointer<GtkLinkButton>, userData: gpointer) -> Unit>

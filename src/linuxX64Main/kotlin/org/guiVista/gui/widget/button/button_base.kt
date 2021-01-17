@@ -14,9 +14,6 @@ import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-private const val CLICKED_SIGNAL = "clicked"
-private const val ACTIVATE_SIGNAL = "activate"
-
 public actual interface ButtonBase : Container {
     public val gtkButtonPtr: CPointer<GtkButton>?
         get() = gtkWidgetPtr?.reinterpret()
@@ -67,22 +64,23 @@ public actual interface ButtonBase : Container {
         set(value) = gtk_button_set_use_underline(gtkButtonPtr, if (value) TRUE else FALSE)
 
     /**
-     * Connects the *clicked* signal to a [slot] on a button. This signal is used when a user has clicked on the button.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *clicked* event to a [handler] on a button. This event is used when a user has clicked on the
+     * button.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData)
+    public fun connectClickedEvent(handler: CPointer<ClickedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkButtonPtr, signal = ButtonBaseEvent.clicked, slot = handler, data = userData)
 
     /**
-     * Connects the *activate* signal to a [slot] on a button. This signal is an action signal that causes the button
-     * to animate press then release. Applications should **NEVER** connect to this signal, but use the “clicked”
-     * signal.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *activate* event to a [handler] on a button. This event is an action event that causes the button
+     * to animate press then release. Applications should **NEVER** connect to this event, but use the **clicked**
+     * event.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkButtonPtr, signal = ACTIVATE_SIGNAL, slot = slot, data = userData)
+    public fun connectActivateEvent(handler: CPointer<ActivateHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkButtonPtr, signal = ButtonBaseEvent.activate, slot = handler, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -91,15 +89,15 @@ public actual interface ButtonBase : Container {
 }
 
 /**
- * The event handler for the *activate* signal. Arguments:
+ * The event handler for the *activate* event. Arguments:
  * 1. widget: CPointer<GtkButton>
  * 2. userData: gpointer
  */
-public typealias ActivateSlot = CFunction<(widget: CPointer<GtkButton>?, userData: gpointer) -> Unit>
+public typealias ActivateHandler = CFunction<(widget: CPointer<GtkButton>?, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *clicked* signal. Arguments:
+ * The event handler for the *clicked* event. Arguments:
  * 1. button: CPointer<GtkButton>
  * 2. userData: gpointer
  */
-public typealias ClickedSlot = CFunction<(button: CPointer<GtkButton>?, userData: gpointer) -> Unit>
+public typealias ClickedHandler = CFunction<(button: CPointer<GtkButton>?, userData: gpointer) -> Unit>

@@ -9,11 +9,6 @@ import kotlinx.cinterop.reinterpret
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val NEXT_MATCH_SIGNAL = "next-match"
-private const val PREVIOUS_MATCH_SIGNAL = "previous-match"
-private const val STOP_SEARCH_SIGNAL = "stop-search"
-private const val SEARCH_CHANGED_SIGNAL = "search-changed"
-
 public actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null) : EntryBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = searchEntryPtr?.reinterpret() ?: gtk_search_entry_new()
     public val gtkSearchEntryPtr: CPointer<GtkSearchEntry>?
@@ -33,43 +28,47 @@ public actual class SearchEntry(searchEntryPtr: CPointer<GtkSearchEntry>? = null
         gtk_search_entry_handle_event(gtkSearchEntryPtr, event) == TRUE
 
     /**
-     * Connects the *next-match* signal to a [slot] on a [SearchEntry]. This signal is a key binding signal that is used
-     * when the user initiates a move to the next match for the current search string. Applications should connect to
-     * it to implement moving between matches. The default bindings for this signal is *Ctrl-g*.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *next-match* event to a [handler] on a [SearchEntry]. This event is a key binding event that is used
+     * when the user initiates a move to the next match for the current search String. Applications should connect to
+     * it to implement moving between matches. The default bindings for this event is *Ctrl-g*.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectNextMatchSignal(slot: CPointer<NextMatchSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkSearchEntryPtr, signal = NEXT_MATCH_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectNextMatchEvent(handler: CPointer<NextMatchHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSearchEntryPtr, signal = SearchEntryEvent.nextMatch, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *previous-match* signal to a [slot] on a [SearchEntry]. This signal is a key binding signal that is
-     * used when the user initiates a move to the previous match for the current search string. Applications should
-     * connect to it to implement moving between matches. The default bindings for this signal is *Ctrl-Shift-g*.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *previous-match* event to a [handler] on a [SearchEntry]. This event is a key binding event that is
+     * used when the user initiates a move to the previous match for the current search String. Applications should
+     * connect to it to implement moving between matches. The default bindings for this event is *Ctrl-Shift-g*.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectPreviousMatchSignal(slot: CPointer<PreviousMatchSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkSearchEntryPtr, signal = PREVIOUS_MATCH_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectPreviousMatchEvent(handler: CPointer<PreviousMatchHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSearchEntryPtr, signal = SearchEntryEvent.previousMatch, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *search-changed* signal to a [slot] on a [SearchEntry]. This signal is emitted with a short delay of
-     * 150 milliseconds after the last change to the entry text.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *search-changed* event to a [handler] on a [SearchEntry]. This event is emitted with a short delay
+     * of 150 milliseconds after the last change to the entry text.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectSearchChangedSignal(slot: CPointer<SearchChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkSearchEntryPtr, signal = SEARCH_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectSearchChangedEvent(handler: CPointer<SearchChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSearchEntryPtr, signal = SearchEntryEvent.searchChanged, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *stop-search* signal to a [slot] on a [SearchEntry]. This signal is a key binding signal that is
+     * Connects the *stop-search* event to a [handler] on a [SearchEntry]. This event is a key binding event that is
      * used when the user stops a search via keyboard input. Applications should connect to it to implement hiding the
-     * [SearchEntry] in this case. The default bindings for this signal is *Escape*.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * [SearchEntry] in this case. The default bindings for this event is *Escape*.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectStopSearchSignal(slot: CPointer<StopSearchSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkSearchEntryPtr, signal = STOP_SEARCH_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectStopSearchEvent(handler: CPointer<StopSearchHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSearchEntryPtr, signal = SearchEntryEvent.stopSearch, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -87,29 +86,29 @@ public fun searchEntryWidget(
 }
 
 /**
- * The event handler for the *next-match* signal. Arguments:
+ * The event handler for the *next-match* event. Arguments:
  * 1. entry: CPointer<GtkSearchEntry>
  * 2. userData: gpointer
  */
-public typealias NextMatchSlot = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
+public typealias NextMatchHandler = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *previous-match* signal. Arguments:
+ * The event handler for the *previous-match* event. Arguments:
  * 1. entry: CPointer<GtkSearchEntry>
  * 2. userData: gpointer
  */
-public typealias PreviousMatchSlot = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
+public typealias PreviousMatchHandler = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *search-changed* signal. Arguments:
+ * The event handler for the *search-changed* event. Arguments:
  * 1. entry: CPointer<GtkSearchEntry>
  * 2. userData: gpointer
  */
-public typealias SearchChangedSlot = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
+public typealias SearchChangedHandler = CFunction<(entry: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *stop-search* signal. Arguments:
+ * The event handler for the *stop-search* event. Arguments:
  * 1. entry: CPointer<GtkSearchEntry>
  * 2. userData: gpointer
  */
-public typealias StopSearchSlot = CFunction<(app: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>
+public typealias StopSearchHandler = CFunction<(app: CPointer<GtkSearchEntry>, userData: gpointer) -> Unit>

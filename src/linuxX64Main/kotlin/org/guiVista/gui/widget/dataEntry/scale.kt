@@ -11,8 +11,6 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.widget.Range
 
-private const val FORMAT_VALUE_SIGNAL = "format-value"
-
 public actual class Scale(scalePtr: CPointer<GtkScale>? = null,
                           orientation: GtkOrientation = GtkOrientation.GTK_ORIENTATION_HORIZONTAL) : Range {
     override val gtkWidgetPtr: CPointer<GtkWidget>? =
@@ -37,17 +35,17 @@ public actual class Scale(scalePtr: CPointer<GtkScale>? = null,
         set(value) = gtk_scale_set_value_pos(gtkScalePtr, value)
 
     /**
-     * Connects the *format-value* signal to a [slot] on a [Scale]. The signal allows you to change how the scale value
-     * is displayed. Connect a signal handler which returns an allocated string representing value. That string will
+     * Connects the *format-value* event to a [handler] on a [Scale]. The event allows you to change how the scale value
+     * is displayed. Connect a event handler which returns an allocated string representing value. That string will
      * then be used to display the scale's value.
      *
      * If no user-provided handlers are installed the value will be displayed on its own, rounded according to the
      * value of the [digits property][digits].
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectFormatValueSignal(slot: CPointer<FormatValueSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkScalePtr, signal = FORMAT_VALUE_SIGNAL, slot = slot, data = userData)
+    public fun connectFormatValueEvent(handler: CPointer<FormatValueHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkScalePtr, signal = ScaleEvent.formatValue, slot = handler, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -70,9 +68,9 @@ public fun scaleWidget(scalePtr: CPointer<GtkScale>? = null, init: Scale.() -> U
 }
 
 /**
- * The event handler for the *format-value* signal. Arguments:
+ * The event handler for the *format-value* event. Arguments:
  * 1. scale: CPointer<GtkScale>
  * 2. value: Double
  * 3. userData: gpointer
  */
-public typealias FormatValueSlot = CFunction<(scale: CPointer<GtkScale>, value: Double, userData: gpointer) -> Unit>
+public typealias FormatValueHandler = CFunction<(scale: CPointer<GtkScale>, value: Double, userData: gpointer) -> Unit>

@@ -11,9 +11,6 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.layout.Container
 
-private const val CLOSE_SIGNAL = "close"
-private const val RESPONSE_SIGNAL = "response"
-
 public actual class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Container {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = infoBarPtr?.reinterpret() ?: gtk_info_bar_new()
     public val gtkInfoBarPtr: CPointer<GtkInfoBar>?
@@ -39,23 +36,23 @@ public actual class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Containe
         get() = gtk_info_bar_get_content_area(gtkInfoBarPtr)
 
     /**
-     * Connects the *close* signal to a [slot] on a [InfoBar]. This signal is used when a user uses a key binding
+     * Connects the *close* event to a [handler] on a [InfoBar]. This event is used when a user uses a key binding
      * to dismiss the info bar.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectCloseSignal(slot: CPointer<CloseSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkInfoBarPtr, signal = CLOSE_SIGNAL, slot = slot, data = userData)
+    public fun connectCloseEvent(handler: CPointer<CloseHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkInfoBarPtr, signal = InfoBarEvent.close, slot = handler, data = userData)
 
     /**
-     * Connects the *response* signal to a [slot] on a [InfoBar]. This signal is used when an action widget
+     * Connects the *response* event to a [handler] on a [InfoBar]. This event is used when an action widget
      * is clicked, or the application programmer calls `gtk_dialog_response()`. The responseId depends on which action
      * widget was clicked.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectResponseSignal(slot: CPointer<ResponseSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkInfoBarPtr, signal = RESPONSE_SIGNAL, slot = slot, data = userData)
+    public fun connectResponseEvent(handler: CPointer<ResponseHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkInfoBarPtr, signal = InfoBarEvent.response, slot = handler, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -64,7 +61,7 @@ public actual class InfoBar(infoBarPtr: CPointer<GtkInfoBar>? = null) : Containe
 
     /**
      * Adds a button with the given text, and sets things up so that clicking the button will emit the “response”
-     * signal with the given [responseId]. The button is appended to the end of the info bars's action area.
+     * event with the given [responseId]. The button is appended to the end of the info bars's action area.
      * @param buttonText The button's text.
      * @param responseId Response ID to use for the button.
      * @return A button widget. Usually you don't need it.
@@ -91,16 +88,20 @@ public fun infoBarWidget(infoBarPtr: CPointer<GtkInfoBar>? = null, init: InfoBar
 }
 
 /**
- * The event handler for the *close* signal. Arguments:
+ * The event handler for the *close* event. Arguments:
  * 1. infoBar: CPointer<GtkInfoBar>
  * 2. userData: gpointer
  */
-public typealias CloseSlot = CFunction<(infoBar: CPointer<GtkInfoBar>, userData: gpointer) -> Unit>
+public typealias CloseHandler = CFunction<(infoBar: CPointer<GtkInfoBar>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *response* signal. Arguments:
+ * The event handler for the *response* event. Arguments:
  * 1. infoBar: CPointer<GtkInfoBar>
  * 2. responseId: Int
  * 3. userData: gpointer
  */
-public typealias ResponseSlot = CFunction<(infoBar: CPointer<GtkInfoBar>, responseId: Int, userData: gpointer) -> Unit>
+public typealias ResponseHandler = CFunction<(
+    infoBar: CPointer<GtkInfoBar>,
+    responseId: Int,
+    userData: gpointer
+) -> Unit>

@@ -11,8 +11,6 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.widget.WidgetBase
 
-private const val STATE_SET_SIGNAL = "state-set"
-
 public actual class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = switchPtr?.reinterpret() ?: gtk_switch_new()
     public val gtkSwitchPtr: CPointer<GtkSwitch>?
@@ -25,19 +23,19 @@ public actual class Switch(switchPtr: CPointer<GtkSwitch>? = null) : WidgetBase 
         set(value) = gtk_switch_set_state(gtkSwitchPtr, if (value) TRUE else FALSE)
 
     /**
-     * Connects the *state-set* signal to a [slot] on a [Switch]. This signal is used when the user changes the switch
+     * Connects the *state-set* event to a [handler] on a [Switch]. This event is used when the user changes the switch
      * position. The default handler keeps the state in sync with the [active property][active]. To implement delayed
-     * state change applications can connect to this signal, initiate the change of the underlying state, and call
-     * `gtk_switch_set_state()` when the underlying state change is complete. The signal handler should return *true*
+     * state change applications can connect to this event, initiate the change of the underlying state, and call
+     * `gtk_switch_set_state()` when the underlying state change is complete. The event handler should return *true*
      * to prevent the default handler from running.
      *
      * Visually, the underlying state is represented by the true color of the switch, while the
      * [active property][active] is represented by the position of the [Switch].
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectStateSetSignal(slot: CPointer<StateSetSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkSwitchPtr, signal = STATE_SET_SIGNAL, slot = slot, data = userData)
+    public fun connectStateSetEvent(handler: CPointer<StateSetHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSwitchPtr, signal = SwitchEvent.stateSet, slot = handler, data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -52,9 +50,9 @@ public fun switchWidget(switchPtr: CPointer<GtkSwitch>? = null, init: Switch.() 
 }
 
 /**
- * The event handler for the *state-set* signal. Arguments:
+ * The event handler for the *state-set* event. Arguments:
  * 1. switch: CPointer<GtkSwitch>
  * 2. state: Boolean
  * 3. userData: gpointer
  */
-public typealias StateSetSlot = CFunction<(switch: CPointer<GtkSwitch>, state: Boolean, userData: gpointer) -> Unit>
+public typealias StateSetHandler = CFunction<(switch: CPointer<GtkSwitch>, state: Boolean, userData: gpointer) -> Unit>

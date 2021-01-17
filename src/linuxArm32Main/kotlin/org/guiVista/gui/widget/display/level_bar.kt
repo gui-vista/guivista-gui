@@ -11,8 +11,6 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.widget.WidgetBase
 
-private const val OFFSET_CHANGED_SIGNAL = "offset-changed"
-
 public actual class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : WidgetBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = levelBarPtr?.reinterpret() ?: gtk_level_bar_new()
     public val gtkLevelBarPtr: CPointer<GtkLevelBar>?
@@ -50,14 +48,15 @@ public actual class LevelBar(levelBarPtr: CPointer<GtkLevelBar>? = null) : Widge
         }
 
     /**
-     * Connects the *offset-changed* signal to a [slot] on a [LevelBar]. This signal is used when the
-     * bar changes value as an effect to ?? being called. The signal supports detailed connections. You can connect to
-     * the detailed signal "changed::x" in order to only receive callbacks when the value of offset *x* changes.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *offset-changed* event to a [handler] on a [LevelBar]. This event is used when the
+     * bar changes value as an effect to ?? being called. The event supports detailed connections. You can connect to
+     * the detailed event "changed::x" in order to only receive callbacks when the value of offset *x* changes.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectOffsetChangedSignal(slot: CPointer<OffsetChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkLevelBarPtr, signal = OFFSET_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectOffsetChangedEvent(handler: CPointer<OffsetChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkLevelBarPtr, signal = LevelBarEvent.offsetChanged, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -72,9 +71,13 @@ public fun levelBarWidget(levelBarPtr: CPointer<GtkLevelBar>? = null, init: Leve
 }
 
 /**
- * The event handler for the *offset-changed* signal. Arguments:
+ * The event handler for the *offset-changed* event. Arguments:
  * 1. levelBar: CPointer<GtkLevelBar>
  * 2. name: String
  * 3. userData: gpointer
  */
-public typealias OffsetChangedSlot = CFunction<(app: CPointer<GtkLevelBar>, name: String, userData: gpointer) -> Unit>
+public typealias OffsetChangedHandler = CFunction<(
+    app: CPointer<GtkLevelBar>,
+    name: String,
+    userData: gpointer
+) -> Unit>

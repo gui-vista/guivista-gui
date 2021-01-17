@@ -12,12 +12,6 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.widget.WidgetBase
 
-private const val ACTIVATE_SIGNAL = "activate"
-private const val BACKSPACE_SIGNAL = "backspace"
-private const val COPY_CLIPBOARD_SIGNAL = "copy-clipboard"
-private const val CUT_CLIPBOARD_SIGNAL = "cut-clipboard"
-private const val PASTE_CLIPBOARD_SIGNAL = "paste-clipboard"
-
 public actual interface EntryBase : WidgetBase {
     public val gtkEntryPtr: CPointer<GtkEntry>?
         get() = gtkWidgetPtr?.reinterpret()
@@ -190,88 +184,88 @@ public actual interface EntryBase : WidgetBase {
     }
 
     /**
-     * Connects the *activate* signal to a [slot] on a [Entry]. This signal is used when the user hits the **Enter**
-     * key. Signal is commonly used by applications to intercept activation of entries. The default bindings for this
-     * signal are all forms of the **Enter** key.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
-     * @return The handler ID for the [slot].
+     * Connects the *activate* event to a [handler] on a [Entry]. This event is used when the user hits the **Enter**
+     * key, and the event is commonly used by applications to intercept activation of entries. The default bindings for
+     * this event are all forms of the **Enter** key.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
+     * @return The handler ID for the [handler].
      */
-    public fun connectActivateSignal(slot: CPointer<ActivateSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkEntryPtr, signal = ACTIVATE_SIGNAL, slot = slot, data = userData)
+    public fun connectActivateEvent(handler: CPointer<ActivateHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = EntryBaseEvent.activate, slot = handler, data = userData)
 
     /**
-     * Connects the *backspace* signal to a [slot] on a [Entry]. This signal is used when when the user asks for it.
-     * The default bindings for this signal are **Backspace** and **Shift-Backspace**.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
-     * @return The handler ID for the [slot].
+     * Connects the *backspace* event to a [handler] on a [Entry]. This event is used when when the user asks for it.
+     * The default bindings for this event are **Backspace** and **Shift-Backspace**.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
+     * @return The handler ID for the [handler].
      */
-    public fun connectBackspaceSignal(slot: CPointer<BackspaceSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkEntryPtr, signal = BACKSPACE_SIGNAL, slot = slot, data = userData)
+    public fun connectBackspaceEvent(handler: CPointer<BackspaceHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = EntryBaseEvent.backspace, slot = handler, data = userData)
 
     /**
-     * Connects the *copy-clipboard* signal to a [slot] on a [Entry]. This signal is used when something is copied to
-     * the clipboard. The default bindings for this signal are **Ctrl-c** and **Ctrl-Insert**.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
-     * @return The handler ID for the [slot].
+     * Connects the *copy-clipboard* event to a [handler] on a [Entry]. This event is used when something is copied to
+     * the clipboard. The default bindings for this event are **Ctrl-c** and **Ctrl-Insert**.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
+     * @return The handler ID for the [handler].
      */
-    public fun connectCopyClipboardSignal(slot: CPointer<CopyClipboardSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkEntryPtr, signal = COPY_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+    public fun connectCopyClipboardEvent(handler: CPointer<CopyClipboardHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = EntryBaseEvent.copyClipboard, slot = handler, data = userData)
 
     /**
-     * Connects the *cut-clipboard* signal to a [slot] on a [Entry]. This signal is used when something is cut from
-     * the clipboard. The default bindings for this signal are **Ctrl-x** and **Shift-Delete**.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
-     * @return The handler ID for the [slot].
+     * Connects the *cut-clipboard* event to a [handler] on a [Entry]. This event is used when something is cut from
+     * the clipboard. The default bindings for this event are **Ctrl-x** and **Shift-Delete**.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
+     * @return The handler ID for the [handler].
      */
-    public fun connectCutClipboardSignal(slot: CPointer<CutClipboardSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkEntryPtr, signal = CUT_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+    public fun connectCutClipboardEvent(handler: CPointer<CutClipboardHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = EntryBaseEvent.cutClipboard, slot = handler, data = userData)
 
     /**
-     * Connects the *paste-clipboard* signal to a [slot] on a [Entry]. This signal is used when pasting the contents of
-     * the clipboard into the text view. The default bindings for this signal are **Ctrl-v** and **Shift-Insert**.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
-     * @return The handler ID for the [slot].
+     * Connects the *paste-clipboard* event to a [handler] on a [Entry]. This event is used when pasting the contents of
+     * the clipboard into the text view. The default bindings for this event are **Ctrl-v** and **Shift-Insert**.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
+     * @return The handler ID for the [handler].
      */
-    public fun connectPasteClipboardSignal(slot: CPointer<PasteClipboardSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkEntryPtr, signal = PASTE_CLIPBOARD_SIGNAL, slot = slot, data = userData)
+    public fun connectPasteClipboardEvent(handler: CPointer<PasteClipboardHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkEntryPtr, signal = EntryBaseEvent.pasteClipboard, slot = handler, data = userData)
 }
 
 /**
- * The event handler for the *activate* signal. Arguments:
+ * The event handler for the *activate* event. Arguments:
  * 1. entry: CPointer<GtkEntry>
  * 2. userData: gpointer
  */
-public typealias ActivateSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
+public typealias ActivateHandler = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *backspace* signal. Arguments:
+ * The event handler for the *backspace* event. Arguments:
  * 1. entry: CPointer<GtkEntry>
  * 2. userData: gpointer
  */
-public typealias BackspaceSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
+public typealias BackspaceHandler = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *copy-clipboard* signal. Arguments:
+ * The event handler for the *copy-clipboard* event. Arguments:
  * 1. entry: CPointer<GtkEntry>
  * 2. userData: gpointer
  */
-public typealias CopyClipboardSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
+public typealias CopyClipboardHandler = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *cut-clipboard* signal. Arguments:
+ * The event handler for the *cut-clipboard* event. Arguments:
  * 1. entry: CPointer<GtkEntry>
  * 2. userData: gpointer
  */
-public typealias CutClipboardSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
+public typealias CutClipboardHandler = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *paste-clipboard* signal. Arguments:
+ * The event handler for the *paste-clipboard* event. Arguments:
  * 1. entry: CPointer<GtkEntry>
  * 2. userData: gpointer
  */
-public typealias PasteClipboardSlot = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>
+public typealias PasteClipboardHandler = CFunction<(entry: CPointer<GtkEntry>, userData: gpointer) -> Unit>

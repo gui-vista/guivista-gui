@@ -11,9 +11,6 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.Adjustment
 
-private const val VALUE_CHANGED_SIGNAL = "value-changed"
-private const val CHANGE_VALUE_SIGNAL = "change-value"
-
 public actual class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, climbRate: Double = 0.0,
                                digits: UInt = 1u) : EntryBase {
     override val gtkWidgetPtr: CPointer<GtkWidget>? = spinButtonPtr?.reinterpret()
@@ -76,23 +73,25 @@ public actual class SpinButton(spinButtonPtr: CPointer<GtkSpinButton>? = null, c
     }
 
     /**
-     * Connects the *value-changed* signal to a [slot] on a [SpinButton]. This signal is used when the [value] changes.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *value-changed* event to a [handler] on a [SpinButton]. This event is used when the [value] changes.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectValueChangedSignal(slot: CPointer<ValueChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkSpinButtonPtr, signal = VALUE_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectValueChangedEvent(handler: CPointer<ValueChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSpinButtonPtr, signal = SpinButtonEvent.valueChanged, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *change-value* signal to a [slot] on a [SpinButton]. This signal is used when the user initiates a
+     * Connects the *change-value* event to a [handler] on a [SpinButton]. This event is used when the user initiates a
      * [value] change. Applications should not connect to it, but may emit it with `g_signal_emit_by_name()` if they
-     * need to control the cursor programmatically. The default bindings for this signal are *Up*, *Down*, *Page Up*,
+     * need to control the cursor programmatically. The default bindings for this event are *Up*, *Down*, *Page Up*,
      * and *Page Down*.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectChangeValueSignal(slot: CPointer<ChangeValueSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkSpinButtonPtr, signal = CHANGE_VALUE_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectChangeValueEvent(handler: CPointer<ChangeValueHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkSpinButtonPtr, signal = SpinButtonEvent.changeValue, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -112,17 +111,17 @@ public fun spinButtonWidget(
 }
 
 /**
- * The event handler for the *value-changed* signal. Arguments:
+ * The event handler for the *value-changed* event. Arguments:
  * 1. spinButton: CPointer<GtkSpinButton>
  * 2. userData: gpointer
  */
-public typealias ValueChangedSlot = CFunction<(spinButton: CPointer<GtkSpinButton>, userData: gpointer) -> Unit>
+public typealias ValueChangedHandler = CFunction<(spinButton: CPointer<GtkSpinButton>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *change-value* signal. Arguments:
+ * The event handler for the *change-value* event. Arguments:
  * 1. spinButton: CPointer<GtkSpinButton>
  * 2. scroll: GtkScrollType
  * 3. userData: gpointer
  */
-public typealias ChangeValueSlot = CFunction<(spinButton: CPointer<GtkSpinButton>, scroll: GtkScrollType,
-                                              userData: gpointer) -> Unit>
+public typealias ChangeValueHandler = CFunction<(spinButton: CPointer<GtkSpinButton>, scroll: GtkScrollType,
+                                                 userData: gpointer) -> Unit>
