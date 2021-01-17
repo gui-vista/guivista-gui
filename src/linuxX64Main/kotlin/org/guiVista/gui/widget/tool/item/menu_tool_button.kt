@@ -8,8 +8,6 @@ import kotlinx.cinterop.reinterpret
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val SHOW_MENU_SIGNAL = "show-menu"
-
 public actual class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: String) : ToolButtonBase {
     override val gtkToolItemPtr: CPointer<GtkToolItem>? = gtk_menu_tool_button_new(iconWidget, label)
     public val gtkMenuToolButtonPtr: CPointer<GtkMenuToolButton>?
@@ -25,14 +23,15 @@ public actual class MenuToolButton(iconWidget: CPointer<GtkWidget>?, label: Stri
     }
 
     /**
-     * Connects the *show-menu* signal to a [slot] on a [MenuToolButton]. This signal is used to populate the menu on
+     * Connects the *show-menu* event to a [handler] on a [MenuToolButton]. This event is used to populate the menu on
      * demand when [menu] is set. Note that even if you populate the menu dynamically in this way, you **must** set an
      * empty menu on the [MenuToolButton] beforehand, since the arrow is made insensitive if the menu is not set.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectShowMenuSignal(slot: CPointer<ShowMenuSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkMenuToolButtonPtr, signal = SHOW_MENU_SIGNAL, slot = slot, data = userData)
+    public fun connectShowMenuEvent(handler: CPointer<ShowMenuHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkMenuToolButtonPtr, signal = MenuToolButtonEvent.showMenu, slot = handler,
+            data = userData)
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -51,8 +50,8 @@ public fun menuToolButtonWidget(
 }
 
 /**
- * The event handler for the *show-menu* signal. Arguments:
+ * The event handler for the *show-menu* event. Arguments:
  * 1. button: CPointer<GtkMenuToolButton>
  * 2. userData: gpointer
  */
-public typealias ShowMenuSlot = CFunction<(button: CPointer<GtkMenuToolButton>?, userData: gpointer) -> Unit>
+public typealias ShowMenuHandler = CFunction<(button: CPointer<GtkMenuToolButton>?, userData: gpointer) -> Unit>

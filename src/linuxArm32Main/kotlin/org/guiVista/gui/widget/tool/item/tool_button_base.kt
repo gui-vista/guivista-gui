@@ -12,8 +12,6 @@ import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-private const val CLICKED_SIGNAL = "clicked"
-
 public actual interface ToolButtonBase : ToolItemBase {
     public val gtkToolButtonPtr: CPointer<GtkToolButton>?
 
@@ -55,13 +53,14 @@ public actual interface ToolButtonBase : ToolItemBase {
         set(value) = gtk_tool_button_set_use_underline(gtkToolButtonPtr, if (value) TRUE else FALSE)
 
     /**
-     * Connects the *clicked* signal to a [slot] on a tool button. This signal is used when a user has clicked on the
+     * Connects the *clicked* event to a [handler] on a tool button. This event is used when a user has clicked on the
      * tool button.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectClickedSignal(slot: CPointer<ClickedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkToolButtonPtr, signal = CLICKED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectClickedEvent(handler: CPointer<ClickedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkToolButtonPtr, signal = ToolButtonBaseEvent.clicked, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -70,8 +69,8 @@ public actual interface ToolButtonBase : ToolItemBase {
 }
 
 /**
- * The event handler for the *clicked* signal. Arguments:
+ * The event handler for the *clicked* event. Arguments:
  * 1. toolButton: CPointer<GtkToolButton>
  * 2. userData: gpointer
  */
-public typealias ClickedSlot = CFunction<(toolButton: CPointer<GtkToolButton>?, userData: gpointer) -> Unit>
+public typealias ClickedHandler = CFunction<(toolButton: CPointer<GtkToolButton>?, userData: gpointer) -> Unit>

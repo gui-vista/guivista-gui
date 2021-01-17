@@ -16,13 +16,6 @@ import org.guiVista.gui.keyboard.AcceleratorMap
 import org.guiVista.gui.widget.menu.item.MenuItemBase
 import org.guiVista.gui.window.WindowBase
 
-private const val GRAB_FOCUS_SIGNAL = "grab-focus"
-private const val SHOW_SIGNAL = "show"
-private const val HIDE_SIGNAL = "hide"
-private const val CONFIGURE_EVENT_SIGNAL = "configure-event"
-private const val KEY_PRESS_EVENT_SIGNAL = "key-press-event"
-private const val KEY_RELEASE_EVENT_SIGNAL = "key-release-event"
-
 public actual interface WidgetBase : ObjectBase {
     public val gtkWidgetPtr: CPointer<GtkWidget>?
 
@@ -46,7 +39,7 @@ public actual interface WidgetBase : ObjectBase {
 
     /**
      * Sets the text of tooltip to be the given string. Property “has-tooltip” will automatically be set to *true* and
-     * there will be taken care of “query-tooltip” in the default signal handler. Note that if both “tooltip-text” and
+     * there will be taken care of “query-tooltip” in the default event handler. Note that if both “tooltip-text” and
      * “tooltip-markup” are set, the last one wins. Default value is *""* (an empty String).
      */
     public var tooltipText: String
@@ -186,7 +179,7 @@ public actual interface WidgetBase : ObjectBase {
      * Sets the text of tooltip to be the given string, which is marked up with the Pango text markup language. Also
      * see `gtk_tooltip_set_markup()`. This is a convenience property which will take care of getting the tooltip
      * shown if the given string isn't *null*, [hasTooltip] will automatically be set to *true*, and the
-     * "query-tooltip" signal will be handled in the default signal handler. Note that if both [tooltipText], and
+     * "query-tooltip" event will be handled in the default event handler. Note that if both [tooltipText], and
      * [tooltipMarkup] are set the last one wins.
      *
      * Default value is *""* (an empty String).
@@ -215,22 +208,22 @@ public actual interface WidgetBase : ObjectBase {
     }
 
     /**
-     * Installs an accelerator for this widget in [accelGroup] that causes [accelSignal] to be emitted if the
+     * Installs an accelerator for this widget in [accelGroup] that causes [accelEvent] to be emitted if the
      * accelerator is activated. The [accelGroup] needs to be added to the widget’s top level via
-     * [WindowBase.addAccelGroup], and the signal must be of type `G_SIGNAL_ACTION`. Accelerators added through this
+     * [WindowBase.addAccelGroup], and the event must be of type `G_SIGNAL_ACTION`. Accelerators added through this
      * function are **NOT** user changeable during runtime. If you want to support accelerators that can be changed by
      * the user then use [AcceleratorMap.addEntry], and [changeAccelPath], or [MenuItemBase.accelPath] instead.
-     * @param accelSignal The widget signal to emit on accelerator activation.
+     * @param accelEvent The widget event to emit on accelerator activation.
      * @param accelGroup The accelerator group for this widget, added to its top level.
      * @param accelKey GDK key val of the accelerator.
      * @param accelMods Modifier key combination of the accelerator.
      * @param accelFlags Flag accelerators, e.g. `GTK_ACCEL_VISIBLE`.
      */
-    public fun addAccelerator(accelSignal: String, accelGroup: AcceleratorGroup, accelKey: UInt, accelMods: UInt,
+    public fun addAccelerator(accelEvent: String, accelGroup: AcceleratorGroup, accelKey: UInt, accelMods: UInt,
                               accelFlags: UInt) {
         gtk_widget_add_accelerator(
             widget = gtkWidgetPtr,
-            accel_signal = accelSignal,
+            accel_signal = accelEvent,
             accel_group = accelGroup.gtkAccelGroupPtr,
             accel_key = accelKey,
             accel_mods = accelMods,
@@ -278,21 +271,21 @@ public actual interface WidgetBase : ObjectBase {
     /**
      * Lists the closures used by the widget for accelerator group connections with
      * `gtk_accel_group_connect_by_path()`, or `gtk_accel_group_connect()`. The closures can be used to monitor
-     * accelerator changes on the widget, by connecting to the GtkAccelGroup ::accel-changed signal of the
+     * accelerator changes on the widget, by connecting to the GtkAccelGroup ::accel-changed event of the
      * [AcceleratorGroup] of a closure which can be found out with `gtk_accel_group_from_accel_closure()`.
      */
     public fun listAccelClosures(): DoublyLinkedList = DoublyLinkedList(gtk_widget_list_accel_closures(gtkWidgetPtr))
 
     /**
-     * Determines whether an accelerator that activates the signal identified by [signalId] can currently be activated.
-     * This is done by emitting the **can-activate-accel** signal on the widget; if the signal isn’t overridden by a
+     * Determines whether an accelerator that activates the event identified by [eventId] can currently be activated.
+     * This is done by emitting the **can-activate-accel** event on the widget; if the event isn’t overridden by a
      * handler or in a derived widget then the default check is that the widget must be sensitive, and the widget and
      * all its ancestors mapped.
-     * @param signalId The ID of a signal installed on the widget.
+     * @param eventId The ID of a event installed on the widget.
      * @return A value of *true* if the accelerator can be activated.
      */
-    public infix fun canActivateAccel(signalId: UInt): Boolean =
-        gtk_widget_can_activate_accel(gtkWidgetPtr, signalId) == TRUE
+    public infix fun canActivateAccel(eventId: UInt): Boolean =
+        gtk_widget_can_activate_accel(gtkWidgetPtr, eventId) == TRUE
 
     /** Changes all margins for the widget. */
     public fun changeMargins(bottom: Int, end: Int, start: Int, top: Int) {
@@ -323,7 +316,7 @@ public actual interface WidgetBase : ObjectBase {
      * as a GtkEntry; something like GtkFrame won’t work. More precisely it must have the `GTK_CAN_FOCUS` flag set. Use
      * `gtk_widget_set_can_focus()` to modify that flag.
      *
-     * The widget also needs to be realized and mapped. This is indicated by the related signals. Grabbing the focus
+     * The widget also needs to be realized and mapped. This is indicated by the related events. Grabbing the focus
      * immediately after creating the widget will likely fail and cause critical warnings.
      */
     public fun grabFocus() {
@@ -331,55 +324,64 @@ public actual interface WidgetBase : ObjectBase {
     }
 
     /**
-     * Connects the *grab-focus* signal to a [slot] on a [WidgetBase]. This signal is used when a widget is
+     * Connects the *grab-focus* event to a [handler] on a [WidgetBase]. This event is used when a widget is
      * "grabbing" focus.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectGrabFocusSignal(slot: CPointer<GrabFocusSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWidgetPtr, signal = GRAB_FOCUS_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectGrabFocusEvent(handler: CPointer<GrabFocusHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = WidgetBaseEvent.grabFocus, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *show* signal to a [slot] on a [WidgetBase]. This signal is used when a widget is shown.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *show* event to a [handler] on a [WidgetBase]. This event is used when a widget is shown.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectShowSignal(slot: CPointer<ShowSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWidgetPtr, signal = SHOW_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectShowEvent(handler: CPointer<ShowHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = WidgetBaseEvent.show, slot = handler, data = userData).toULong()
 
     /**
-     * Connects the *hide* signal to a [slot] on a [WidgetBase]. This signal is used when a widget is hidden.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *hide* event to a [handler] on a [WidgetBase]. This event is used when a widget is hidden.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectHideSignal(slot: CPointer<HideSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWidgetPtr, signal = HIDE_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectHideEvent(handler: CPointer<HideHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = WidgetBaseEvent.hide, slot = handler, data = userData).toULong()
 
     /**
-     * Connects the *configure-event* signal to a [slot] on a [WidgetBase]. This signal is used when the size, position
-     * or stacking of the widget's window has changed. To receive this signal, the GdkWindow associated to the widget
+     * Connects the *configure-event* event to a [handler] on a [WidgetBase]. This event is used when the size, position
+     * or stacking of the widget's window has changed. To receive this event, the GdkWindow associated to the widget
      * needs to enable the `GDK_STRUCTURE_MASK` mask. GDK will enable this mask automatically for all new windows.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectConfigureEventSignal(slot: CPointer<ConfigureEventSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWidgetPtr, signal = CONFIGURE_EVENT_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectConfigureEvent(handler: CPointer<ConfigureEventHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = WidgetBaseEvent.configure, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *key-press-event* signal to a [slot] on a [WidgetBase]. This signal is used when a key is pressed.
-     * The signal emission will reoccur at the key-repeat rate when the key is kept pressed. To receive this signal the
+     * Connects the *key-press-event* event to a [handler] on a [WidgetBase]. This event is used when a key is pressed.
+     * The event emission will reoccur at the key-repeat rate when the key is kept pressed. To receive this event the
      * GdkWindow associated to the widget needs to enable the GDK_KEY_PRESS_MASK mask.
      *
-     * This signal will be sent to the grab widget if there is one.
+     * This event will be sent to the grab widget if there is one.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectKeyPressEventSignal(slot: CPointer<KeyPressEventSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWidgetPtr, signal = KEY_PRESS_EVENT_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectKeyPressEvent(handler: CPointer<KeyPressEventHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = WidgetBaseEvent.keyPress, slot = handler, data = userData).toULong()
 
     /**
-     * Connects the *key-release-event* signal to a [slot] on a [WidgetBase]. This signal is used when a key is
-     * released. To receive this signal the GdkWindow associated to the widget needs to enable the
-     * `GDK_KEY_RELEASE_MASK` mask. This signal will be sent to the grab widget if there is one.
+     * Connects the *key-release-event* event to a [handler] on a [WidgetBase]. This event is used when a key is
+     * released. To receive this event the GdkWindow associated to the widget needs to enable the
+     * `GDK_KEY_RELEASE_MASK` mask. This event will be sent to the grab widget if there is one.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectKeyReleaseEventSignal(slot: CPointer<KeyReleaseEventSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkWidgetPtr, signal = KEY_RELEASE_EVENT_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectKeyReleaseEvent(handler: CPointer<KeyReleaseEventHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkWidgetPtr, signal = WidgetBaseEvent.keyRelease, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -400,28 +402,28 @@ public actual interface WidgetBase : ObjectBase {
 }
 
 /**
- * The event handler for the *grab-focus* signal. Arguments:
+ * The event handler for the *grab-focus* event. Arguments:
  * 1. widget: CPointer<GtkWidget>
  * 2. userData: gpointer
  */
-public typealias GrabFocusSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
+public typealias GrabFocusHandler = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *show* signal. Arguments:
+ * The event handler for the *show* event. Arguments:
  * 1. widget: CPointer<GtkWidget>
  * 2. userData: gpointer
  */
-public typealias ShowSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
+public typealias ShowHandler = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *hide* signal. Arguments:
+ * The event handler for the *hide* event. Arguments:
  * 1. widget: CPointer<GtkWidget>
  * 2. userData: gpointer
  */
-public typealias HideSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
+public typealias HideHandler = CFunction<(widget: CPointer<GtkWidget>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *configure-event* signal. Arguments:
+ * The event handler for the *configure-event* event. Arguments:
  * 1. widget: CPointer<GtkWidget>
  * 2. event: CPointer<GdkEvent>
  * 3. userData: gpointer
@@ -429,11 +431,11 @@ public typealias HideSlot = CFunction<(widget: CPointer<GtkWidget>, userData: gp
  * Return *true* to stop other handlers from being invoked for the event, otherwise *false* to propagate the event
  * further.
  */
-public typealias ConfigureEventSlot =
+public typealias ConfigureEventHandler =
     CFunction<(widget: CPointer<GtkWidget>, event: CPointer<GdkEvent>, userData: gpointer) -> Boolean>
 
 /**
- * The event handler for the *key-press-event* signal. Arguments:
+ * The event handler for the *key-press-event* event. Arguments:
  * 1. widget: CPointer<GtkWidget>
  * 2. event: CPointer<GdkEvent>
  * 3. userData: gpointer
@@ -441,11 +443,11 @@ public typealias ConfigureEventSlot =
  * Return *true* to stop other handlers from being invoked for the event, otherwise *false* to propagate the event
  * further.
  */
-public typealias KeyPressEventSlot =
+public typealias KeyPressEventHandler =
     CFunction<(widget: CPointer<GtkWidget>, event: CPointer<GdkEvent>, userData: gpointer) -> Boolean>
 
 /**
- * The event handler for the *key-release-event* signal. Arguments:
+ * The event handler for the *key-release-event* event. Arguments:
  * 1. widget: CPointer<GtkWidget>
  * 2. event: CPointer<GdkEvent>
  * 3. userData: gpointer
@@ -453,5 +455,5 @@ public typealias KeyPressEventSlot =
  * Return *true* to stop other handlers from being invoked for the event, otherwise *false* to propagate the event
  * further.
  */
-public typealias KeyReleaseEventSlot =
+public typealias KeyReleaseEventHandler =
     CFunction<(widget: CPointer<GtkWidget>, event: CPointer<GdkEvent>, userData: gpointer) -> Boolean>

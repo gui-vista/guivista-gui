@@ -7,14 +7,6 @@ import kotlinx.cinterop.*
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 
-private const val DAY_SELECTED_SIGNAL = "day-selected"
-private const val DAY_SELECTED_DOUBLE_CLICK_SIGNAL = "day-selected-double-click"
-private const val MONTH_CHANGED_SIGNAL = "month-changed"
-private const val NEXT_MONTH_SIGNAL = "next-month"
-private const val NEXT_YEAR_SIGNAL = "next-year"
-private const val PREV_MONTH_SIGNAL = "prev-month"
-private const val PREV_YEAR_SIGNAL = "prev-year"
-
 /** Displays a calendar, and allows the user to select a date. */
 public actual class Calendar(ptr: CPointer<GtkCalendar>? = null) : WidgetBase {
     public val gtkCalendarPtr: CPointer<GtkCalendar>? = ptr ?: gtk_calendar_new()?.reinterpret()
@@ -56,70 +48,74 @@ public actual class Calendar(ptr: CPointer<GtkCalendar>? = null) : WidgetBase {
     }
 
     /**
-     * Connects the *day-selected* signal to a [slot] on a [Calendar]. The signal occurs when the user selects a day.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *day-selected* event to a [handler] on a [Calendar]. The event occurs when the user selects a day.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectDaySelectedSignal(slot: CPointer<DaySelectedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkCalendarPtr, signal = DAY_SELECTED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectDaySelectedEvent(handler: CPointer<DaySelectedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkCalendarPtr, signal = CalendarEvent.daySelected, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *day-selected-double-click* signal to a [slot] on a [Calendar]. The signal occurs when the user
+     * Connects the *day-selected-double-click* event to a [handler] on a [Calendar]. The event occurs when the user
      * double clicks a day.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectDaySelectedDoubleClickSignal(
-        slot: CPointer<DaySelectedDoubleClickSlot>,
+    public fun connectDaySelectedDoubleClickEvent(
+        handler: CPointer<DaySelectedDoubleClickHandler>,
         userData: gpointer
     ): ULong =
-        connectGSignal(obj = gtkCalendarPtr, signal = DAY_SELECTED_DOUBLE_CLICK_SIGNAL, slot = slot, data = userData)
-            .toULong()
+        connectGSignal(obj = gtkCalendarPtr, signal = CalendarEvent.daySelectedDoubleClick, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *month-changed* signal to a [slot] on a [Calendar]. The signal occurs when the user clicks a button
+     * Connects the *month-changed* event to a [handler] on a [Calendar]. The event occurs when the user clicks a button
      * to change the selected month on a calendar.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectMonthChangedSignal(slot: CPointer<MonthChangedSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkCalendarPtr, signal = MONTH_CHANGED_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectMonthChangedEvent(handler: CPointer<MonthChangedHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkCalendarPtr, signal = CalendarEvent.monthChanged, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *next-month* signal to a [slot] on a [Calendar]. The signal occurs when the user switched to the
+     * Connects the *next-month* event to a [handler] on a [Calendar]. The event occurs when the user switched to the
      * next month.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectNextMonthSignal(slot: CPointer<NextMonthSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkCalendarPtr, signal = NEXT_MONTH_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectNextMonthEvent(handler: CPointer<NextMonthHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkCalendarPtr, signal = CalendarEvent.nextMonth, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *next-year* signal to a [slot] on a [Calendar]. The signal occurs when the user switched to the
+     * Connects the *next-year* event to a [handler] on a [Calendar]. The event occurs when the user switched to the
      * next year.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectNextYearSignal(slot: CPointer<NextYearSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkCalendarPtr, signal = NEXT_YEAR_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectNextYearEvent(handler: CPointer<NextYearHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkCalendarPtr, signal = CalendarEvent.nextYear, slot = handler, data = userData).toULong()
 
     /**
-     * Connects the *prev-month* signal to a [slot] on a [Calendar]. The signal occurs when the user switched to the
+     * Connects the *prev-month* event to a [handler] on a [Calendar]. The event occurs when the user switched to the
      * previous month.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectPrevMonthSignal(slot: CPointer<PrevMonthSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkCalendarPtr, signal = PREV_MONTH_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectPrevMonthEvent(handler: CPointer<PrevMonthHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkCalendarPtr, signal = CalendarEvent.prevMonth, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *prev-year* signal to a [slot] on a [Calendar]. The signal occurs when user switched to the
+     * Connects the *prev-year* event to a [handler] on a [Calendar]. The event occurs when user switched to the
      * previous year.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectPrevYearSignal(slot: CPointer<PrevYearSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkCalendarPtr, signal = PREV_YEAR_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectPrevYearEvent(handler: CPointer<PrevYearHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkCalendarPtr, signal = CalendarEvent.prevYear, slot = handler, data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -128,53 +124,56 @@ public actual class Calendar(ptr: CPointer<GtkCalendar>? = null) : WidgetBase {
 }
 
 /**
- * The event handler for the *day-selected* signal. Arguments:
+ * The event handler for the *day-selected* event. Arguments:
  * 1. calendar: CPointer<GtkCalendar>
  * 2. userData: gpointer
  */
-public typealias DaySelectedSlot = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
+public typealias DaySelectedHandler = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *day-selected-double-click* signal. Arguments:
+ * The event handler for the *day-selected-double-click* event. Arguments:
  * 1. calendar: CPointer<GtkCalendar>
  * 2. userData: gpointer
  */
-public typealias DaySelectedDoubleClickSlot = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
+public typealias DaySelectedDoubleClickHandler = CFunction<(
+    calendar: CPointer<GtkCalendar>,
+    userData: gpointer
+) -> Unit>
 
 /**
- * The event handler for the *month-changed* signal. Arguments:
+ * The event handler for the *month-changed* event. Arguments:
  * 1. calendar: CPointer<GtkCalendar>
  * 2. userData: gpointer
  */
-public typealias MonthChangedSlot = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
+public typealias MonthChangedHandler = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *next-month* signal. Arguments:
+ * The event handler for the *next-month* event. Arguments:
  * 1. calendar: CPointer<GtkCalendar>
  * 2. userData: gpointer
  */
-public typealias NextMonthSlot = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
+public typealias NextMonthHandler = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *next-year* signal. Arguments:
+ * The event handler for the *next-year* event. Arguments:
  * 1. calendar: CPointer<GtkCalendar>
  * 2. userData: gpointer
  */
-public typealias NextYearSlot = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
+public typealias NextYearHandler = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *prev-month* signal. Arguments:
+ * The event handler for the *prev-month* event. Arguments:
  * 1. calendar: CPointer<GtkCalendar>
  * 2. userData: gpointer
  */
-public typealias PrevMonthSlot = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
+public typealias PrevMonthHandler = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *prev-year* signal. Arguments:
+ * The event handler for the *prev-year* event. Arguments:
  * 1. calendar: CPointer<GtkCalendar>
  * 2. userData: gpointer
  */
-public typealias PrevYearSlot = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
+public typealias PrevYearHandler = CFunction<(calendar: CPointer<GtkCalendar>, userData: gpointer) -> Unit>
 
 public fun calendarWidget(ptr: CPointer<GtkCalendar>? = null, init: Calendar.() -> Unit = {}): Calendar {
     val result = Calendar(ptr)

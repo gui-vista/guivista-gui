@@ -13,11 +13,6 @@ import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-private const val CANCEL_SIGNAL = "cancel"
-private const val SELECTION_DONE_SIGNAL = "selection-done"
-private const val ACTIVATE_CURRENT_SIGNAL = "activate-current"
-private const val DEACTIVATE_SIGNAL = "deactivate"
-
 public actual interface MenuShell : Container {
     public val gtkMenuShellPtr: CPointer<GtkMenuShell>?
         get() = gtkWidgetPtr?.reinterpret()
@@ -118,40 +113,43 @@ public actual interface MenuShell : Container {
     }
 
     /**
-     * Connects the *cancel* signal to a [slot] on a [MenuShell]. This signal is used when selection is
+     * Connects the *cancel* event to a [handler] on a [MenuShell]. This event is used when selection is
      * cancelled in a [MenuShell].
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectCancelSignal(slot: CPointer<CancelSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkMenuShellPtr, signal = CANCEL_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectCancelEvent(handler: CPointer<CancelHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkMenuShellPtr, signal = MenuShellEvent.cancel, slot = handler, data = userData).toULong()
 
     /**
-     * Connects the *selection-done* signal to a [slot] on a [MenuShell]. This signal is used when selection is
+     * Connects the *selection-done* event to a [handler] on a [MenuShell]. This event is used when selection is
      * completed within a [MenuShell].
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectSelectionDoneSignal(slot: CPointer<SelectionDoneSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkMenuShellPtr, signal = SELECTION_DONE_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectSelectionDoneEvent(handler: CPointer<SelectionDoneHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkMenuShellPtr, signal = MenuShellEvent.selectionDone, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *activate-current* signal to a [slot] on a [MenuShell]. This signal is used when the current item
+     * Connects the *activate-current* event to a [handler] on a [MenuShell]. This event is used when the current item
      * is activated within the [MenuShell].
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectActivateCurrentSignal(slot: CPointer<ActivateCurrentSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkMenuShellPtr, signal = ACTIVATE_CURRENT_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectActivateCurrentEvent(handler: CPointer<ActivateCurrentHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkMenuShellPtr, signal = MenuShellEvent.activateCurrent, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *deactivate* signal to a [slot] on a [MenuShell]. This signal is used when the [MenuShell] is
+     * Connects the *deactivate* event to a [handler] on a [MenuShell]. This event is used when the [MenuShell] is
      * deactivated.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectDeactivateSignal(slot: CPointer<DeactivateSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkMenuShellPtr, signal = DEACTIVATE_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectDeactivateEvent(handler: CPointer<DeactivateHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkMenuShellPtr, signal = MenuShellEvent.deactivate, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -160,32 +158,32 @@ public actual interface MenuShell : Container {
 }
 
 /**
- * The event handler for the *cancel* signal. Arguments:
+ * The event handler for the *cancel* event. Arguments:
  * 1. menuShell: CPointer<GtkMenuShell>
  * 2. userData: gpointer
  */
-public typealias CancelSlot = CFunction<(menuShell: CPointer<GtkMenuShell>, userData: gpointer) -> Unit>
+public typealias CancelHandler = CFunction<(menuShell: CPointer<GtkMenuShell>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *selection-done* signal. Arguments:
+ * The event handler for the *selection-done* event. Arguments:
  * 1. menuShell: CPointer<GtkMenuShell>
  * 2. userData: gpointer
  */
-public typealias SelectionDoneSlot = CFunction<(menuShell: CPointer<GtkMenuShell>, userData: gpointer) -> Unit>
+public typealias SelectionDoneHandler = CFunction<(menuShell: CPointer<GtkMenuShell>, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *activate-current* signal. Arguments:
+ * The event handler for the *activate-current* event. Arguments:
  * 1. menuShell: CPointer<GtkMenuShell>
  * 2. forceHide: Boolean
  * 3. userData: gpointer
  */
-public typealias ActivateCurrentSlot =
+public typealias ActivateCurrentHandler =
     CFunction<(menuShell: CPointer<GtkMenuShell>, forceHide: Boolean, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *deactivate* signal. Arguments:
+ * The event handler for the *deactivate* event. Arguments:
  * 1. menuShell: CPointer<GtkMenuShell>
  * 2. userData: gpointer
  */
-public typealias DeactivateSlot =
+public typealias DeactivateHandler =
     CFunction<(menuShell: CPointer<GtkMenuShell>, userData: gpointer) -> Unit>

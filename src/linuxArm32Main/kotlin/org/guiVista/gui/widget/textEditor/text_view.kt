@@ -15,14 +15,6 @@ import org.guiVista.gui.layout.Container
 import org.guiVista.gui.text.TextBuffer
 import org.guiVista.gui.widget.WidgetBase
 
-private const val BACKSPACE_SIGNAL = "backspace"
-private const val COPY_CLIPBOARD_SIGNAL = "copy-clipboard"
-private const val CUT_CLIPBOARD_SIGNAL = "cut-clipboard"
-private const val INSERT_AT_CURSOR_SIGNAL = "insert-at-cursor"
-private const val PASTE_CLIPBOARD_SIGNAL = "paste-clipboard"
-private const val POPULATE_POPUP_SIGNAL = "populate-popup"
-private const val SELECT_ALL_SIGNAL = "select-all"
-
 public actual class TextView(
     textViewPtr: CPointer<GtkTextView>? = null,
     textBufferPtr: CPointer<GtkTextBuffer>? = null
@@ -108,73 +100,80 @@ public actual class TextView(
     }
 
     /**
-     * Connects the *backspace* signal to a [slot] on a [TextView]. This signal occurs when the user asks for it. The
-     * default bindings for this signal are **Backspace** and **Shift-Backspace**.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *backspace* event to a [handler] on a [TextView]. This event occurs when the user asks for it. The
+     * default bindings for this event are **Backspace** and **Shift-Backspace**.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectBackspaceSignal(slot: CPointer<BackspaceSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextViewPtr, signal = BACKSPACE_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectBackspaceEvent(handler: CPointer<BackspaceHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = TextViewEvent.backspace, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *copy-clipboard* signal to a [slot] on a [TextView]. This signal occurs when a selection is copied
-     * to the clipboard. The default bindings for this signal are **Ctrl-c**, and **Ctrl-Insert**.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *copy-clipboard* event to a [handler] on a [TextView]. This event occurs when a selection is copied
+     * to the clipboard. The default bindings for this event are **Ctrl-c**, and **Ctrl-Insert**.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectCopyClipboardSignal(slot: CPointer<CopyClipboardSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextViewPtr, signal = COPY_CLIPBOARD_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectCopyClipboardEvent(handler: CPointer<CopyClipboardHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = TextViewEvent.copyClipboard, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *cut-clipboard* signal to a [slot] on a [TextView]. This signal occurs when a selection is cut
-     * from the clipboard. The default bindings for this signal are **Ctrl-x**, and **Shift-Delete**.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *cut-clipboard* event to a [handler] on a [TextView]. This event occurs when a selection is cut
+     * from the clipboard. The default bindings for this event are **Ctrl-x**, and **Shift-Delete**.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectCutClipboardSignal(slot: CPointer<CutClipboardSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextViewPtr, signal = CUT_CLIPBOARD_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectCutClipboardEvent(handler: CPointer<CutClipboardHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = TextViewEvent.cutClipboard, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *insert-at-cursor* signal to a [slot] on a [TextView]. This signal occurs when the user initiates
-     * the insertion of a fixed string at the cursor. This signal has no default bindings.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *insert-at-cursor* event to a [handler] on a [TextView]. This event occurs when the user initiates
+     * the insertion of a fixed string at the cursor. This event has no default bindings.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectInsertAtCursorSignal(slot: CPointer<InsertAtCursorSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextViewPtr, signal = INSERT_AT_CURSOR_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectInsertAtCursorEvent(handler: CPointer<InsertAtCursorHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = TextViewEvent.insertAtCursor, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *paste-clipboard* signal to a [slot] on a [TextView]. This signal occurs when a selection is
-     * pasted from the clipboard. The default bindings for this signal are **Ctrl-v**, and **Shift-Insert**.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * Connects the *paste-clipboard* event to a [handler] on a [TextView]. This event occurs when a selection is
+     * pasted from the clipboard. The default bindings for this event are **Ctrl-v**, and **Shift-Insert**.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectPasteClipboardSignal(slot: CPointer<PasteClipboardSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextViewPtr, signal = PASTE_CLIPBOARD_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectPasteClipboardEvent(handler: CPointer<PasteClipboardHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = TextViewEvent.pasteClipboard, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *populate-popup* signal to a [slot] on a [TextView]. This signal occurs before showing the context
-     * menu of the text view. If you need to add items to the context menu, connect to this signal and append your
-     * items to the popup, which will be a GtkMenu in this case. If **populate-all** is *true* then this signal will
+     * Connects the *populate-popup* event to a [handler] on a [TextView]. This event occurs before showing the context
+     * menu of the text view. If you need to add items to the context menu, connect to this event and append your
+     * items to the popup, which will be a GtkMenu in this case. If **populate-all** is *true* then this event will
      * also be emitted to populate touch popups. In this case, popup will be a different container, e.g. a GtkToolbar.
      *
-     * The signal handler should **NOT** make assumptions about the type of widget, but check whether popup is a
+     * The event handler should **NOT** make assumptions about the type of widget, but check whether popup is a
      * GtkMenu, or GtkToolbar, or another kind of [container][Container].
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectPopulatePopupSignal(slot: CPointer<PopuplatePopupSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextViewPtr, signal = POPULATE_POPUP_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectPopulatePopupEvent(handler: CPointer<PopuplatePopupHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = TextViewEvent.populatePopup, slot = handler,
+            data = userData).toULong()
 
     /**
-     * Connects the *select-all* signal to a [slot] on a [TextView]. This signal occurs when selecting or unselecting
-     * the complete contents of the text view. The default bindings for this signal are **Ctrl-a** and
+     * Connects the *select-all* event to a [handler] on a [TextView]. This event occurs when selecting or unselecting
+     * the complete contents of the text view. The default bindings for this event are **Ctrl-a** and
      * **Ctrl-forward_slash** for selecting, and **Shift-Ctrl-a** and **Ctrl-\** for unselecting.
-     * @param slot The event handler for the signal.
-     * @param userData User data to pass through to the [slot].
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
      */
-    public fun connectSelectAllSignal(slot: CPointer<SelectAllSlot>, userData: gpointer): ULong =
-        connectGSignal(obj = gtkTextViewPtr, signal = SELECT_ALL_SIGNAL, slot = slot, data = userData).toULong()
+    public fun connectSelectAllEvent(handler: CPointer<SelectAllHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkTextViewPtr, signal = TextViewEvent.selectAll, slot = handler,
+            data = userData).toULong()
 
     override fun disconnectSignal(handlerId: ULong) {
         super.disconnectSignal(handlerId)
@@ -193,64 +192,64 @@ public fun textViewWidget(
 }
 
 /**
- * The event handler for the *backspace* signal. Arguments:
+ * The event handler for the *backspace* event. Arguments:
  * 1. textView: CPointer<GtkTextView>
  * 2. userData: gpointer
  */
-public typealias BackspaceSlot = CFunction<(textView: CPointer<GtkTextView>?, userData: gpointer) -> Unit>
+public typealias BackspaceHandler = CFunction<(textView: CPointer<GtkTextView>?, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *copy-clipboard* signal. Arguments:
+ * The event handler for the *copy-clipboard* event. Arguments:
  * 1. textView: CPointer<GtkTextView>
  * 2. userData: gpointer
  */
-public typealias CopyClipboardSlot = CFunction<(textView: CPointer<GtkTextView>?, userData: gpointer) -> Unit>
+public typealias CopyClipboardHandler = CFunction<(textView: CPointer<GtkTextView>?, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *cut-clipboard* signal. Arguments:
+ * The event handler for the *cut-clipboard* event. Arguments:
  * 1. textView: CPointer<GtkTextView>
  * 2. userData: gpointer
  */
-public typealias CutClipboardSlot = CFunction<(textView: CPointer<GtkTextView>?, userData: gpointer) -> Unit>
+public typealias CutClipboardHandler = CFunction<(textView: CPointer<GtkTextView>?, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *insert-at-cursor* signal. Arguments:
+ * The event handler for the *insert-at-cursor* event. Arguments:
  * 1. textView: CPointer<GtkTextView>
  * 2. string: CPointer<ByteVar>
  * 3. userData: gpointer
  */
-public typealias InsertAtCursorSlot = CFunction<(
+public typealias InsertAtCursorHandler = CFunction<(
     textView: CPointer<GtkTextView>?,
     string: CPointer<ByteVar>,
     userData: gpointer
 ) -> Unit>
 
 /**
- * The event handler for the *paste-clipboard* signal. Arguments:
+ * The event handler for the *paste-clipboard* event. Arguments:
  * 1. textView: CPointer<GtkTextView>
  * 2. userData: gpointer
  */
-public typealias PasteClipboardSlot = CFunction<(textView: CPointer<GtkTextView>?, userData: gpointer) -> Unit>
+public typealias PasteClipboardHandler = CFunction<(textView: CPointer<GtkTextView>?, userData: gpointer) -> Unit>
 
 /**
- * The event handler for the *populate-popup* signal. Arguments:
+ * The event handler for the *populate-popup* event. Arguments:
  * 1. textView: CPointer<GtkTextView>
  * 2. widget: CPointer<GtkWidget>
  * 3. userData: gpointer
  */
-public typealias PopuplatePopupSlot = CFunction<(
+public typealias PopuplatePopupHandler = CFunction<(
     textView: CPointer<GtkTextView>?,
     widget: CPointer<GtkWidget>,
     userData: gpointer
 ) -> Unit>
 
 /**
- * The event handler for the *select-all* signal. Arguments:
+ * The event handler for the *select-all* event. Arguments:
  * 1. textView: CPointer<GtkTextView>
  * 2. select: gboolean
  * 3. userData: gpointer
  */
-public typealias SelectAllSlot = CFunction<(
+public typealias SelectAllHandler = CFunction<(
     textView: CPointer<GtkTextView>?,
     select: gboolean,
     userData: gpointer
