@@ -9,19 +9,26 @@ import org.guiVista.core.connectGSignal
 import org.guiVista.core.dataType.SinglyLinkedList
 import org.guiVista.core.disconnectGSignal
 
-public actual class RadioButton(
-    radioButtonPtr: CPointer<GtkRadioButton>? = null,
-    label: String = "",
-    mnemonic: Boolean = false
-) : CheckButtonBase {
-    @Suppress("IfThenToElvis")
-    override val gtkWidgetPtr: CPointer<GtkWidget>? =
-        if (radioButtonPtr != null) radioButtonPtr.reinterpret()
-        else if (label.isNotEmpty() && mnemonic) gtk_check_button_new_with_mnemonic(label)
-        else if (label.isNotEmpty() && !mnemonic) gtk_check_button_new_with_label(label)
-        else gtk_check_button_new()
+public actual class RadioButton private constructor(radioButtonPtr: CPointer<GtkRadioButton>?) : CheckButtonBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = radioButtonPtr?.reinterpret()
     public val gtkRadioButtonPtr: CPointer<GtkRadioButton>?
         get() = gtkWidgetPtr?.reinterpret()
+
+    public actual companion object {
+        public fun fromPointer(radioButtonPtr: CPointer<GtkRadioButton>?): RadioButton = RadioButton(radioButtonPtr)
+
+        public actual fun create(group: SinglyLinkedList?): RadioButton =
+            RadioButton(gtk_radio_button_new(group?.gSListPtr)?.reinterpret())
+
+        public actual fun fromLabel(group: SinglyLinkedList?, label: String): RadioButton =
+            RadioButton(gtk_radio_button_new_with_label(group?.gSListPtr, label)?.reinterpret())
+
+        public actual fun fromMnemonic(group: SinglyLinkedList?, label: String): RadioButton =
+            RadioButton(gtk_radio_button_new_with_mnemonic(group?.gSListPtr, label)?.reinterpret())
+
+        public actual fun fromGroup(group: RadioButton): RadioButton =
+            RadioButton(gtk_radio_button_new_from_widget(group.gtkRadioButtonPtr)?.reinterpret())
+    }
 
     public actual fun changeGroup(newGroup: SinglyLinkedList?) {
         gtk_radio_button_set_group(gtkRadioButtonPtr, newGroup?.gSListPtr)
@@ -35,6 +42,10 @@ public actual class RadioButton(
 
     public actual fun joinGroup(groupSource: RadioButton) {
         gtk_radio_button_join_group(gtkRadioButtonPtr, groupSource.gtkRadioButtonPtr)
+    }
+
+    public actual fun leaveGroup() {
+        gtk_radio_button_join_group(gtkRadioButtonPtr, null)
     }
 
     /**
@@ -58,11 +69,19 @@ public actual class RadioButton(
 
 public fun radioButtonWidget(
     radioButtonPtr: CPointer<GtkRadioButton>? = null,
+    groupList: SinglyLinkedList? = null,
+    group: RadioButton? = null,
     label: String = "",
-    mnemonic: Boolean = false,
+    mnemonic: String = "",
     init: RadioButton.() -> Unit = {}
 ): RadioButton {
-    val radioButton = RadioButton(radioButtonPtr = radioButtonPtr, label = label, mnemonic = mnemonic)
+    val radioButton = when {
+        radioButtonPtr != null -> RadioButton.fromPointer(radioButtonPtr)
+        group != null -> RadioButton.fromGroup(group)
+        label.isNotEmpty() -> RadioButton.fromLabel(groupList, label)
+        mnemonic.isNotEmpty() -> RadioButton.fromMnemonic(groupList, mnemonic)
+        else -> RadioButton.create(groupList)
+    }
     radioButton.init()
     return radioButton
 }
