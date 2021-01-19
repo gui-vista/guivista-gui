@@ -4,23 +4,33 @@ import gtk3.*
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 
-public actual class Button(buttonPtr: CPointer<GtkButton>? = null, label: String = "", mnemonic: Boolean = false) : ButtonBase {
-    @Suppress("IfThenToElvis")
-    override val gtkWidgetPtr: CPointer<GtkWidget>? = when {
-        buttonPtr != null -> buttonPtr.reinterpret()
-        label.isNotEmpty() && mnemonic -> gtk_button_new_with_mnemonic(label)
-        label.isNotEmpty() && !mnemonic -> gtk_button_new_with_label(label)
-        else -> gtk_button_new()
+public actual class Button private constructor(buttonPtr: CPointer<GtkButton>?) : ButtonBase {
+    override val gtkWidgetPtr: CPointer<GtkWidget>? = buttonPtr?.reinterpret()
+
+    public actual companion object {
+        public fun fromPointer(buttonPtr: CPointer<GtkButton>?): Button = Button(buttonPtr)
+
+        public actual fun create(): Button = Button(gtk_button_new()?.reinterpret())
+
+        public actual fun fromLabel(label: String): Button = Button(gtk_button_new_with_label(label)?.reinterpret())
+
+        public actual fun fromMnemonic(label: String): Button =
+            Button(gtk_button_new_with_mnemonic(label)?.reinterpret())
     }
 }
 
 public fun buttonWidget(
     buttonPtr: CPointer<GtkButton>? = null,
     label: String = "",
-    mnemonic: Boolean = false,
+    mnemonic: String = "",
     init: Button.() -> Unit = {}
 ): Button {
-    val button = Button(buttonPtr = buttonPtr, label = label, mnemonic = mnemonic)
+    val button = when {
+        buttonPtr != null -> Button.fromPointer(buttonPtr)
+        label.isNotEmpty() -> Button.fromLabel(label)
+        mnemonic.isNotEmpty() -> Button.fromMnemonic(mnemonic)
+        else -> Button.create()
+    }
     button.init()
     return button
 }

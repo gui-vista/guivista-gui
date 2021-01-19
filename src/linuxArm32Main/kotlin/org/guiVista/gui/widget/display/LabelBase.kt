@@ -97,8 +97,8 @@ public actual interface LabelBase : WidgetBase {
             if (value >= -1) gtk_label_set_lines(gtkLabelPtr, value)
         }
 
-    /** The mnemonic accelerator key for this label. Default value is *16777215*. */
-    public val mnemonicKeyval: UInt
+    /** The mnemonic accelerator key for this label. */
+    public val mnemonicKeyVal: UInt
         get() = gtk_label_get_mnemonic_keyval(gtkLabelPtr)
 
     /** The widget to be activated when the label's mnemonic key is pressed. */
@@ -180,4 +180,15 @@ public actual interface LabelBase : WidgetBase {
         set(value) {
             if (value in (0.0f..1.0f)) gtk_label_set_yalign(gtkLabelPtr, value)
         }
+
+    /**
+     * Parses [str] which is marked up with the Pango text markup language, setting the label’s text and attribute list
+     * based on the parse results. If characters in [str] are preceded by an underscore then they are underlined
+     * indicating that they represent a keyboard accelerator called a mnemonic. The mnemonic key can be used to
+     * activate another widget, chosen automatically, or explicitly using [mnemonicWidget].
+     * @param str A markup string (see Pango markup format).
+     */
+    public fun changeMarkupWithMnemonic(str: String) {
+        gtk_label_set_markup_with_mnemonic(gtkLabelPtr, str)
+    }
 }

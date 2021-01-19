@@ -398,6 +398,24 @@ public actual interface WindowBase : Container {
         super.disconnectSignal(handlerId)
         disconnectGSignal(gtkWindowPtr, handlerId)
     }
+
+    /**
+     * Adds a mnemonic to this window.
+     * @param keyVal The mnemonic.
+     * @param target The widget that gets activated by the mnemonic.
+     */
+    public fun addMnemonic(keyVal: UInt, target: WidgetBase) {
+        gtk_window_add_mnemonic(window = gtkWindowPtr, keyval = keyVal, target = target.gtkWidgetPtr)
+    }
+
+    /**
+     * Removes a mnemonic from this window.
+     * @param keyVal The mnemonic.
+     * @param target The widget that gets activated by the mnemonic.
+     */
+    public fun removeMnemonic(keyVal: UInt, target: WidgetBase) {
+        gtk_window_remove_mnemonic(window = gtkWindowPtr, keyval = keyVal, target = target.gtkWidgetPtr)
+    }
 }
 
 public actual fun listTopLevelWindows(): DoublyLinkedList = DoublyLinkedList(gtk_window_list_toplevels())
