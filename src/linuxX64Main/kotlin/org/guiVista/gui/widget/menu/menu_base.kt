@@ -2,17 +2,20 @@ package org.guiVista.gui.widget.menu
 
 import glib2.FALSE
 import glib2.TRUE
+import glib2.gpointer
 import gtk3.*
+import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.toKString
+import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.keyboard.AcceleratorGroup
 import org.guiVista.gui.layout.Container
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-public actual interface MenuBase : Container {
+public actual interface MenuBase : MenuShell {
     public val gtkMenuPtr: CPointer<GtkMenu>?
         get() = gtkWidgetPtr?.reinterpret()
 
@@ -123,4 +126,24 @@ public actual interface MenuBase : Container {
     public fun detach() {
         gtk_menu_detach(gtkMenuPtr)
     }
+
+    /**
+     * Connects the *move-scroll* event to a [handler] on a menu. The event occurs when scrolling is done on a menu.
+     * @param handler The event handler for the event.
+     * @param userData User data to pass through to the [handler].
+     */
+    public fun connectMoveScrollEvent(handler: CPointer<FormatValueHandler>, userData: gpointer): ULong =
+        connectGSignal(obj = gtkMenuPtr, signal = MenuBaseEvent.moveScroll, slot = handler, data = userData)
 }
+
+/**
+ * The event handler for the *move-scroll* event. Arguments:
+ * 1. menu: CPointer<GtkMenu>
+ * 2. scrollType: GtkScrollType
+ * 3. userData: gpointer
+ */
+public typealias FormatValueHandler = CFunction<(
+    menu: CPointer<GtkMenu>,
+    scrollType: GtkScrollType,
+    userData: gpointer
+) -> Unit>
