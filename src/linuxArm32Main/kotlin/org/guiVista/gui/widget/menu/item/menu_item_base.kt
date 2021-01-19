@@ -11,10 +11,13 @@ import kotlinx.cinterop.toKString
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.layout.Container
+import org.guiVista.gui.widget.Actionable
 import org.guiVista.gui.widget.menu.Menu
 
-public actual interface MenuItemBase : Container {
+public actual interface MenuItemBase : Container, Actionable {
     public val gtkMenuItemPtr: CPointer<GtkMenuItem>?
+        get() = gtkWidgetPtr?.reinterpret()
+    override val gtkActionablePtr: CPointer<GtkActionable>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /** Whether the menu item reserves space for the submenu indicator regardless if it has a submenu or not. */

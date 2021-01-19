@@ -11,11 +11,14 @@ import kotlinx.cinterop.toKString
 import org.guiVista.core.connectGSignal
 import org.guiVista.core.disconnectGSignal
 import org.guiVista.gui.layout.Container
+import org.guiVista.gui.widget.Actionable
 import org.guiVista.gui.widget.Widget
 import org.guiVista.gui.widget.WidgetBase
 
-public actual interface ButtonBase : Container {
+public actual interface ButtonBase : Container, Actionable {
     public val gtkButtonPtr: CPointer<GtkButton>?
+        get() = gtkWidgetPtr?.reinterpret()
+    override val gtkActionablePtr: CPointer<GtkActionable>?
         get() = gtkWidgetPtr?.reinterpret()
 
     /**
